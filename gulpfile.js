@@ -1,3 +1,4 @@
+var path = require('path')
 var gulp = require('gulp')
 var plumber = require('gulp-plumber')
 var notify = require('gulp-notify')
@@ -44,22 +45,36 @@ var DEST = {
 
 var lessConfig = {strictMath: true}
 
-function buildLess(watchNames, inputName = watchNames, renameTo) {
-	return watch(watchNames, inputName, stream => {
-		return stream
-			.pipe(plumber(notify.onError('<%= error.message %>')))
-			.pipe(sourcemaps.init())
-			.pipe(less(lessConfig))
-			.pipe(renameTo ? rename({basename: renameTo}) : rename({prefix: 'flexus-'}))
-			.pipe(sourcemaps.write(''))
-			.pipe(gulp.dest(DEST.css))
-			//.pipe(browser.reload({stream: true}))
-	}, {cwd: 'src/css/'})
+function watchLess(inputName, watchNames = inputName, renameTo) {
+	var cwd = 'src/css/'
+	return watch(watchNames, inputName, processLess, {cwd})
 }
 
-gulp.task('wireframe',   () => buildLess('wireframe.less'))
-gulp.task('ui-fluent',   () => buildLess(['*.less', '!material*.less'], 'fluent.less'))
-gulp.task('ui-material', () => buildLess(['*.less', '!fluent*.less'], 'material.less'))
+function buildLess(inputName) {
+	var cwd = 'src/css/'
+	var stream = gulp.src(path.relative(cwd, inputName))
+	return processLess(stream)
+}
 
-gulp.task('ui', ['ui-fluent', 'ui-material'])
-gulp.task('default', [/*'ui-fluent', */'ui-material'])
+function processLess(stream, renameTo) {
+	return stream
+		.pipe(plumber(notify.onError('<%= error.message %>')))
+		.pipe(sourcemaps.init())
+		.pipe(less(lessConfig))
+		.pipe(renameTo ? rename({basename: renameTo}) : rename({prefix: 'flexus-'}))
+		.pipe(sourcemaps.write(''))
+		.pipe(gulp.dest(DEST.css))
+		//.pipe(browser.reload({stream: true}))
+}
+
+gulp.task('watch-wireframe',   () => watchLess('wireframe.less'))
+gulp.task('watch-fluent',   () => watchLess('fluent.less', ['*.less', '!material*.less']))
+gulp.task('watch-material', () => watchLess('material.less', ['*.less', '!fluent*.less']))
+
+gulp.task('build-wireframe',   () => buildLess('wireframe.less'))
+gulp.task('build-fluent',   () => buildLess('fluent.less'))
+gulp.task('build-material', () => buildLess('material.less'))
+
+gulp.task('default', [/*'watch-fluent',*/ 'watch-material'])
+gulp.task('watch', [/*'watch-fluent',*/ 'watch-material'])
+gulp.task('build', ['build-wireframe', 'build-fluent', 'build-material'])

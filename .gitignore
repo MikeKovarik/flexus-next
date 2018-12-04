@@ -79,3 +79,6 @@ resources
 experimental
 demos/img/longboard/large
 demos/img/longboard/original
+
+dist/
+css/
