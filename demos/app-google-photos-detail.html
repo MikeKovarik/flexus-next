@@ -10,12 +10,33 @@
 
 	<style>
 
+		/* TODO, implement appbar into the framework */
+		#bottom-bar {
+			justify-content: space-around;
+		}
+		#bottom-bar > *:not(:last-child) {
+			margin: 0;
+		}
 		flexus-view[hidden] {
 			display: flex;
 			visibility: hidden;
 			pointer-events: none;
 		}
 
+		/* demo code */
+		body {
+			width: 100%;
+			height: 100%;
+			max-width: 420px;
+			max-height: 750px;
+			position: relative;
+			margin: auto;
+		}
+		html {
+			display: flex;
+		}
+
+		/* app code */
 		body {
 			animation: 300ms fade-in;
 		}
@@ -23,26 +44,9 @@
 			from {opacity: 0}
 			to   {opacity: 1}
 		}
-
 		flexus-toolbar [fab] {
 			background-color: #FFF;
 			color: #000;
-		}
-
-		#the-img {
-			will-change: transform, clip-path;
-		}
-
-		/* TODO */
-		#bottom-bar {
-			justify-content: space-around;
-		}
-		#bottom-bar > *:not(:last-child) {
-			margin: 0;
-		}
-
-		#info {
-			display: none;
 		}
 
 		img, [cover], [ratio] {
@@ -57,8 +61,8 @@
 <body google theme="white">
 
 
-	<flexus-view fit id="gallery">
-		<flexus-toolbar>
+	<flexus-view fit id="view-gallery">
+		<flexus-toolbar flat>
 			<button icon="arrow-back"></button>
 			<div flex>Longboarding</div>
 			<button icon="edit"></button>
@@ -70,14 +74,14 @@
 	</flexus-view>
 
 
-	<flexus-view fit hidden theme="black" id="detail">
+	<flexus-view fit hidden theme="black" id="view-detail">
 		<flexus-toolbar transparent floating>
 			<button icon="arrow-back"></button>
 			<div flex></div>
 			<button icon="favorite_outline"></button>
 			<button icon="edit"></button>
 		</flexus-toolbar>
-		<img id="the-img" fit contain>
+		<img fit contain>
 		<flexus-toolbar transparent absolute bottom id="bottom-bar">
 			<button icon="share"></button>
 			<button icon="settings"></button>
@@ -86,7 +90,7 @@
 	</flexus-view>
 
 
-	<flexus-view fit hidden theme="white" id="info">
+	<flexus-view fit hidden theme="white" id="view-info">
 		<flexus-toolbar transparent floating>
 			<button icon="arrow-back" small fab></button>
 		</flexus-toolbar>
@@ -162,18 +166,18 @@
 			'IMG_20181110_144054.jpg',
 		]
 
-		var galleryView = document.querySelector('#gallery')
-		var detailView = document.querySelector('#detail')
-		var infoView = document.querySelector('#info')
-		var grid = document.querySelector('#gallery [grid]')
-		var detailImg = document.querySelector('#detail img')
+		var galleryView = document.querySelector('#view-gallery')
+		var detailView = document.querySelector('#view-detail')
+		var infoView = document.querySelector('#view-info')
+		var galleryGrid = document.querySelector('#view-gallery [grid]')
+		var detailImg = document.querySelector('#view-detail img')
 		var detailViewBackButton = detailView.querySelector('[icon="arrow-back"]')
 
 		function getLink(name, size = 'medium') {
 			return `./img/longboard/${size}/${name}`
 		}
 
-		grid.innerHTML = galleryNames
+		galleryGrid.innerHTML = galleryNames
 			.map(name => `
 				<div
 					ratio="1:1" cover name="${name}"
@@ -212,7 +216,7 @@
 			return
 			// TODO, implement reverse mode in ImageTransition (so that source could be scaled down)
 			var name = detailImg.getAttribute('name')
-			var gridImg = grid.querySelector(`[name="${name}"]`)
+			var gridImg = galleryGrid.querySelector(`[name="${name}"]`)
 			var transition = new ImageTransition(detailImg, gridImg, {duration})
 			await transition.ready
 			detailView.removeAttribute('hidden')
@@ -223,14 +227,14 @@
 		}
 
 		setTimeout(() => {
-			openDetail(grid.children[6])
+			openDetail(galleryGrid.children[6])
 			//detailView.removeAttribute('hidden')
 			//detailImg.src = './img/longboard/medium/IMG_20180908_190443.jpg'
 			//detailImg.setAttribute('name', 'IMG_20180908_190443.jpg')
-		}, 600)
+		}, 800)
 
 
-		grid.addEventListener('click', e => {
+		galleryGrid.addEventListener('click', e => {
 			if (e.target.hasAttribute('name') && e.target.hasAttribute('cover'))
 				openDetail(e.target)
 		})

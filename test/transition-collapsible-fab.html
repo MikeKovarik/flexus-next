@@ -7,7 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
 	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
-	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
 
 	<style>
 		:root,
@@ -124,13 +123,10 @@
 
 
 
-	<script src="../dist/flexus.js"></script>
 	<script src="./util/demo-util.js"></script>
-<!--
-	<script src="./AnimationOrchestrator.js"></script>
--->
-	<script>
-		var {ViewTransition} = window.flexus
+
+	<script type="module">
+		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
 
 		var fab = $('[fab]')
 		var listView = $('#list')
