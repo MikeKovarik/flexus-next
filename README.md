@@ -1,6 +1,10 @@
-Warning. The 
+This is reimplementation of [flexus](https://github.com/MikeKovarik/flexus) ui framework which was an experiment back in time when Shadow DOM V1 wasn't finished, CSS Variables weren't widely available and Fluent Design System & Material Design Language were just a rumours.
 
-TL:DR; The code is crap because the framework is still under heavy development.
+This repo tries to take the good parts of the experiment and build it into production ready app framework.
+
+## Warning. Work in progress, ugly code
+
+**TL:DR;** The code is crap because the framework is still under heavy development.
 
 Ideas come and go. Some are outlined, some prototyped, some even fully implemented. Most of them stick around and wait for polishing. `test/` directory is a melting pot of ideas of components, whereas examples `demos/` present how it could all works together in an actual app.
 
