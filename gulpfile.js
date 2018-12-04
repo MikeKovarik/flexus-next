@@ -52,7 +52,8 @@ function watchLess(inputName, watchNames = inputName, renameTo) {
 
 function buildLess(inputName) {
 	var cwd = 'src/css/'
-	var stream = gulp.src(path.relative(cwd, inputName))
+	var inputPath = path.join(cwd, inputName)
+	var stream = gulp.src(inputPath)
 	return processLess(stream)
 }
 

@@ -12,6 +12,9 @@
   "author": "Mike Kovarik",
   "license": "MIT",
   "devDependencies": {
+	"@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
     "gulp": "^3.9.1",
     "gulp-better-rollup": "^1.1.0",
     "gulp-changed": "^3.2.0",
@@ -20,8 +23,6 @@
     "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
     "rollup": "^0.67.4",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-notify": "^1.0.6"
