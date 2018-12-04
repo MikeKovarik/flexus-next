@@ -1,0 +1,167 @@
+@import "layout-flexbox.less";
+@import "layout-grid.less";
+@import "layout-modifiers.less";
+@import "layout-position.less";
+
+
+// NOT-A-HACK hack. This just squeezes the last drip of juice out of CSS.
+// NOTE: we need to keep two sets of variables, one with px units (but only on the 1px value, the zero doesnt have px units)
+//       because of the way css calc() function works. We sometimes need to break it (only unitful numbers can be added; and
+//       only one unitless number can multiply unitful number, not two unitful numbers can multiply).
+//       I wish there was a unitless() function or means of better conditional CSS ruling. But there's not.
+// WHY: This is used first and foremost used in <hr>. It enables it to be used in both vertical and horizontal
+//      layout without additional bloat and rules. It is also cornerstone for allowing [inset], [offset] and all of --offset
+//      functionality in horizontal layout as well. 
+:root,
+[vertical-axis] {
+	& > * {
+	--is-parent-horizontal-int: 0;
+	--is-parent-vertical-int:   1;
+	--is-parent-horizontal-px:  0;
+	--is-parent-vertical-px:    1px;
+	}
+	//--side: 0px;
+}
+[horizontal-axis] {
+	& > * {
+	--is-parent-horizontal-int: 1;
+	--is-parent-vertical-int:   0;
+	--is-parent-horizontal-px:  1px;
+	--is-parent-vertical-px:    0;
+	}
+	//--side: 0px;
+}
+
+// TODO: more work and investigation required here.
+[main-content-stacking] {
+	// Here we use solely unitless numbers (the -int ones) because of the same calc() breaking reasons. Except here we don't
+	// want to break it. We always have unitful number in --offset variable and only other numbers that can multiply it
+	// must have no unit.
+	--margin-vertical:   calc( (var(--is-parent-horizontal-int) * var(--offset, 0px)) + (8px * var(--is-parent-vertical-int)  ) );
+	--margin-horizontal: calc( (var(--is-parent-vertical-int)   * var(--offset, 0px)) + (8px * var(--is-parent-horizontal-int)) );
+	//margin: var(--margin-vertical) var(--margin-horizontal);
+	margin: 0 var(--margin-horizontal);
+}
+
+flexus-view > main > *,
+flexus-view > flexus-pages > * > * {
+	&:extend([main-content-stacking]);
+}
+
+
+
+
+
+// NOTE: rethink this when writing-mode and margin-block-end is supported
+// https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block-end
+
+[horizontal-flexbox] {
+	// WARNING: cannot set display here because it would mess up inline-flex based <buttons>
+	//display: flex;
+	flex-direction: row;
+	&:extend([horizontal-axis] all);
+}
+
+[vertical-flexbox] {
+	// WARNING: cannot set display here because it would mess up inline-flex based <buttons>
+	//display: flex;
+	flex-direction: column;
+	&:extend([vertical-axis] all);
+}
+
+
+
+
+
+//[no-scrollbar] {
+[no-scrollbar] {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	// hide scrollbars
+	-ms-overflow-style: none;
+}
+
+.scrollable() {
+	// inertia scrolling
+	-webkit-overflow-scrolling: touch;
+	// do not shrink items if [scrollable] is also layout layout
+	& > * {
+		//flex-shrink: 0;
+		flex: 0 0 auto;
+	}
+	//[touch] & {
+	/*
+	@media (hover: none) {
+		// Hide scrollbars on touch devices.
+		[no-scrollbar];
+	}
+	*/
+}
+
+[vertical-scrollable] {
+	.scrollable();
+	touch-action: pan-y;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overflow-y: overlay;
+}
+
+[horizontal-scrollable] {
+	.scrollable();
+	// There's no way around it. Internet is full of hacks and ways to do horizontal scroll,
+	// all of which break itself or the layout around it sooner or later. Flexbox is the only working solution.
+	display: flex;
+	// set orientation
+	touch-action: pan-x;
+	overflow-x: auto;
+	overflow-x: overlay;
+	overflow-y: hidden;
+	// Flexbox based vertical scrollable does not render padding (not last children's margin)
+	// on the right side. We need to substitute it with pseudoelement.
+	> * {
+		flex: 0 0 auto;
+	}
+	&::after {
+		content: '';
+		display: inline-block;
+		padding-right: inherit;
+	}
+	// prevents internal inline elements from wrapping
+	//white-space: nowrap;
+}
+
+
+
+
+// REAL WORLD APPLICATION
+
+[layout]:not([vertical]),
+[horizontal=""] {
+	&:extend([horizontal-flexbox] all);
+
+	&[scrollable=""] {
+		&:extend([horizontal-scrollable] all);
+	}
+}
+
+// NOTE: It's not jut [layout][vertical] but simple [vertical] because it should be
+//       reusable for all flexboxes (even button is flexbox and can be vertical with icon on top
+//       and the text at the bottom)
+[vertical=""] {
+	&:extend([vertical-flexbox] all);
+
+	&[scrollable=""] {
+		&:extend([vertical-scrollable] all);
+	}
+}
+
+
+
+
+[columns]:not([grid]):not(grid) {
+	// Alterinative behavior if [columns] property is used outside of [grid].
+	// It splits the text paragraphs into columns using the CSS column API.
+	column-count: var(--columns, 1);
+	column-gap: var(--gutter, var(--theme-gutter));
+}

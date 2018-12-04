@@ -1,0 +1,91 @@
+flexus-view > flexus-tabs,
+flexus-toobar flexus-tabs {
+	display: inline-flex;
+}
+flexus-tabs {
+	// using inline here because we might want to use tabs in places other than toolbar.
+	// and we dont want it to stretch edge to edge.
+	display: inline-flex;
+
+	&:not([round]) {
+		min-height: 48px;
+		// important is here to override global [center] and keep the tabs stretched.
+		align-items: stretch !important;
+	}
+
+	&[scrollable] {
+		//&:extend([indent] all);
+	}
+	&:not([scrollable]) {
+		padding: 0;
+		& > * {
+			flex: 1;
+		}
+	}
+	&[center] {
+		justify-content: center;
+		& > * {
+			flex: unset;
+		}
+	}
+
+	// NOTE: this is typography preset BUTTON, not a button element, nor button like element.
+	&:extend([button]);
+	//font-size: 14px;
+	//font-weight: 500;
+
+	// ITEMS of flexus-tabs
+	& > * {
+		// Buttons font is not defined per item, but on the whole flexus-tabs element
+		// and all items just inherit it.
+		// NOTE: !important to override whatever the children's detault or residual style is.
+		//       Anything can be used inside flexus-tabs. Like <div> <button> <a href="">.
+		//       So here we're cancelling their usual style.
+		font-size: inherit;
+		font-weight: inherit;
+		color: inherit;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		//&:extend(button[flat] all);
+		//&:extend([hoverable] all);
+		padding: 0 24px !important;
+		--fg: inherit !important;
+		border-radius: 0 !important;
+		--hitbox-offset: 0px !important;
+		.apply-foreground();
+	}
+	// SELECTED ITEM
+	& > *[selected] {
+		--fg-opacity: 1;
+		// TODO: remove this. this is just a demo thing
+		// TODO: reimplement this with JS and scollable bg/bar
+		border-bottom: 2px solid rgb(var(--fg));
+	}
+	// NOT SELECTED ITEMS
+	& > :not([selected]) {
+		--fg-opacity: 0.7;
+	}
+
+	&[round] {
+		// ITEMS of flexus-tabs[round] (aka pill shaped)
+		& > * {
+			//height: 32px;
+			align-self: center;
+			border: none !important;
+			&:extend([round]);
+			//border-radius: 100px !important;
+			padding: 0.57em 1.14em !important; // 8px 16px;
+			background-color: transparent;			
+		}
+		& > *[selected] {
+			// TODO: reimplement this with JS and scollable bg/bar
+			background-color: rgb(var(--tint-bg));
+			color:            rgb(var(--tint-fg));
+		}
+	}
+
+
+}

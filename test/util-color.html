@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>util-color</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+</head>
+<body>
+
+	<div fx-item id="opacity">
+		<label>opacity</label>
+		<input type="text" placeholder="hex opacity">
+		<output></output>
+	</div>
+
+	<div fx-item id="rgb">
+		<label>rgb-hex</label>
+		<input type="text" placeholder="rgb">
+		<output></output>
+	</div>
+
+	<div fx-item id="hex">
+		<label>hex-rgb</label>
+		<input type="text" placeholder="hex">
+		<output></output>
+	</div>
+
+	<script>
+		var $opacityInput  = document.querySelector('#opacity > input')
+		var $opacityOutput = document.querySelector('#opacity > output')
+		var $rgbInput  = document.querySelector('#rgb > input')
+		var $rgbOutput = document.querySelector('#rgb > output')
+		var $hexInput  = document.querySelector('#hex > input')
+		var $hexOutput = document.querySelector('#hex > output')
+
+		$opacityInput.addEventListener('input', e => {
+			var hex = $opacityInput.value.slice(0, 2)
+			var int = parseInt(hex, 16)
+			$opacityOutput.innerHTML = `${int} | ${((100 / 255) * int).toFixed(2)} %`
+		})
+
+		$rgbInput.addEventListener('input', e => {
+			var [r,g,b] = $rgbInput.value
+				.split(',')
+				.map(section => section.trim())
+				.map(section => parseInt(section))
+			r = r || 0
+			g = g || 0
+			b = b || 0
+			$rgbOutput.innerHTML = [
+				r.toString(16).padStart(2, '0'),
+				g.toString(16).padStart(2, '0'),
+				b.toString(16).padStart(2, '0'),
+			].join('')
+		})
+
+		$hexInput.addEventListener('input', e => {
+			var hex = $hexInput.value
+			var r = parseInt(hex.slice(0, 2) || '0', 16)
+			var g = parseInt(hex.slice(2, 4) || '0', 16)
+			var b = parseInt(hex.slice(4, 6) || '0', 16)
+			$hexOutput.innerHTML = `${r}, ${g}, ${b}`
+		})
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html screensize="l">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		/* TODO: fix flexus-view[scrollabe] so that this could disappear */
+		[screensize="m"] flexus-view,
+		[screensize="l"] flexus-view {
+			overflow-y: overlay;
+		}
+		[screensize="m"] main,
+		[screensize="l"] main {
+			overflow: unset !important;
+		}
+		/* TODO: fix */
+		card {
+			border-radius: 4px !important;
+		}
+		/* Apps style */
+		[screensize="m"] main,
+		[screensize="l"] main {
+			max-width: 600px;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: -140px;
+		}
+	</style>
+
+</head>
+<body primary="blue" secondary="yellow">
+
+	<flexus-view>
+
+		<flexus-toolbar multisection tinted flat="m l" sticky="m l">
+			<section>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="search"></button>
+			</section>
+			<section style="height: 160px" hidden="s m"></section>
+		</flexus-toolbar>
+
+		<main>
+			<card fullbleed="s">
+				<p subtitle2 muted>Today</p>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+			</card>
+			<br>
+			<card fullbleed="s">
+				<p subtitle2 muted>Yesterday</p>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+				<div fx-item seamed="between">
+					<img avatar src="./img/coulson.jpg">
+					<div vertical layout>
+						<div>Phil Coulson</div>
+						<div body2 muted>We have a situation</div>
+					</div>
+				</div>
+			</card>
+			<br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br>
+		</main>
+
+	</flexus-view>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+@import "layout.less";
+@import "core-body.less";
+@import "core-reset.less";
+@import "core-item.less";
+@import "core-typography.less";
+@import "core-color.less";
+@import "core-avatar.less";
+@import "core-hr.less";
+@import "core-shape.less";
+@import "core-util.less";
+
+
+// WARNING: Material design uses term "margin" for the side 16/24px margins
+// and mixes it with gutter which is usually always 16px even on tablets
+// https://material.io/design/layout/responsive-layout-grid.html#
+
+
+html, body {
+	// reset & make body just a stage for <flexus-view>, <flexus-drawer> and others
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+	// necessary for draggable views and drawer
+	user-select: none;
+	// apps have just the default sharp arrow cursor
+	cursor: default;
+}
+
+
+
+
+
+
+
+// RESETTING MEANING OF [HIDDEN]
+[hidden] {
+    display: unset;
+    visibility: visible;
+}
+// table cannot just use unset but it requires the actual values
+td[hidden] {
+	display: table-cell;
+}
+tr[hidden] {
+	display: table-row;
+}
+
+.responsive-screensize(hidden, {
+    display: none;
+});
+.responsive-screensize(visible, {
+    visibility: visible !important;
+});
+.responsive-screensize(invisible, {
+    visibility: hidden !important;
+});
+/*
+[hidden=""],
+[screensize="s"] [hidden~="s"],
+[screensize="m"] [hidden~="m"],
+[screensize="l"] [hidden~="l"] {
+    display: none;
+}
+[visible=""] {
+    visibility: visible !important;
+}
+[invisible=""] {
+    visibility: hidden !important;
+}
+*/
+
+
+
+// IDEAS
+flexus-pages > * > :first-child,
+flexus-view > main > :first-child {
+	margin-top: 0;
+}
+flexus-pages > * > :last-child,
+flexus-view > main > :last-child {
+	margin-bottom: 0;
+}
+
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+}
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+p[body2] {
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+p:first-child {
+	margin-top: 0;
+}
+p:last-child {
+	margin-bottom: 0;
+}
+/*
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+	margin-top: 4px;
+}
+*/

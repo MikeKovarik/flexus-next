@@ -1,0 +1,29 @@
+input[type="checkbox"] {
+
+	// TOGGLE BUTTONS, STATEFUL CHIPS, ETC... BUTTON-LIKE
+
+	&[chip],
+	&[button], // todo: experimental
+	&[icon] {
+		-webkit-appearance: none;
+		align-items: center;
+		justify-content: center;
+		display: inline-flex;
+	}
+	&[icon] {
+		-webkit-appearance: button;
+		border-radius: 50%;
+		padding: 0;
+		width: var(--size);
+	}
+	&[chip]::before {
+		content: attr(chip);
+	}
+	&[button] {
+		-webkit-appearance: button;
+	}
+	&[button]::before {
+		content: attr(button);
+	}
+
+}

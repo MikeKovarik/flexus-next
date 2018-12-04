@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>input</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+	<style>
+		input {
+			max-width: 100px;
+		}
+	</style>
+
+</head>
+<body>
+
+	<template variants-row="seamed elevated flat plain" variants-col="rounded round">
+
+		<button condensed neutral>edit</button>
+		<input condensed neutral type="text" placeholder="input">
+		<select condensed neutral>
+			<option>select</option>
+		</select>
+
+		<br>
+
+		<button dense>edit</button>
+		<input dense type="text" placeholder="input">
+		<select dense>
+			<option>select</option>
+		</select>
+
+		<br>
+
+		<button>edit</button>
+		<input type="text" placeholder="input">
+		<select>
+			<option>select</option>
+		</select>
+
+		<br>
+
+		<button big tinted>edit</button>
+		<input big tinted type="text" placeholder="input">
+		<select big tinted>
+			<option>select</option>
+		</select>
+
+		<br>
+
+		<input type="checkbox">
+		<input type="checkbox" checked>
+		<input type="checkbox" toggle>
+		<input type="checkbox" toggle checked>
+		<input type="radio">
+		<input type="radio" checked>
+		<br>
+		<input type="checkbox" button="Button">
+		<input type="checkbox" button="Button" checked>
+		<input type="checkbox" icon="favorite">
+		<input type="checkbox" icon="favorite" checked>
+		<input type="checkbox" chip="Chip">
+		<input type="checkbox" chip="Chip" checked>
+
+	</template>
+
+	<template>
+		<div mini avatar></div>
+		<input mini flat no-bar type="text" placeholder="add">
+		<button mini flat neutral>save</button>
+		<div chip mini flat>chip</div>
+		<input mini flat type="checkbox" icon="favorite_outline">
+		<input mini flat type="checkbox" icon="favorite" checked>
+		<br>
+		<div small avatar></div>
+		<input small flat no-bar type="text" placeholder="add">
+		<button small flat neutral>save</button>
+		<div chip small flat>chip</div>
+		<input small flat type="checkbox" icon="favorite_outline">
+		<input small flat type="checkbox" icon="favorite" checked>
+		<br>
+		<div big avatar></div>
+		<input big seamed type="text" placeholder="add">
+		<button big seamed neutral>save</button>
+		<div chip big seamed>chip</div>
+		<input big seamed type="checkbox" icon="favorite_outline">
+		<input big seamed type="checkbox" icon="favorite" checked>
+	</template>
+
+
+	<h3>TODO</h3>
+	<ul>
+		<li></li>
+	</ul>
+
+
+	<script src="./util/testbed.js"></script>
+
+</body>
+</html>

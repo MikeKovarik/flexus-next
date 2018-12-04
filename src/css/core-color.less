@@ -1,0 +1,297 @@
+html, body {
+	// recalculate colors (--background-default to --background)
+	.reset-colors();
+	.apply-colors();
+}
+
+/*
+EXPLAINER
+
+absolute black-white values used in ink ripple, reveal effects, hover states, etc...
+never used in any real background:var(--) scenario
+--theme-base-bg & --theme-base-fg
+
+Actual colors of the backgrounds of the elements.
+Used as basis for scoped --bg and --fg.
+Rarely ever used directly in background:var(--) scenario.
+--theme-bg & --theme-fg
+
+General elements coloring.
+Can be rewritten by [tinted], [primary] and [secondary].
+Otherwise falls back to --theme-bg and --theme-fg
+Applied to big container elements, like cards, toolbars, etc...
+--bg & --fg
+
+View's main backgound. the thing below card 
+--todobackdrop
+
+card
+--sheet
+
+can only be applies to last child. mostly inline elements, like buttons, chips, snackbars
+and even icon and ink pseudo elements
+--bg & --fg
+
+*/
+
+[theme="white"] {
+	&:extend([theme]);
+	--theme-base-bg: 255, 255, 255;
+	--theme-base-fg: 0, 0, 0;
+	--theme-todobackdrop-bg: 255, 255, 255;
+	--theme-todobackdrop-fg: 0, 0, 0;
+	--theme-sheet-bg: 255, 255, 255;
+	--theme-sheet-fg: 0, 0, 0;
+}
+
+:root,
+[theme="light"] {
+	&:extend([theme]);
+	--theme-base-bg: 255, 255, 255;
+	--theme-base-fg: 0, 0, 0;
+	// view background
+	--theme-todobackdrop-bg: 237, 237, 237;
+	--theme-todobackdrop-fg: 0, 0, 0;
+	// card
+	--theme-sheet-bg: 255, 255, 255;
+	--theme-sheet-fg: 0, 0, 0;
+}
+
+[theme="black"] {
+	&:extend([theme]);
+	--theme-base-bg: 0, 0, 0;
+	--theme-base-fg: 255, 255, 255;
+	--theme-todobackdrop-bg: 0, 0, 0;
+	--theme-todobackdrop-fg: 255, 255, 255;
+	--theme-sheet-bg: 0, 0, 0;
+	--theme-sheet-fg: 255, 255, 255;
+}
+
+[theme="dark"] {
+	&:extend([theme]);
+	// absolute black-white values used in ink ripple, reveal effects, hover states, etc... 
+	--theme-base-bg: 0, 0, 0;
+	--theme-base-fg: 255, 255, 255;
+	// actual colors of the backgrounds of the elements.
+	--theme-todobackdrop-bg: 16, 16, 16;
+	--theme-todobackdrop-fg: 255, 255, 255;
+	
+	--theme-sheet-bg: 32, 32, 32;
+	--theme-sheet-fg: 255, 255, 255;
+	//--theme-sheet-bg: 20, 20, 20; // where are these from?
+	//--theme-sheet-fg: 255, 255, 255; // where are these from?
+}
+
+
+[theme] {
+	.reset-colors();
+	//.apply-colors();
+	.apply-foreground();
+	.apply-backdrop();
+}
+
+//.reset-theme-colors() {
+.reset-colors() {
+
+	--todobackdrop-bg: var(--theme-todobackdrop-bg, var(--theme-base-bg));
+	--todobackdrop-fg: var(--theme-todobackdrop-fg, var(--theme-base-fg));
+
+	--sheet-bg: var(--theme-sheet-bg, var(--theme-base-bg));
+	--sheet-fg: var(--theme-sheet-fg, var(--theme-base-fg));
+
+	--theme-bg: var(--theme-base-bg);
+	--theme-fg: var(--theme-base-fg);
+
+	--bg: var(--theme-bg);
+	--fg: var(--theme-fg);
+}
+
+.apply-colors() {
+	.apply-background();
+	.apply-foreground();
+}
+
+
+.apply-foreground() {
+	color:            rgba(var(--fg, var(--fg)), var(--fg-opacity, var(--fg-base-opacity, 1)));
+}
+.apply-background() {
+	background-color: rgba(var(--bg, var(--bg)), var(--bg-opacity, var(--bg-base-opacity, 1)));
+}
+.apply-surface() {
+	background-color: rgb(var(--sheet-bg, var(--theme-sheet-bg, var(--theme-base-bg))))
+}
+.apply-backdrop() {
+	background-color: rgb(var(--todobackdrop-bg, var(--theme-todobackdrop-bg, var(--theme-base-bg))))
+}
+
+// Elements with opacity variables built in set the color automatically and change int based on
+// the hover/focus/click state. But we also apply the color ourselves so that [muted] can be applied
+// to any random element, like <span> and <p>
+[muted] {
+	--fg-opacity: 0.6;
+	.apply-foreground();
+}
+
+
+
+[scope-theme-colors] {
+	--primary-bg:   var(--theme-primary-bg);
+	--primary-fg:   var(--theme-primary-fg);
+	--secondary-bg: var(--theme-secondary-bg);
+	--secondary-fg: var(--theme-secondary-fg);
+	--tint-bg:      var(--theme-tint-bg);
+	--tint-fg:      var(--theme-tint-fg);
+}
+[calculate-tint] {
+	--theme-tint-bg: var(--theme-primary-bg, var(--theme-secondary-bg));
+	--theme-tint-fg: var(--theme-primary-fg, var(--theme-secondary-fg));
+}
+[scope-color-shortcuts] {
+	--primary:   var(--primary-bg,   var(--theme-primary-bg));
+	--secondary: var(--secondary-bg, var(--theme-secondary-bg));
+	--tint:      var(--tint-bg,      var(--theme-tint-bg));
+}
+
+:root {
+	// TODO: delete
+	// Global (or view's) theme
+	//--theme-primary-bg: 98, 0, 238;
+	//--theme-primary-fg: 255, 255, 255;
+	//--theme-secondary-bg: 98, 0, 238;
+	//--theme-secondary-fg: 255, 255, 255;
+	// Local scope inehrits --theme-tint into local --tint that can be overriden by inline attributes like [red]
+	--tint-bg: var(--theme-tint-bg);
+	--tint-fg: var(--theme-tint-fg);
+	//--theme-tint-bg: 98, 0, 238;
+	//--theme-tint-fg: 255, 255, 255;
+	--theme-primary-bg: 98, 0, 238;
+	--theme-primary-fg: 255, 255, 255;
+}
+
+.createcolor(white,  ~'255, 255, 255', ~'0, 0, 0');
+.createcolor(black,  ~'0, 0, 0', ~'255, 255, 255');
+//.createcolor(gray,  ~'128, 128, 128', ~'255, 255, 255');
+.createcolor(red,    ~'176, 0, 32',    ~'255, 255, 255');
+.createcolor(purple, ~'98, 0, 238',    ~'255, 255, 255');
+.createcolor(pink,   ~'216, 27, 96',   ~'255, 255, 255');
+.createcolor(blue,   ~'33, 150, 243',  ~'255, 255, 255');
+//.createcolor(blue,   ~'3, 169, 244',  ~'255, 255, 255');
+.createcolor(teal,   ~'3, 218, 197',   ~'255, 255, 255');
+.createcolor(green,  ~'80, 170, 20',   ~'255, 255, 255');
+//.createcolor(green,  ~'139, 195, 74',  ~'255, 255, 255');
+
+:root,
+[primary],
+[secondary] {
+	// translate primary and secondary colors into tint
+	&:extend([calculate-tint]);
+	// apply theme colors to local scope (--primary-bg: --theme-primary-bg).
+	&:extend([scope-theme-colors]);
+	// apply easy to use shortcuts (--primary: --theme-primary-bg).
+	&:extend([scope-color-shortcuts]);
+}
+
+.createcolor(@name, @bg, @fg) {
+	[primary="@{name}"] {
+		--theme-primary-bg: @bg;
+		--theme-primary-fg: @fg;
+	}
+	[secondary="@{name}"] {
+		--theme-secondary-bg: @bg;
+		--theme-secondary-fg: @fg;
+	}
+	// Overrides local tint and bypasses any color inheritance and recalcutaion.
+	// Local --tint is used for reskinning of for example <button> or certain other element
+	// while we could always tap into app's original global theme color if needed (even from
+	// within the locally styled element)
+	[@{name}] {
+		--tint-bg: @bg;
+		--tint-fg: @fg;
+		--tint: var(--tint-bg);
+	}
+}
+
+/*
+.responsive-screensize(transparent, {
+	--background: transparent;
+});
+.responsive-screensize(translucent, {
+	--background: ~'rgba(var(--background-rgb), var(--translucent-opacity))';
+});
+// TODO: MOVE, FLUENT EXCLUSIVE
+.responsive-screensize(acrylic, {
+	backdrop-filter: blur(var(--acrylic-blur));
+	--background: ~'rgba(var(--background-rgb), var(--acrylic-opacity, var(--translucent-opacity)))';
+});
+
+.theme-inherited(@light, @dark) {
+	// TODO: deprecate
+	[dark] & {
+		@dark();
+	}
+	[light] & {
+		@light();
+	}
+}
+
+*/
+
+
+
+
+[apply-tinted-block] {
+	--bg: var(--tint-bg, var(--theme-tint-bg));
+	--fg: var(--tint-fg, var(--theme-tint-fg));
+	background-color: rgb(var(--bg));
+	color:            rgb(var(--fg));
+}
+
+[apply-tinted-foreground] {
+	--fg: var(--tint-bg, var(--theme-tint-bg));
+	color: rgb(var(--fg));
+}
+
+[apply-tinted-background] {
+	--bg: var(--tint-bg, var(--theme-tint-bg));
+	background-color: rgb(var(--bg));
+}
+
+
+[card],
+card,
+div,
+main,
+section,
+header,
+footer,
+flexus-view,
+flexus-pages,
+flexus-toolbar,
+div {
+	&[tinted] {
+		&:extend([apply-tinted-block]);
+	}
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+code,
+strong,
+[foreground="tinted"] {
+	&[tinted] {
+		&:extend([apply-tinted-foreground]);
+	}
+}
+
+[background="tinted"] {
+	&[tinted] {
+		&:extend([apply-tinted-background]);
+	}
+}

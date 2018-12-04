@@ -1,0 +1,26 @@
+html, body {
+    height: unset;
+}
+html, body {
+    overflow: auto;
+    flex-direction: column;
+}
+
+.testbed {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+@media only screen and (max-width: 999px) {
+    .testbed {
+        flex-direction: column;
+    }
+}
+
+.testbed > div {
+    flex: 1;
+    padding: 16px;
+    background-color: rgb(var(--theme-todobackdrop-bg, var(--bg)));
+    color:            rgb(var(--theme-todobackdrop-fg, var(--fg)));
+}

@@ -1,0 +1,138 @@
+// TODO: properly resolve [fullbleed] and [inset] inside [nopadding]
+
+
+
+[nomargin] {
+	margin: 0 !important;
+}
+[nopadding] {
+	padding: 0 !important;
+	--offset-modifier: 0px;
+	// This is used in cards, for now. But it may be the way to go forward.
+	--padding-top: 0px !important;
+	--padding-right: 0px !important;
+	--padding-bottom: 0px !important;
+	--padding-left: 0px !important;
+	// Fixes vertical layouts.
+	// This was added here to fix nested layouts (see the materia-music-player detail demo app).
+	// Requires further investigation (regarding nested layouts and [fullbleed]/[inset] inside [nopadding])
+	//--side: 0px;
+}
+[padded] {
+	padding: var(--rem);
+}
+
+
+[fullwidth] {
+	//width: 100%;
+	width: calc(100% - 2 * var(--offset));
+	width: -webkit-fill-available;
+}
+[fullheight] {
+	//height: 100%;
+	height: calc(100% - 2 * var(--offset));
+	height: -webkit-fill-available;
+}
+
+
+[padded],
+[fullbleed][scrollable] {
+	--padding-horizontal: calc(-1 * var(--offset));
+	padding-left:   var(--padding-horizontal, var(--gutter));
+	padding-right:  var(--padding-horizontal, var(--gutter));
+	//padding-left:  var(--offset);
+	//padding-right: var(--offset);
+}
+
+[padded] {
+	padding-top:    var(--gutter);
+	padding-bottom: var(--gutter);
+}
+
+
+[apply-offset] {
+	margin-left:  var(--offset);
+	margin-right: var(--offset);
+}
+// |------------| fullbleed
+// |-|--------|-| offset, half the --theme-sideline size
+// |--|------|--| inset (default behavior), half the --theme-sideline size
+[fullbleed] {
+	//--offset: var(--side, var(--theme-sideline));
+	&:extend([apply-offset]);
+	--offset: calc(-1 * var(--side, var(--theme-sideline)));
+}
+[offset] {
+	&:extend([apply-offset]);
+	--offset: calc(-0.5 * var(--side, var(--theme-sideline)));
+}
+[inset] {
+	&:extend([apply-offset]);
+	// TODO: introduce better calculations so that inset works properly inside [nopadding]
+	//--offset: 0px;
+	--offset: calc(var(--sideline, var(--theme-sideline)) - var(--offset-modifier, var(--sideline, var(--theme-sideline))));
+}
+
+/*
+// TODO: introduce better calculations so that inset works properly inside [nopadding]
+main[nopadding] > [inset] {
+	--offset: 16px;
+}
+*/
+
+[indent] {
+	padding-left: var(--keyline);
+}
+
+
+[spaced]:not([grid]):not(grid):not(table) {
+
+	// NOTE: It's not prefferable to have !important, but it's necessary because
+	// elements with more complex selects (mainly buttons) override the spacing easily.
+
+	&:not([vertical]) {
+		> *:not(:last-child) {
+			margin-right: var(--gutter) !important;
+		}
+	}
+
+	&[vertical] {
+		> *:not(:last-child) {
+			margin-bottom: var(--gutter) !important;
+		}
+	}
+
+}
+
+// reset table
+table { 
+	border-collapse: separate;
+}
+
+// Reset default theme gutter if no other value is specified.
+[spaced=""] {
+	--gutter: var(--theme-gutter, 16px);
+}
+// Apply gutter (of any value).
+[spaced] {
+	// [grid] and <grid>
+	gap: var(--gutter);
+	// <table>
+	border-spacing: var(--gutter);
+}
+
+[spaced="0px"] {--gutter: 0px;}
+[spaced="1px"] {--gutter: 1px;}
+[spaced="2px"] {--gutter: 2px;}
+[spaced="3px"] {--gutter: 3px;}
+[spaced="4px"] {--gutter: 4px;}
+[spaced="5px"] {--gutter: 5px;}
+[spaced="6px"] {--gutter: 6px;}
+[spaced="7px"] {--gutter: 7px;}
+[spaced="8px"] {--gutter: 8px;}
+
+[spaced="0"] {--gutter: 0px;}
+[spaced="1"] {--gutter: calc(1 * var(--theme-gutter, 16px));}
+[spaced="2"] {--gutter: calc(2 * var(--theme-gutter, 16px));}
+[spaced="3"] {--gutter: calc(3 * var(--theme-gutter, 16px));}
+[spaced="4"] {--gutter: calc(4 * var(--theme-gutter, 16px));}

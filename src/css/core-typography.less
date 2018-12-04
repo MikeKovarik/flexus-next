@@ -1,0 +1,151 @@
+html {
+	// ensure 16px grid for REM (global) units
+	font-size: var(--theme-gutter); // 16px
+}
+
+body {
+	font-size: 16px;
+}
+[mouse][optimize] { // TODO
+	font-size: 15px;
+}
+
+
+// NOTE: Having !important rule is not prefferable but necessary.
+//       If there's more complex selector, simple [bold] would get invalidated.
+//       Or when the whole container is set to bold, but some children have custom styling
+//       that needs to be overwritten by the bold. For example - in messaging app,
+//       unread message with [bold] on container should turn everything to bold. even child[body2].
+
+
+// WARNING: not strictly following the official naming.
+// It's because [thin] is a intuitive name to use where [light] clashes with color & theme attributes.
+// Also weight 100 (thin) is rarely ever used in material design whereas 300 (light) is common.
+// https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#Common_weight_name_mapping
+
+//[thin]   {font-weight: 300 !important}
+//[normal] {font-weight: 400 !important}
+//[medium] {font-weight: 500 !important}
+//[bold]   {font-weight: 700 !important}
+
+[thin],   [thin] *   {font-weight: 300 !important}
+[normal], [normal] * {font-weight: 400 !important}
+[medium], [medium] * {font-weight: 500 !important}
+[bold],   [bold] *   {font-weight: 700 !important}
+// makes current (parent's) weight a step thinner/thicker
+[lighter] {font-weight: lighter}
+[bolder]  {font-weight: bolder}
+
+[nowrap] {
+	// prevents internal inline elements from wrapping
+	white-space: nowrap;
+}
+
+[text="left"]   {text-align: left}
+[text="center"] {text-align: center}
+[text="right"]  {text-align: right}
+
+[text-left]   {text-align: left}
+[text-center] {text-align: center}
+[text-right]  {text-align: right}
+
+/*
+subheader
+subtitle
+headline
+*/
+
+
+// TODO: 
+/*
+[subheader] {	
+}
+*/
+
+// https://material.io/design/typography/the-type-system.html#applying-the-type-scale
+
+
+[h1],
+h1 {
+	font-size: 96px !important;
+	font-weight: 300;
+	//letter-spacing: -1.5em;
+}
+[h2],
+h2 {
+	font-size: 60px !important;
+	font-weight: 300;
+	//letter-spacing: -0.5em;
+}
+[h3],
+h3 {
+	font-size: 48px !important;
+	font-weight: 400;
+	//letter-spacing: 0em;
+}
+[h4],
+h4 {
+	font-size: 34px !important;
+	font-weight: 400;
+	////letter-spacing: -0.25em;
+}
+[h5],
+h5 {
+	font-size: 24px !important;
+	font-weight: 400;
+	//letter-spacing: 0em;
+}
+[h6],
+h6 {
+	font-size: 20px !important;
+	font-weight: 500;
+	///letter-spacing: 0.15em;
+}
+[subtitle1] {
+	font-size: 16px;
+	font-weight: 400;
+	//letter-spacing: 0.15em;
+}
+[subtitle2] {
+	font-size: 14px;
+	font-weight: 500;
+	//letter-spacing: 0.1em;
+}
+
+[body1] {
+	font-size: 16px;
+	font-weight: 400;
+	//letter-spacing: 0.5em;
+}
+// NOTE: replaces [secondary] from previous flexus version
+[body2] {
+	font-size: 14px;
+	font-weight: 400;
+	//letter-spacing: 0.25em;
+	// This mixin goes beyond the font-size and adds color.
+	// But according to Material Design.
+	//&:extend([muted]);
+}
+[button] {
+	font-family: var(--font-family);
+	font-size: 14px;
+	font-weight: 500;
+	//letter-spacing: 0.75em;
+	letter-spacing: .25px;
+	text-transform: uppercase;
+	-webkit-font-smoothing: antialiased;
+}
+
+[caption] {
+	font-size: 12px;
+	font-weight: 400;
+	//letter-spacing: 0.4em;
+}
+[overline] {
+	font-size: 10px;
+	font-weight: 400;
+	//letter-spacing: 1.5em;
+	text-transform: uppercase;
+}
+
+

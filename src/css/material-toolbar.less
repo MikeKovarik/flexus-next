@@ -1,0 +1,220 @@
+
+
+:root,
+[screensize="s"] {
+	--toolbar-min-height: 56px;
+	--fx-item-min-height: 48px;
+}
+[screensize="m"],
+[screensize="l"] {
+	--toolbar-min-height: 64px;
+}
+
+[dense],
+[mouse][optimize] {
+	--toolbar-min-height: 48px;
+	// https://material.io/design/layout/density.html#usage
+	--fx-item-min-height: 32px;
+}
+flexus-toolbar[card] {
+	--toolbar-min-height: 48px;
+}
+
+
+
+
+
+
+
+flexus-toolbar {
+
+	// 1 custom local override
+	// 2 custom directly targetted at toolbar override
+	// 2 default sheet (toolbar, card, panels, etc)
+	//background-color: rgba(var(--bg, var(--toolbar-bg, var(--sheet-bg))), var(--bg-opacity, 1));
+	//color:            rgba(var(--fg, var(--toolbar-fg, var(--sheet-fg))), var(--fg-opacity, 1));
+
+	&:extend([sheet] all);
+	//&:extend([horizontal-axis] all);
+	&:extend([horizontal-flexbox] all);
+	--offset: 0px;
+
+	// BASIC LOOKS
+
+	--elevation: var(--elevation-4);
+	box-shadow: var(--elevation);
+
+	// NOTE: toolbar also supports [seamed] but that attribute is global as it applies to many elements.
+	&[seamed] {
+		border-width: 0 0 var(--seam-size, 1px) 0;
+	}
+
+	&[waterfall] {
+		// TODO: only works with javascript
+		--elevation: var(--elevation-0);
+	}
+
+	&[transparent] {
+		box-shadow: none;
+		background-color: transparent;
+	}
+
+	// LAYOUT
+
+	font-weight: 500;
+	font-size: 20px;
+	&, [icon] {
+		--icon-size: 24px;
+	}
+	--avatar-size: 24px;
+	position: relative;
+	flex-shrink: 0;
+
+	&:not([multisection]),
+	& > section {
+		&:extend([fx-item] all);
+		--padding-vertical: 0px;
+		--padding-horizontal: var(--side, var(--theme-sideline));
+		--offset: 0px;
+		align-items: center;
+		min-height: var(--toolbar-min-height);
+	}
+	&[multisection] {
+		display: flex;
+		flex-direction: column;
+	}
+	& > section {
+		position: relative;
+	}
+	/*
+	& > section {
+		margin-left:  calc(-1 * var(--theme-sideline));
+		margin-right: calc(-1 * var(--theme-sideline));
+	}
+	*/
+
+	// RERSET INPUT & BUTTON
+	& select,
+	& input[type="search"],
+	& input[type="text"] {
+		outline: none;
+		font: inherit;
+		color: inherit;
+		background-color: transparent;
+		min-width: 0;
+		padding: 0 !important;
+		border: none !important;
+		text-indent: 0;
+		//[screeensize="s"] & {
+			height: 100%;
+		//}
+	}
+
+	// NOTE: the search input textbox should not have any border, but any others
+	//       in other sections should be able to have the bottom border.
+	input[type="search"],
+	&[card] > input,
+	[card] > input {
+		border: none !important;
+	}
+
+	button:not([fab]) {
+		&:not(:empty) {
+			&:extend(button[plain]);
+		}
+		&[icon]:empty {
+			background-color: transparent;
+			// NOTE: not setting width because of thin icon 'more'
+			// TODO: ink needs to be fixed
+			--hitbox-offset: 10px;
+			//min-width: var(--icon-size);
+			//width: var(--icon-size);
+			height: var(--icon-size);
+			padding: 0;
+			box-shadow: none;
+			color: inherit;
+		}
+	}
+
+	// STYLES
+
+/*
+	&[card] {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+*/
+	&[floating] {
+		position: absolute;
+		z-index: 16;
+
+		top: 0px;
+		right: 0px;
+		left: 0px;
+
+		&[card] {
+			--offset: var(--side, var(--theme-sideline));
+			//top: var(--offset);
+			top: 8px;
+			right: var(--offset);
+			left: var(--offset);
+		}
+
+		// TODO: remove this margin once (if possible) the --offset is finalized and resolved.
+		// It's currently problematic because :not([multisection]) inherits the negative margin behavior.
+		margin: 0;
+		& + main,
+		& + flexus-pages > * {
+			// TODO: this needs more polish and integration with [card] and [multisection]
+			padding-top: calc(8px + 48px + 16px);
+		}
+	}
+	&[absolute][top] {
+		// kinda like floating except it doesn't compensate padding below.
+		& + main,
+		& + flexus-pages > * {
+			// TODO: this needs more polish and integration with [card] and [multisection]
+			padding-top: 0;
+		}
+	}
+
+}
+
+
+[screensize="m"] flexus-toolbar input[type="search"],
+[screensize="m"] flexus-toolbar input[type="text"],
+[screensize="s"] flexus-toolbar input[type="search"],
+[screensize="s"] flexus-toolbar input[type="text"] {
+	background: transparent;
+	height: 100%;
+}
+
+//input[flat=""],
+[screensize="l"] flexus-toolbar input[type="search"],
+[screensize="l"] flexus-toolbar input[type="text"] {
+	background-color: ~'rgba(var(--fg), 0.06)';
+	height: 40px;
+	border-radius: 6px;
+	padding: 0 16px;
+}
+
+flexus-toolbar [search] > input[type="text"],
+flexus-toolbar [search] > input[type="search"] {
+	flex: 1;
+}
+
+
+
+/*
+flexus-toolbar[floating] {
+	position: absolute;
+	z-index: 200;
+	--toolbar-offset: var(--theme-sideline);
+	left: var(--toolbar-offset);
+	top: var(--toolbar-offset);
+	right: var(--toolbar-offset);
+}
+flexus-toolbar[floating] + * {
+	padding-top: calc(var(--toolbar-offset, 0) + var(--toolbar-min-height) + var(--theme-sideline))
+}
+*/

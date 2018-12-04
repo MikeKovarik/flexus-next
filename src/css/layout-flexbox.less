@@ -1,0 +1,49 @@
+
+
+// FLEXBOX
+[layout] {
+	display: flex;
+}
+
+[flex] {
+    flex: 1;
+}
+[flex-1] {flex: 1}
+[flex-2] {flex: 2}
+[flex-3] {flex: 3}
+[flex-4] {flex: 4}
+[flex-5] {flex: 5}
+
+
+
+
+
+
+
+[center] {
+	align-items: center;
+	justify-content: center;
+}
+[center][left] {
+	justify-content: flex-start;
+}
+
+[self-start]  {align-self: flex-start}
+[self-center] {align-self: center}
+[self-end]    {align-self: flex-end}
+
+[content-start]  {align-items: flex-start;}
+[content-center] {align-items: center;}
+[content-end]    {align-items: flex-end;}
+
+[layout]:not([vertical])[top] {
+	align-items: flex-start;
+}
+[layout]:not([vertical])[bottom] {
+	align-items: flex-end;
+}
+
+
+[noshrink] {
+	flex-shrink: 0;
+}

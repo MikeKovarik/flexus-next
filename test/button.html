@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>button</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+	<style>
+
+		[red] {
+			--tint-bg: 220, 0, 60;
+			--tint-fg: 255, 255, 255;
+		}
+
+		button {
+			margin: 4px !important;
+		}
+
+		[transparent] {
+			--local-background-opacity: 0;
+		}
+		[translucent] {
+			--local-background-opacity: 0.6;
+		}
+		[opaque] {
+			--local-background-opacity: 1;
+		}
+
+		/* reset big elements to default opaque background */
+		flexus-view,
+		flexus-toolbar,
+		flexus-tabs,
+		flexus-pages,
+		[card] {
+			--local-background-opacity: 1;
+		}
+
+		/* for testing purposes */
+		[card] {
+			background-color: rgb(var(--background-rgb));
+			color: rgb(var(--foreground-rgb));
+			border-radius: 5px;
+			box-shadow: 0 1px 10px rgba(0,0,0,0.4);
+			padding: 24px;
+		}
+		.testcard {
+			background-size: cover;
+			background-position: center;
+			width: 300px;
+			height: 300px;
+			display: inline-flex;
+			align-items: flex-start;
+			flex-direction: column;
+			justify-content: flex-end;
+			margin: 8px;
+		}
+		.testcard2 {
+			background-image: url('./img/butterfly.jpg');
+		}
+		.testcard p {
+			margin-top: 8px;
+			margin-bottom: 24px;
+		}
+		.testcard h1 {
+			margin: 0;
+			padding: 0;
+			font-weight: 400;
+		}
+		.testcard2 button {
+			color: #FFF !important;
+		}
+
+
+		[fab][icon]::before,
+		[fab] > [icon]::before {
+			outline: 1px solid red;
+		}
+	</style>
+
+</head>
+<body>
+
+	<template>
+
+		<button>edit</button>
+		<button icon="edit">edit</button>
+		<button><i icon="edit"></i>edit</button>
+		<button icon="edit"></button>
+		<button icon="favorite" rounded flat>Faves</button>
+		<button icon="favorite" rounded tinted>Faves</button>
+		<button text>Text</button>
+		<button text icon="car">Text & Icon</button>
+
+		<br><hr><br>
+
+	</template>
+
+	<template variants-row="plain elevated flat seamed transparent" variants-col="tinted muted">
+
+		<button>default</button>
+		<button icon="edit">icon</button>
+		<button icon="edit"></button>
+		<br>
+		<button disabled>disabled</button>
+		<button disabled icon="edit">icon</button>
+		<button disabled icon="edit"></button>
+		<br>
+		<button dense>dense</button>
+		<button dense icon="edit">icon</button>
+		<button dense icon="edit"></button>
+		<br>
+		<button rounded>rounded</button>
+		<button rounded icon="edit">icon</button>
+		<button rounded icon="edit"></button>
+		<br>
+		<button round>round</button>
+		<button round icon="edit">icon</button>
+		<button round icon="edit"></button>
+		<br>
+		<button red>red</button>
+		<button red icon="edit">red</button>
+		<button red icon="edit"></button>
+
+	</template>
+
+	<template name="sized icon buttons">
+
+		<button icon="favorite" small></button>
+		<button icon="favorite"></button>
+		<button icon="favorite" big></button>
+
+		<button icon="favorite" size="18"></button>
+		<button icon="favorite" size="20"></button>
+		<button icon="favorite" size="24"></button>
+		<button icon="favorite" size="32"></button>
+		<button icon="favorite" size="48"></button>
+
+	</template>
+
+	<template name="vertical">
+
+		<p muted body2>Like in Android Contacts app's detail</p>
+		<button vertical icon="phone">Call</button>
+		<button vertical icon="message">Text</button>
+		<button vertical icon="email">Email</button>
+		<p muted body2>Different sized</p>
+		<button vertical icon="phone" small>Call</button>
+		<button vertical icon="phone">Call</button>
+		<button vertical icon="phone" big>Call</button>
+		<br>
+		<button icon="phone" small>Call</button>
+		<button icon="phone">Call</button>
+		<button icon="phone" big>Call</button>
+		<p muted body2>And in various looks</p>
+		<button vertical plain icon="phone">Plain</button>
+		<button vertical flat icon="phone">Flat</button>
+		<button vertical seamed icon="phone">Seamed</button>
+		<button vertical elevated icon="phone">Elevated</button>
+		<p muted body2>In comparison to the default look</p>
+		<button icon="phone">Call</button>
+		<button icon="message">Text</button>
+		<button icon="email">Email</button>
+
+	</template>
+
+	<template name="fab">
+
+		<p body2 muted>inherits [elevated] with resting elevation of 6</p>
+
+		<p>Default</p>
+		<p body2 muted>Icon-only FAB is 56px wide and tall. According to spec.</p>
+		<p body2 muted>FAB with text shrinks to standard 48px.</p>
+		<button fab icon="plus"></button>
+		<button fab icon="plus">Payment method</button>
+		<p>[small]</p>
+		<p body2 muted>Small Icon-only FAB is 40px wide and tall. According to spec.</p>
+		<p body2 muted>Small modifier for FAB with text shrinks is not in MD spec but is inspired by Google Pay app where 44px tall FAB with text is.</p>
+		<button fab small icon="plus"></button>
+		<button fab small icon="plus">Payment method</button>
+		<p>[big]</p>
+		<p body2 muted>Just like the standard FAB except the FAB with text is also 56px tall and has 16px paddings. It's also not in MD spec (much like [small] text FAB) but allows for the text to be collapsed and animated. Built according to Android Messages app.</p>
+		<button fab big icon="plus"></button>
+		<button fab big icon="plus">Payment method</button>
+
+		<p muted body2>Collapsible ala Andoid Messages</p>
+		<div spaced center left layout>
+			<button fab big icon="message">Start chat</button>
+			<i icon="arrow-forward"></i>
+			<button fab big icon="message"></button>
+		</div>
+		<div spaced center left layout>
+			<button fab big icon="message">
+				<span collapse>[icon]</span>
+			</button>
+			<i icon="arrow-forward"></i>
+			<button fab big icon="message">
+				<span collapse collapsed style="width: 0px">[icon]</span>
+			</button>
+		</div>
+		<div spaced center left layout>
+			<button fab big>
+				<i icon="message"></i>
+				<span collapse>&lt;icon&gt;</span>
+			</button>
+			<i icon="arrow-forward"></i>
+			<button fab big>
+				<i icon="message"></i>
+				<span collapse collapsed style="width: 0px">&lt;icon&gt;</span>
+			</button>
+		</div>
+
+		<div tinted fullbleed padded>
+			<p body2 muted>FAB inside tinted container should fall back to themes white/black background.</p>
+			<p body2 muted>text pristine and wrapped in span</p>
+			<button fab big icon="message">Start chat</button>
+			<br>
+			<button big fab icon="message">
+				<span collapse>Start chat</span>
+			</button>
+		</div>
+	
+	</template>
+
+	<template name="radio toggle">
+		<p body2 muted>This is just an experimental idea. Not a working thing</p>
+
+		<span rounded seamed>
+			<input type="radio" name="align" icon="format_align_left">
+			<input type="radio" name="align" icon="format_align_center">
+			<input type="radio" name="align" icon="format_align_right">
+		</span>
+
+	</template>
+
+	<template name="demos">
+
+		<div card class="testcard testcard1">
+			<h1>Butterflies</h1>
+			<p>Lorem ipsum dolor set</p>
+			<button plain nomargin>explore</button>
+		</div>
+
+		<div card dark class="testcard testcard2">
+			<h1>Butterflies</h1>
+			<p>Lorem ipsum dolor set</p>
+			<button plain nomargin>explore</button>
+		</div>
+
+	</template>
+
+
+	<h3>TODO</h3>
+	<ul>
+		<li>tranparent tinted (box-shadow)</li>
+		<li>seamed tinted on hover (border drops opacity from 1 to 0.x)</li>
+	</ul>
+
+
+	<script src="./util/testbed.js"></script>
+
+</body>
+</html>

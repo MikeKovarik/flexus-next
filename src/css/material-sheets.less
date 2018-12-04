@@ -1,0 +1,80 @@
+.responsive-screensize(flat, {
+//[flat] {
+	box-shadow: var(--elevation-0);
+	&[hoverable] {
+		box-shadow: var(--elevation-1);
+	}
+	&[clickable] {
+		box-shadow: var(--elevation-2);
+	}
+//}
+});
+
+[elevation="1"] {
+	box-shadow: var(--elevation-1);
+	&[hoverable] {
+		box-shadow: var(--elevation-2);
+	}
+	&[clickable] {
+		box-shadow: var(--elevation-4);
+	}
+}
+
+[elevated],
+[elevation="2"] {
+	box-shadow: var(--elevation-2);
+	&[hoverable] {
+		box-shadow: var(--elevation-4);
+	}
+	&[clickable] {
+		box-shadow: var(--elevation-8);
+	}
+}
+
+[elevated] {
+	border: none !important;
+}
+
+
+
+:root {
+	--seam-size: 1px;
+	--seam-opacity: 0.12;
+}
+
+hr {
+	background-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+}
+
+[seamed] {
+	--seam-temp: 1px solid rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+}
+
+[seamed=""] {
+/* [seamed] outline is gray - translucent global foreground color */
+	border-width: var(--seam-size, 1px);
+	border-style: solid;
+	border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+
+	// The !important isn't there due to poor selectors but
+	// to prevent any :hover, :active, :focused elevated shadows
+	box-shadow: none !important;
+}
+
+[seamed="right"], [seamed=""][left]   {border-right:  var(--seam-temp)}
+[seamed="left"],  [seamed=""][right]  {border-left:   var(--seam-temp)}
+[seamed="bottom"],[seamed=""][top]    {border-bottom: var(--seam-temp)}
+[seamed="top"],   [seamed=""][bottom] {border-top:    var(--seam-temp)}
+
+[seamed="between"] {
+	& + & {
+		border-top: var(--seam-temp);
+	}
+}
+
+[seamed="around"] {
+	border-top: var(--seam-temp);
+	&:last-of-type {
+		border-bottom: var(--seam-temp);
+	}
+}

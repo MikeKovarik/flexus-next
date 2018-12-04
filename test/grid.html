@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>grid</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		.img {
+			background-color: #DDD;
+			padding-top: 100%;
+		}
+	</style>
+
+</head>
+<body theme="white">
+
+	<flexus-view>
+		<flexus-toolbar>
+			Grid test
+		</flexus-toolbar>
+		<main>
+			<h6>Default [grid]</h6>
+			<p body2 muted>Changes ammount of displayed items based on screensize and input type. Mouse based PCs can fit more items.</p>
+			<div grid>
+				<div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div>
+			</div>
+			<h6>[grid][spaced][colums="4"]</h6>
+			<div spaced grid columns="4">
+				<div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div>
+				<div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div><div card>&lt;div&gt;[card]</div>
+			</div>
+			<h6>[grid][fullbleed][columns="3"][spaced="2px"]</h6>
+			<p body2 muted>[fullbleed] offtets the grid, edge-to-edge.</p>
+			<p body2 muted>[columns="3"] sets exactly three columns. Does not change, isn't responsive.</p>
+			<div fullbleed grid columns="3" spaced="2px">
+				<div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div>
+				<div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div>
+			</div>
+			<h6>[grid] with prominent item</h6>
+			<p body2 muted>First item has [colspan="2"] and [rowspan="2"]. CSS and display:grid takes care of the rest.</p>
+			<p body2 muted>Default spacing</p>
+			<div spaced grid columns="5">
+				<div class="img" colspan="2" rowspan="2"></div>
+				<div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div>
+				<div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div><div class="img"></div>
+			</div>
+		</main>
+	</flexus-view>
+
+</body>
+</html>

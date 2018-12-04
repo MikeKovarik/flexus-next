@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>image descriptor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+</head>
+<body>
+
+
+	<pre style="white-space:pre-line"></pre>
+
+
+	<script>
+		var allowAnimations = navigator.maxTouchPoints === 0
+						|| navigator.hardwareConcurrency > 1
+						|| navigator.deviceMemory > 1
+
+		var KB = 1024
+		var MB = KB * 1024
+
+		if (window.performance.memory
+		&& window.performance.memory.jsHeapSizeLimit
+		&& window.performance.memory.jsHeapSizeLimit / MB < 300)
+			allowAnimations = false
+
+		var pre = document.querySelector('pre')
+
+		pre.innerHTML = `
+		allowAnimations: ${allowAnimations}
+
+		heapSizeLimit: ${(window.performance.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(1)} MB
+		totalHeapSize: ${(window.performance.memory.totalJSHeapSize / 1024 / 1024).toFixed(1)} MB
+		deviceMemory: ${navigator.deviceMemory} GB | ${navigator.deviceMemory * 1024} MB
+		hardwareConcurrency: ${navigator.hardwareConcurrency} | ${navigator.hardwareConcurrency / 2} cores
+		maxTouchPoints: ${navigator.maxTouchPoints}
+		`
+
+	</script>
+
+</body>
+</html>

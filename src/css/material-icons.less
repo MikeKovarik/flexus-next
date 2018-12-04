@@ -1,0 +1,65 @@
+//@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@font-face {
+	font-family: 'Material Icons';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../icons/material-icons-v41.woff2') format('woff2');
+}
+
+// MOVE this to core
+icon,
+i[icon],
+[icon]::before {
+	font-family: 'Material Icons', Roboto;
+    font-feature-settings: 'liga';
+	direction: ltr;
+	display: inline-block;
+	text-transform: none;
+	font-weight: normal;
+	font-style: normal;
+	letter-spacing: normal;
+	white-space: nowrap;
+	word-wrap: normal;
+	//vertical-align: middle;
+	width:       var(--icon-size);
+	height:      var(--icon-size);
+	font-size:   var(--icon-size);
+	line-height: var(--icon-size);
+	//width:       var(--size, var(--icon-size));
+	//height:      var(--size, var(--icon-size));
+	//font-size:   var(--size, var(--icon-size));
+	//line-height: var(--size, var(--icon-size));
+}
+
+[icon="more"] {
+	&::before {
+		width:       calc(var(--icon-size) * 0.5);
+		text-indent: calc(var(--icon-size) * -0.25);
+	}
+}
+
+
+[icon]::before {
+	content: attr(icon);
+	margin: 0;
+	padding: 0;
+}
+
+[icon="more"]::before {content: 'more_vert'}
+[icon="arrow-back"]::before {content: 'arrow_back'}
+[icon="arrow-forward"]::before {content: 'arrow_forward'}
+[icon="x"]::before {content: 'close'}
+
+[icon="clock"]::before {content: 'access_time'}
+[icon="calendar"]::before {content: 'calendar_today'}
+[icon="internet"]::before {content: 'language'}
+[icon="heart"]::before {content: 'favorite'}
+[icon="heart-outline"]::before {content: 'favorite_outline'}
+
+[icon="face"]::before {
+	content: '\E87C';
+}
+[icon="plus"]::before,
+[icon="add"]::before {
+	content: '\E145';
+}

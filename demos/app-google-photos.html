@@ -1,0 +1,331 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>floating toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		[indent] {
+			padding-left: calc(var(--core-side, 16px) + 56px);
+		}
+
+		.photos-on-device [card] {
+			width: 150px;
+		}
+
+
+		flexus-pages {
+			display: flex;
+		}
+		flexus-pages > * {
+			margin: inherit;
+			padding: inherit;
+		}
+
+		flexus-tabs {
+			background-color: #FFF;
+			min-height: 48px;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			box-shadow: var(--elevation-8);
+			display: flex;
+		}
+/*
+		body > flexus-view {
+			max-width: 33%;
+		}
+		flexus-view main {
+			display: flex;
+			flex-direction: column;
+		}
+		flexus-view main > * {
+			flex-shrink: 0;
+		}
+*/
+	</style>
+
+</head>
+<body google theme="white">
+
+<!--
+	<flexus-view id="gallery">
+		<main nopadding="s">
+			<div grid spaced="1px"></div>
+		</main>
+	</flexus-view>
+-->
+
+
+	<flexus-view>
+
+		<flexus-toolbar floating="s" card="s" rounded="s" waterfall="m l" seamed="m l">
+			<button icon="menu"></button>
+			<input type="text" placeholder="Search 'picnics'" flex>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<flexus-pages>
+
+
+			<main id="albums">
+
+				<p overline bold muted>Photos on device</p>
+
+				<div scrollable fullbleed spaced layout class="photos-on-device">
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+				</div>
+
+				<p overline bold muted>Albums</p>
+
+				<grid spaced>
+					<div>
+						<card seamed rounded ratio="1:1">
+							<icon absolute center tinted>add</icon>
+						</card>
+						<strong>New albums</strong>
+					</div>
+					<div>
+						<card flat rounded ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></card>
+						<strong>Name</strong>
+						<div muted>30 items * Shared</div>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+					</div>
+					<div>
+						<div flat rounded card ratio="1:1" style="background-image: url(./img/butterfly.jpg)" image-cover></div>
+						<strong>Name</strong>
+						<div muted>30 items * Shared</div>
+					</div>
+				</grid>
+
+			</main>
+
+
+			<main id="assistant">
+
+				<p overline bold muted>create new</p>
+				<div layout text="center">
+					<div flex vertical layout center>
+						<button big blue flat circle icon="book"></button>
+						<span body2>Albums</span>
+					</div>
+					<div flex vertical layout center>
+						<button big red flat circle icon="book"></button>
+						<span body2>Photo book</span>
+					</div>
+					<div flex vertical layout center>
+						<button big yellow flat circle icon="book"></button>
+						<span body2>Movie</span>
+					</div>
+					<div flex vertical layout center>
+						<button big green flat circle icon="book"></button>
+						<span body2>Collage</span>
+					</div>
+					<div flex vertical layout center>
+						<button big purple flat circle icon="book"></button>
+						<span body2>Animation</span>
+					</div>
+				</div>
+
+				<card offsetted seamed round>
+					<div center layout>
+						<icon>star</icon>
+						<span body2 muted flex>Assistant</span>
+						<button icon="close"></button>
+					</div>
+					<p h6>Enjoying Goolge Photos?</p>
+					<p muted>Make your opinion count</p>
+				</card>
+
+				<card offsetted seamed round>
+					<div center layout>
+						<icon>star</icon>
+						<span body2 muted flex>Assistant</span>
+						<button icon="close"></button>
+					</div>
+					<p h6>Back up device folders</p>
+					<p muted>Back up folders like Downloads and Screenshots to view, search, and organize their content in your Photos library.</p>
+					<button icon="folder" plain>Device folders</button>
+				</card>
+
+			</main>
+
+
+			<main id="share">
+
+				<div fx-item icon="add">Start a new share</div>
+				<hr>
+				<div fx-item>
+					<div circle avatar></div>
+					<div vertical layout flex>
+						<div>Oslava 22 + Projížďka</div>
+						<div body2 muted>You, Lucie</div>
+					</div>
+					<div rounded avatar></div>
+				</div>
+				<div fx-item>
+					<div circle avatar></div>
+					<div vertical layout flex>
+						<div>UNITED 2018</div>
+						<div body2 muted>You, Lucie</div>
+					</div>
+					<div rounded avatar></div>
+				</div>
+				<div fx-item bold>
+					<div circle avatar></div>
+					<div vertical layout flex>
+						<div>Monday, Sep 10</div>
+						<div body2>You, Lucie</div>
+					</div>
+					<div rounded avatar></div>
+				</div>
+
+			</main>
+
+
+		</flexus-pages>
+
+		<flexus-tabs>
+			<a href="#/photos" icon="book-variant">Photos</a>
+			<a href="#/albums" icon="image">Albums</a>
+			<a href="#/assistant" icon="account-circle">Assistant</a>
+			<a href="#/share" icon="share">Share</a>
+		</flexus-tabs>
+
+	</flexus-view>
+
+
+
+<!--
+	<flexus-view theme="dark" id="photo" style="display: none">
+		<flexus-toolbar translucent>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="share">Share</button>
+			<button icon="edit">Edit</button>
+			<button icon="information" for="infopanel">File info</button>
+		</flexus-toolbar>
+		<main nopadding>
+			<img id="photo-img" fit image-contain>
+		</main>
+	</flexus-view>
+
+
+	<flexus-view panel hidden dark subtle id="infopanel" style="display: none">
+		<flexus-toolbar transparent>
+			<button icon="x"></button>
+			<div flex>File Info</div>
+		</flexus-toolbar>
+		<flexus-list>
+			<div fx-item two-line>
+				<div secondary>File name</div>
+				<div>Filename.png</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>Date</div>
+				<div>Thursday, Octover 27, 2016 2:48 AM</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>Size</div>
+				<div>12.6 KB</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>Dimensions</div>
+				<div>514 x 383</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>Shot</div>
+				<div>--</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>ISO</div>
+				<div>--</div>
+			</div>
+			<div fx-item two-line>
+				<div secondary>Device</div>
+				<div>--</div>
+			</div>
+		</flexus-list>
+	</flexus-view>
+-->
+
+	<script>
+		var albums = [{
+			name: 'Some random photos',
+			date: 'April 28, 2014',
+			photos: [
+				'./img/clock.jpg',
+				'./img/toothbrush.jpg',
+				'./img/rulers.jpg',
+				'./img/rubberbands.jpg',
+				'./img/pencil.jpg',
+				'./img/butterfly.jpg',
+				'./img/coulson.jpg',
+			]
+		}]
+
+		var $viewGallery = document.querySelector('#gallery')
+		var $viewPhoto = document.querySelector('#photo')
+		var $photoImg = document.querySelector('#photo-img')
+		var $viewGalleryMain = $viewGallery.querySelector('main')
+
+		var html = albums.map(album => {
+				//<img src="${image}" image-cover>
+			var imgs = album.photos.map(image => `
+				<div style="background-image: url('${image}')" ratio="1:1" image-cover></div>
+			`).join('')
+			return `
+				<div indent h4>${album.name}</div>
+				<div indent body2 muted>${album.date}</div>
+				<div grid spaced="2px" columns="3">${imgs}</div>
+			`
+		}).join('')
+
+		$viewGalleryMain.innerHTML = html
+
+		// listen for click events on gallery grid
+		$viewGalleryMain.addEventListener('click', e => {
+			if (e.target.dataset.url) {
+				var url = e.target.dataset.url
+				$photoImg.src = url
+				$viewGallery.hide()
+				$viewPhoto.show()
+			}
+		})
+
+		// <flexus-view> fires 'hide' event when 'arrow-back' icon is clicked.
+		// Listein to it and show grid gallery afterwards
+		$viewPhoto.addEventListener('hide', e => {
+			$viewGallery.show()
+		})
+
+	</script>
+
+</body>
+</html>

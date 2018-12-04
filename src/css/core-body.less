@@ -1,0 +1,131 @@
+body {
+	display: flex;
+	flex-direction: row;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+body,
+flexus-view {
+	--side: var(--theme-sideline);
+	--gutter: var(--theme-gutter);
+	--keyline: var(--theme-keyline);
+	&:extend([vertical-axis] all);
+}
+
+flexus-view {
+
+	flex: 1;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	// NOTE: max-width is ciritcal for [horizontal][scrollable]
+	max-height: 100%;
+	max-width: 100%;
+
+	.apply-foreground();
+	.apply-backdrop();
+
+	main {
+		flex: 1;
+		//&:extend([vertical] all);
+		//&:extend([vertical-axis] all);
+		&:extend([vertical-scrollable] all);
+		padding: var(--side);
+		position: relative;
+	}
+
+}
+
+[sheet] {
+	--bg-opacity: 1;
+	--bg: var(--sheet-bg);
+	--fg: var(--sheet-fg);
+	.apply-colors();
+}
+
+// TODO: rename
+// separated from card itself because many elements (snackbar) inherits the look of card
+// but not the inner padding, sizing, positioning, etc...
+[card-look] {
+	box-shadow: var(--elevation-1);
+	overflow: hidden;
+
+	&:extend([sheet] all);
+
+	// Always applies current theme's background and color to the card.
+	// Needed for cases of placing [card] inside [tinted] elements or toolbar, to name a few.
+	//.reset-colors();
+
+	// corners
+	border-radius: 4px;
+	&[fullbleed] {
+		--radius: 0px;
+		// effectivelly cancels [round] and [rounded]
+		border-radius: 0;
+		// cancels [seamed] sides
+		border-left: none;
+		border-right: none;
+	}
+}
+
+card {
+	display: block;
+}
+
+card,
+[card] {
+
+	&:extend([card-look] all);
+
+	// TODO: integrate cards with layouts (as used in flexus-view main), --offset, [inset], etc...
+	//       This is just provisional
+	// IDEA: bake [horizontal] and [vertical] into card itself. Most cards are vertical with hero image anyway.
+
+	// This seems unnecessary but we have global modifiers like [nopadding] that can override the internal
+	// variables. Plus there are also used in children's [fullbleed] or [top] (as seen below) which
+	// use these values as margins so direct inheritance is out of the question.
+	--padding-top: 16px;
+	--padding-right: 16px;
+	--padding-bottom: 16px;
+	--padding-left: 16px;
+	padding-top: var(--padding-top);
+	padding-right: var(--padding-right);
+	padding-bottom: var(--padding-bottom);
+	padding-left: var(--padding-left);
+	//margin: 8px;
+	/*
+	--margin-vertical: 8px;
+	--margin-horizontal: 8px;
+	margin: var(--margin-vertical) var(--margin-horizontal);
+	*/
+
+	& > [top]    {margin: calc(-1 * var(--padding-top)) calc(-1 * var(--padding-right))           var(--padding-bottom)  calc(-1 * var(--padding-left))}
+	& > [right]  {margin: calc(-1 * var(--padding-top)) calc(-1 * var(--padding-right)) calc(-1 * var(--padding-bottom))           var(--padding-left)}
+	& > [bottom] {margin:           var(--padding-top)  calc(-1 * var(--padding-right)) calc(-1 * var(--padding-bottom)) calc(-1 * var(--padding-left))}
+	& > [left]   {margin: calc(-1 * var(--padding-top))           var(--padding-right)  calc(-1 * var(--padding-bottom)) calc(-1 * var(--padding-left))}
+
+	//& > [top]    {margin: -1rem -1rem  1rem -1rem}
+	//& > [right]  {margin: -1rem -1rem -1rem  1rem}
+	//& > [bottom] {margin:  1rem -1rem -1rem -1rem}
+	//& > [left]   {margin: -1rem  1rem -1rem -1rem}
+}
+
+
+/*
+[card] {
+	border: none;
+	border-radius: 8px;
+	box-shadow: 0 1px 6px rgba(0,0,0,0.5);
+	background-color: #FFF;
+}
+*/
+/*
+[card=""],
+[screensize="s"] [card~="s"],
+[screensize="m"] [card~="m"],
+[screensize="l"] [card~="l"] {
+	//background: #fff !important;
+	box-shadow: 0 2px 5px ~'rgba(0,0,0,0.3)';
+}
+*/

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Google Contacts</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		flexus-drawer {
+			width: var(--drawer-width);
+		}
+		[drawer-width] {
+			width: var(--drawer-width);
+		}
+	</style>
+
+</head>
+<body theme="white" primary="blue">
+
+	<flexus-drawer seamed>
+		<header>
+			<!--
+			<div>Mike Kovařík</div>
+			<div body2 muted>email@gmail.com</div>
+			-->
+			<div h6>Title</div>
+			<div body2 muted>Subtitle</div>
+		</header>
+		<nav>
+			<a href="#" icon="account_circle" selected>Contacts</a>
+			<a href="#" icon="assistant">Suggestions</a>
+			<a href="#" icon="history">Frequently contacted</a>
+			<a href="#" icon="content_copy">Duplicates</a>
+			<hr>
+			<p overline>Labels</p>
+			<a href="#" icon="label_outline">Label 1</a>
+			<a href="#" icon="label_outline">Label 2</a>
+			<a href="#" icon="label_outline">Label 3</a>
+			<hr>
+			<button icon="settings" selected>Settings</button>
+			<button icon="help">Help & feedback</button>
+		</nav>
+	</flexus-drawer>
+
+</body>
+</html>

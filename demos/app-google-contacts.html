@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Google Contacts</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		flexus-drawer {
+			width: var(--drawer-width);
+		}
+		[drawer-width] {
+			width: var(--drawer-width);
+		}
+	</style>
+
+</head>
+<body google theme="white" primary="blue" class="side-comp">
+
+	<flexus-view>
+
+		<flexus-toolbar flat>
+			<button icon="menu"></button>
+			<div drawer-width center="s">Contacts</div>
+			<section search light flex-2>
+				<button icon="arrow-back"></button>
+				<input type="text" placeholder="Search">
+			</section>
+			<div flex></div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<flexus-drawer>
+			<button icon="add">Create contact</button>
+			<nav>
+				<a href="#" icon="account_circle" selected>Contacts</a>
+				<a href="#" icon="assistant">Suggestions</a>
+				<a href="#" icon="history">Frequently contacted</a>
+				<a href="#" icon="content_copy">Duplicates</a>
+				<hr>
+				<p overline>Labels</p>
+				<a href="#" icon="label_outline">Label 1</a>
+				<a href="#" icon="label_outline">Label 2</a>
+				<a href="#" icon="label_outline">Label 3</a>
+				<hr>
+				<button icon="settings" selected>Settings</button>
+				<button icon="help">Help & feedback</button>
+			</nav>
+		</flexus-drawer>
+
+		<main>
+			<div fx-item muted body2 hidden="s">
+				<span flex-2>Name</span>
+				<span flex-1>Email</span>
+				<span flex-1>Phone number</span>
+				<span flex-1>Labels</span>
+				<span flex-1>Job title & company</span>
+			</div>
+			<div fx-item>
+				<input type="checkbox" avatar>
+				<span flex-2>Name Surname</span>
+				<span flex-2>email@gmail.com</span>
+				<span flex-2><span small chip>label</span></span>
+				<span flex-1>job</span>
+			</div>
+		</main>
+
+	</flexus-view>
+
+	<div vertical layout center space-between>
+		<button onclick="javascript:document.documentElement.setAttribute('screensize', 's')">small</button>
+		<button onclick="javascript:document.documentElement.setAttribute('screensize', 'm')">medium</button>
+		<button onclick="javascript:document.documentElement.setAttribute('screensize', 'l')">large</button>
+		<img src="./img/screenshots/app-google-contacts-phone.png" width="320">
+		<img src="./img/screenshots/app-google-contacts-desktop.png" width="500">
+	</div>
+
+</body>
+</html>

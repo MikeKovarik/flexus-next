@@ -1,0 +1,60 @@
+[offset="8"] {
+  --offset: 8px;
+}
+[offset="16"] {
+  --offset: 16px;
+}
+[offset="24"] {
+  --offset: 24px;
+}
+[offset="32"] {
+  --offset: 32px;
+}
+[offset="40"] {
+  --offset: 40px;
+}
+[offset="48"] {
+  --offset: 48px;
+}
+[offset="56"] {
+  --offset: 56px;
+}
+[offset="64"] {
+  --offset: 64px;
+}
+[offset="72"] {
+  --offset: 72px;
+}
+[offset="80"] {
+  --offset: 80px;
+}
+[wiregrid] {
+  --pattern: transparent, transparent 7px, rgba(0,0,0,0.1) 8px, transparent 8px, transparent 15px, rgba(0,0,0,0.25) 16px;
+  background: linear-gradient(90deg, var(--pattern)), linear-gradient(180deg, var(--pattern));
+  background-size: 16px 100%, 100% 16px;
+}
+:root {
+  --pink: rgba(255, 0, 150, 0.7);
+  --cyan: rgba(0, 255, 200, 0.2);
+}
+[wireframe]::before,
+[wireframe]::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+[wireframe]::before {
+  left: 0;
+  right: 0;
+  border-left: var(--offset, var(--margin, 1rem)) solid var(--cyan);
+  border-right: var(--offset, var(--margin, 1rem)) solid var(--cyan);
+}
+[wireframe]::after {
+  width: var(--keyline, 56px);
+  left: var(--offset, var(--margin, 1rem));
+  outline: 1px solid var(--pink);
+}

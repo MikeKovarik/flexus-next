@@ -1,0 +1,63 @@
+@import "core.less";
+@import "material-states.less";
+@import "material-sheets.less";
+@import "material-elevation.less";
+@import "material-button.less";
+@import "material-input.less";
+@import "material-toolbar.less";
+@import "material-icons.less";
+@import "material-chip.less";
+@import "material-snackbar.less";
+@import "material-drawer.less";
+@import "material-tabs.less";
+//@import "material-toast.less"; // do not include this in default package. not many users will use it.
+
+
+:root {
+	--font-family: Roboto, Arial, sans-serif;
+	// space size in between grid items
+	--theme-gutter: 16px;
+	// side padding around the view. can ve changed
+	--theme-sideline: 16px;
+	// its used to position fabs and other core layout elements that are immune to customizable --side.
+	// whereas --side and --theme-sideline can change. --rem cannot.
+	--theme-rem: 16px; // TODO: find out better name;
+	// indentation line
+	--theme-keyline: 56px;
+	// used mainly for icons and checkboxes
+	--icon-size: 24px;
+	//
+	--scrollbar-size: 10px;
+
+	--bezier-curve: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+
+@media only screen and (min-width: var(--breakpoint-s-m)) {
+	:root {
+		--theme-sideline: 24px;
+		--theme-rem: 24px;
+		--theme-gutter: 16px;
+	}
+}
+
+body {
+	font-family: var(--font-family);
+}
+[google] {
+	--font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+}
+/*
+::-webkit-scrollbar {
+	width: var(--scrollbar-size);
+	height: var(--scrollbar-size);
+}
+ 
+::-webkit-scrollbar-thumb {
+	background: rgba(var(--theme-base-fg), 0.3);
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(var(--theme-base-fg), 0.05);
+}
+*/

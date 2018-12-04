@@ -1,0 +1,161 @@
+<!doctype html>
+<html screensize="l">
+<head>
+
+	<meta charset="utf-8">
+	<title>material music player</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./app-material-music.css">
+
+	<style>
+		.albums > * {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+
+</head>
+<body theme="dark">
+
+
+
+	<flexus-view id="list-view" style="opacity: 0">
+
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>My library</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main responsive grid columns="5" spaced="3px" nopadding>
+
+			<img id="source" src="http://localhost/flexus4/test/img/artists/kodaline.jpg" cover width="150" height="150">
+<!--
+			<div id="source" style="
+				background-size: cover;
+				background-image: url('http://localhost/flexus4/test/img/artists/kodaline.jpg');
+				background-position: center;
+				width: 150px;
+				height: 150px;
+			"></div>
+-->
+			
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="detail-view" theme="light" scrollable cover
+	style="
+		display: none;
+		z-index: 99;
+	">
+
+		<flexus-toolbar sticky transparent theme="dark">
+			<button icon="arrow-back"></button>
+		</flexus-toolbar>
+
+		<main card elevation="16">
+			<h4>Artist name here</h4>
+			<p>Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet</p>
+			<p>Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet</p>
+			<p>Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet. Lorem ipsum dolor set amet</p>
+			<h5>Albums</h5>
+			<div horizontal spaced fullbleed scrollable layout class="albums">
+				<div round cover style="background-image: url('../img/albums/bastille-bad-blood.jpg')"></div>
+				<div round cover style="background-image: url('../img/albums/bastille-bad-blood.jpg')"></div>
+				<div round cover style="background-image: url('../img/albums/bastille-bad-blood.jpg')"></div>
+				<div round cover style="background-image: url('../img/albums/bastille-bad-blood.jpg')"></div>
+			</div>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script type="module">
+		import {renderGrid, renderDetail, getUrl, promiseImageLoaded} from './app-material-music.js'
+		import {albums, artists} from './app-material-music.js'
+		import {listView, detailView} from './app-material-music.js'
+		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
+
+
+		var duration = 400
+		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
+		artists.push(artists[0])
+		renderGrid(artists)
+		fadeIn(listView)
+
+		var listViewMain = listView.querySelector('[grid]')
+		var gridItems = Array.from(listViewMain.children)
+		for (let gridItem of gridItems) {
+			gridItem.addEventListener('click', e => showDetail(gridItem, e))
+		}
+
+		var currentIndex = 0
+
+		listView.setAttribute('fit', '')
+		detailView.setAttribute('fit', '')
+
+		var backToGrid = detailView.querySelector('flexus-toolbar button[icon="arrow-back"]')
+		backToGrid.addEventListener('click', hideDetail)
+
+		async function hideDetail() {
+			listView.style.display = ''
+			detailView.style.display = ''
+			// await
+			detailView.style.display = 'none'
+		}
+
+		async function showDetail(gridItem, e) {
+			var main = detailView.querySelector('main')
+			main.style.opacity = 0
+
+			currentIndex = gridItems.indexOf(gridItem)
+			var artist = artists[currentIndex]
+			var source = gridItem.querySelector('img, [cover]')
+			var target = detailView
+			console.log('source', source)
+			console.log('target', target)
+			if (artist) {
+				target.style.backgroundImage = `url('${getUrl(artist.photo)}')`
+			}
+
+			target.style.display = ''
+
+			var transition = new ImageTransition(source, target, {duration})
+			await transition.ready
+			await transition.play()
+
+			fadeIn(main)
+		}
+
+
+		function fadeIn(node) {
+			console.log('node', node)
+			node.style.opacity = 0
+			node.style.display = ''
+			var slideInAnimation = node.animate({
+				opacity: [0, 1],
+				transform: ['translate(0px, 20px)', 'translate(0px, 0px)'],
+			}, {
+				duration: 200,
+				fill: 'both',
+				easing,
+			})
+			return slideInAnimation.finished.then(() => {
+				console.log('done')
+				node.style.opacity = 1
+				slideInAnimation.cancel()
+			})
+		}
+
+	</script>
+
+</body>
+</html>

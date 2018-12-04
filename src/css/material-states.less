@@ -1,0 +1,78 @@
+// https://material.io/design/interaction/states.html#anatomy
+:root,
+[theme="white"],
+[theme="light"] {
+	--state-hover-opacity: 0.04;
+	--state-focus-opacity: 0.12;
+	--state-selected-opacity: 0.08;
+	--state-activated-opacity: 0.12;
+	--state-pressed-opacity: 0.16;
+	--state-dragged-opacity: 0.08;
+}
+[theme="black"],
+[theme="dark"] {
+	--state-hover-opacity: 0.08;
+	--state-focus-opacity: 0.24;
+	--state-selected-opacity: 0.16;
+	--state-activated-opacity: 0.24;
+	--state-pressed-opacity: 0.32;
+	--state-dragged-opacity: 0.16;
+}
+
+*[disabled],
+*:disabled {
+	cursor: default;
+	opacity: 0.5;
+}
+
+:not([disabled]):not(:disabled) {
+	:checked,
+	&[selected] {
+		--fg: var(--tint);
+		--bg: var(--tint);
+		--fg-opacity: 1;
+		--bg-opacity: calc(var(--bg-base-opacity, 0) + var(--state-selected-opacity));
+	}
+	&[activated] {
+		--fg: var(--tint);
+		--bg: var(--tint);
+		--fg-opacity: 1;
+		--bg-opacity: calc(var(--bg-base-opacity, 0) + var(--state-activated-opacity));
+	}
+}
+
+[hoverable] {
+	// only allow hover on non-touch displays
+	@media (hover: hover) {
+		--bg-opacity: var(--bg-base-opacity, 0);
+		&:not([disabled]):not(:disabled) {
+			&:hover {
+				--bg-opacity: calc(var(--bg-base-opacity, 0) + var(--state-hover-opacity, 0));
+			}
+		}
+	}
+}
+
+[clickable] {
+	--bg-opacity: var(--bg-base-opacity, 0);
+	&:not([disabled]):not(:disabled) {
+		&:active {
+			--bg-opacity: calc(var(--bg-base-opacity, 0) + var(--state-focus-opacity, 0));
+		}
+	}
+}
+
+[focusable] {
+	--bg-opacity: var(--bg-base-opacity, 0);
+	&:not([disabled]):not(:disabled) {
+		&:active,
+		&:focus {
+			--bg-opacity: calc(var(--bg-base-opacity, 0) + var(--state-focus-opacity, 0));
+		}
+	}
+}
+
+
+// when list item is selected (via checkbox, long press, etc...)
+[selected=""] {
+}

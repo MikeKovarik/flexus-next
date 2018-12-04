@@ -1,0 +1,85 @@
+:root {
+	--chip-size: 32px;
+	--chip-font-size: 14px;
+	--chip-avatar-margin: 4px;
+	--chip-padding: 12px;
+}
+
+[small] {
+	--chip-size: 26px;
+	--chip-font-size: 12px;
+	--chip-avatar-margin: 2px;
+}
+
+
+[chip] {
+	--size: var(--chip-size);
+
+	// rounded
+	&:extend([round]);
+	height: var(--size);
+	padding: 0 var(--chip-padding);
+
+	// layout
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	justify-content: center;
+
+	// TODO: test and possibly remove
+	margin: 4px;
+
+	// ICON & AVATAR POSITIONING
+
+	--avatar-size: calc(var(--size) - (2 * var(--chip-avatar-margin)));
+	--icon-size: 18px;
+
+	[avatar] {
+		margin-right: calc(2 * var(--chip-avatar-margin));
+		margin-left: calc(-1 * (var(--chip-padding) - var(--chip-avatar-margin)));
+	}
+	&[icon]::before,
+	[icon]:first-child {
+		margin-right: calc(2 * var(--chip-avatar-margin));
+		margin-left: -4px;
+	}
+	[icon]:last-child:not(:only-child) {
+		margin-left: calc(2 * var(--chip-avatar-margin));
+		margin-right: -4px;
+	}
+
+	// THEME, COLORS and TRANSITION
+
+	font-size: var(--chip-font-size);
+	font-weight: 500;
+
+	transition-duration: 150ms;
+	transition-timing-function: var(--bezier-curve);
+	transition-property: transform, opacity, color, background-color, box-shadow;
+
+	--local-fg: var(--fg);
+	--local-bg: var(--fg);
+	.apply-colors();
+
+	//color:            rgba(var(--local-fg, var(--fg)), var(--local-fg-opacity, var(--local-fg-base-opacity, 1)));
+	//background-color: rgba(var(--local-bg, var(--fg)), var(--local-bg-opacity, var(--local-bg-base-opacity, 1)));
+
+	&:not([seamed]) {
+		// NOTE: small deviation from Material Design Spec.
+		//--local-fg-opacity: 0.86;
+		//--local-bg-base-opacity: 0.12;
+		--local-fg-opacity: 0.8;
+		--local-bg-base-opacity: 0.08;
+	}
+
+	&[seamed] {
+		--local-fg-opacity: 0.6;
+		--local-bg-base-opacity: 0;
+		border: 1px solid rgba(var(--fg), 0.12);
+	}
+
+
+}
+
+
+

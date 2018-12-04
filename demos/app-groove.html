@@ -1,0 +1,703 @@
+<!doctype html>
+<html screensize="m">
+<head>
+
+	<meta charset="utf-8">
+	<title>groove</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		flexus-view {
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+		}
+		flexus-view > main {
+			flex: 1;
+		}
+		flexus-view > flexus-toolbar {
+			margin-top: -1rem;
+			margin-left: -1rem;
+			margin-right: -1rem;
+		}
+		flexus-view > main {
+			margin-left: -1rem;
+			margin-right: -1rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+
+		[fullbleed] {
+			margin-left: -1rem !important;
+			margin-right: -1rem !important;
+		}
+
+		[vertical] > [bottom],
+		flexus-view > [bottom] {
+			align-self: flex-end;
+		}
+
+		flexus-toolbar[tinted] {
+			background-color: rgb(var(--theme-tint-bg));
+			color: rgb(var(--theme-tint-fg));
+		}
+		flexus-toolbar[seamed] {
+			border-bottom: 1px solid #EEE;
+		}
+
+		[fx-item][seamed] + [fx-item][seamed] {
+			border-top: 1px solid #EEE;
+		}
+		[seamed][between] + [seamed][between] {
+			border-top: 1px solid #EEE;
+		}
+		[seamed][around] {
+			border-top: 1px solid #EEE;
+		}
+		[seamed][around]:last-of-type {
+			border-bottom: 1px solid #EEE;
+		}
+		[seamed-below] {
+			border-bottom: 1px solid #EEE;
+		}
+
+		[hidden2] {
+			visibility: hidden;
+			opacity: 0;
+		}
+		[click-through] {
+			pointer-events: none;
+		}
+		flexus-view {
+			will-change: transform, opacity;
+			background-color: rgb(var(--local-bg, var(--surface-bg, var(--theme-bg))));
+		}
+		#detail main {
+			background-color: #fFF;
+			/*
+			background-color: rgba(245, 245, 245);
+			*/
+		}
+
+		:root,
+		[screensize="s"] {
+			--default-columns: 2;
+		}
+		[screensize="s"][mouse][optimize] {
+			--default-columns: 3;
+		}
+		[screensize="m"] {
+			--default-columns: 4;
+		}
+		[screensize="m"][mouse][optimize] {
+			--default-columns: 6;
+		}
+		[screensize="l"] {
+			--default-columns: 6;
+		}
+		[screensize="l"][mouse][optimize] {
+			--default-columns: 8;
+		}
+		[screensize="xl"] {
+			--default-columns: 8;
+		}
+		[screensize="xl"][mouse][optimize] {
+			--default-columns: 10;
+		}
+
+
+		flexus-tabs {
+			display: inline-flex;
+			align-items: stretch;
+			min-height: 48px;
+			margin: 0 0 8px -24px;
+		}
+		flexus-tabs > * {
+			display: inline-flex;
+			align-items: center;
+			padding: 0 24px;
+			color: #888;
+		}
+		flexus-tabs > *:first-child {
+			/*border-bottom: 2px solid red;*/
+			color: #000;
+		}
+
+		flexus-toolbar[multisection] > section {
+			width: 100%;
+		}
+
+		#detail img {
+			max-width: 20%;
+		}
+
+
+		#detail flexus-toolbar {
+			padding-bottom: 10px;
+		}
+		#detail,
+		#detail main {
+			background-color: rgb(237, 237, 237);
+		}
+
+		[max-width="700"] {
+			max-width: 700px;
+		}
+
+		[text-right] {
+			text-align: right;
+		}
+
+	</style>
+
+</head>
+<body theme="white" primary="purple" class="side-comp">
+
+	<flexus-view id="master">
+
+		<flexus-toolbar elevation="0">
+			<button icon="menu"></button>
+			<div flex>Albums</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<flexus-tabs>
+				<div>Albums</div>
+				<div>Artists</div>
+				<div>Songs</div>
+			</flexus-tabs>
+
+			<div spaced grid>
+
+				<div flat card vertical layout relative
+				nopadding
+				v-for="album in albums"
+				:name="`album-${album.id}`"
+				v-on:click="openDetail($event, album.id)">
+					<div ratio="1:1" top>
+						<img fit name="album-art" :src="album.art">
+					</div>
+					<div padded>
+						<div>${album.name}</div>
+						<div body2 muted>${album.artist}</div>
+					</div>
+				</div>
+			</div>
+
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="detail" :name="`album-${album.id}`">
+
+		<flexus-toolbar multisection tinted>
+			<section>
+				<button icon="arrow-back" v-on:click="goBack"></button>
+				<div flex></div>
+				<button icon="more"></button>
+			</section>
+			<section layout top max-width="700" self-center>
+				<img image-cover :src="album.art" name="album-art">
+				<div vertical layout>
+					<div h5>${album.name}</div>
+					<div subtitle>${album.artist}</div>
+				</div>
+			</section>
+		</flexus-toolbar>
+
+		<main>
+			<div dense max-width="700" style="width: 100%; margin:auto">
+				<div fx-item>
+					<span flex>Bastille</span>
+					<span flex>Bad Blood</span>
+					<span flex text-right>3:67</span>
+				</div>
+				<div fx-item>
+					<span flex>Bastille</span>
+					<span flex>Bad Blood</span>
+					<span flex text-right>3:67</span>
+				</div>
+				<div fx-item>
+					<span flex>Bastille</span>
+					<span flex>Bad Blood</span>
+					<span flex text-right>3:67</span>
+				</div>
+			</div>
+		</main>
+
+	</flexus-view>
+
+
+	<script src="./util/demo-util.js"></script>
+	<script src="./util/vue.js"></script>
+
+	<script>
+
+		class FlexusView extends HTMLElement {}
+		class FlexusTabs extends HTMLElement {}
+		class FlexusToolbar extends HTMLElement {}
+		customElements.define('flexus-view', FlexusView)
+		customElements.define('flexus-tabs', FlexusTabs)
+		customElements.define('flexus-toolbar', FlexusToolbar)
+
+		var asyncTimeout = millis => new Promise(resolve => setTimeout(resolve, millis))
+
+		async function main() {
+
+			var albums = await fetch('./albums.json').then(res => res.json())
+			albums = [...albums, ...albums, ...albums]
+			albums.forEach((a, i) => a.id = i)
+
+			var master = new Vue({
+				delimiters: ['${', '}'],
+				el: '#master',
+				data: {
+					albums,
+				},
+				methods: {
+					async openDetail(e, id) {
+						detail.album = albums[id]
+						await asyncTimeout()
+						animateOverlapIn(master.$el, detail.$el, e)
+						//animateCircleIn(master.$el, detail.$el, e)
+					}
+				}
+			})
+
+			var detail = new Vue({
+				delimiters: ['${', '}'],
+				el: '#detail',
+				data: {
+					album: albums[2]
+				},
+				methods: {
+					async goBack(e) {
+						await asyncTimeout()
+						animateOverlapOut(list.$el, detail.$el, e)
+						//animateCircleOut(list.$el, detail.$el, e)
+					},
+					remove() {
+						console.log('remove from list')
+					}
+				}
+			})
+
+		}
+
+		main()
+
+
+
+
+
+		class AnimationOrchestrator {
+			
+			constructor(options) {
+				Object.assign(this, options)
+				this.requests = []
+				this.animations = []
+			}
+
+			schedule(node, keyframes, start = 0, end = 1) {
+				this.requests.push({node, keyframes, start, end})
+			}
+
+			async runAndCancel(direction = 'normal') {
+				var {easing, fill} = this
+				var animations = this.requests.map(item => {
+					var {node, keyframes, start, end} = item
+					var duration = (end - start) * this.duration
+					if (direction === 'normal') {
+						var delay = start * this.duration
+					} else {
+						var delay = (1 - end) * this.duration
+						// Reversing values manually because 'direction' is unreliable and causes problems with delays.
+						keyframes = objectFromEntries(Object.entries(keyframes).map(reverseEntryValues))
+					}
+					var options = {delay, duration, easing, fill}
+					return node.animate(keyframes, options)
+				})
+				await Promise.all(animations.map(a => a.finished))
+				while (animations.length)
+					animations.pop().cancel()
+			}
+
+		}
+
+		function clamp(num, min, max) {
+			return num < min ? min : num > max ? max : num
+		}
+
+		function mapRange(num, inMin, inMax, outMin, outMax) {
+			return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+		}
+
+		function distanceToFurthestCorner(x, y, rect) {
+			const distX = Math.max(Math.abs(x - rect.left), Math.abs(x - rect.right));
+			const distY = Math.max(Math.abs(y - rect.top), Math.abs(y - rect.bottom));
+			return Math.sqrt(distX * distX + distY * distY);
+		}
+
+
+
+/*
+
+		list.$el.setAttribute('fit', '')
+		detail.$el.setAttribute('fit', '')
+		detail.$el.style.display = 'none'
+		function animateCircle(this.baseView, this.newView, e) {
+			//var {e, pivot} = getEventAndPivot(eventOrPivot, this.newView)
+			// TODO: test and fix on scrollable lists / tree.
+			var {x, y} = e
+
+			this.baseView.style.display = ''
+			this.newView.style.display = ''
+			this.baseView.style.zIndex = 100
+			this.newView.style.zIndex = 101
+
+			var this.newBbox = this.newView.getBoundingClientRect()
+			var distance = distanceToFurthestCorner(x, y, this.newBbox)
+
+			var animation = this.newView.animate({
+				clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${distance}px at ${x}px ${y}px)`],
+			}, animOpts)
+
+			animation.finished.then(() => {
+				this.baseView.style.display = 'none'
+				this.newView.style.display = ''
+			})
+		}
+
+		function animateCircleOut(this.baseView, this.newView, e, pivot) {
+			console.log('animateCircleOut', e)
+			//var {e, pivot} = getEventAndPivot(eventOrPivot, this.newView)
+			// TODO: test and fix on scrollable lists / tree.
+			var {x, y} = e
+
+			this.baseView.style.display = ''
+			this.newView.style.display = ''
+			this.baseView.style.zIndex = 100
+			this.newView.style.zIndex = 101
+
+			var this.newBbox = this.newView.getBoundingClientRect()
+			var distance = distanceToFurthestCorner(x, y, this.newBbox)
+
+			var animation = this.newView.animate({
+				clipPath: [`circle(${distance}px at ${x}px ${y}px)`, `circle(0px at ${x}px ${y}px)`],
+			}, animOpts)
+
+			animation.finished.then(() => {
+				this.baseView.style.display = ''
+				this.newView.style.display = 'none'
+			})
+		}
+*/
+
+
+		async function animateOverlapIn(baseView, newView, e, options) {
+/*
+			console.log('this.baseView', this.baseView)
+			console.log('this.newView', this.newView)
+			console.log('backdrop', backdrop)
+			console.log('pivot', pivot)
+			console.log('sheet', sheet)
+
+			var fromNodes = {}
+			for (var node of this.newView.querySelectorAll('[name]'))
+				fromNodes[node.getAttribute('name')] = node
+			var toNodes = {}
+			for (var node of pivot.querySelectorAll('[name]'))
+				toNodes[node.getAttribute('name')] = node
+*/
+			//console.log('fromNodes', fromNodes)
+			//console.log('toNodes', toNodes)
+
+			//var newTargets = Array.from(this.newView.querySelectorAll('[name]'))
+			//var pivotTargets = Array.from(pivot.querySelectorAll('[name]'))
+			//console.log('newTargets', newTargets)
+			//newTargets.forEach(t => t.style.outline = '1px solid green')
+			//console.log('pivotTargets', pivotTargets)
+			//pivotTargets.forEach(t => t.style.outline = '1px solid red')
+
+		}
+
+		async function animateOverlapIn(baseView, newView, e, options) {
+			var {pivot} = getEventAndPivot(e, newView)
+			console.log('getEventAndPivot', pivot)
+			var transition = new TransitionOverlap(baseView, newView, e, pivot, options)
+			await transition.in()
+		}
+
+
+		async function animateOverlapOut(baseView, newView, e, options) {
+			var name = newView.getAttribute('name')
+			var pivot = baseView.querySelector(`[name="${name}"]`)
+			var transition = new TransitionOverlap(baseView, newView, e, pivot, options)
+			await transition.out()
+		}
+
+
+		class TransitionOverlap extends AnimationOrchestrator {
+
+			constructor(baseView, newView, e, pivot, options) {
+				options = {
+					duration: 500,
+					easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+					fill: 'both',
+				}
+				super(options)
+
+				this.baseView = baseView
+				this.newView = newView
+				this.e = e
+				this.pivot = pivot
+
+				console.log('pivot', pivot)
+
+				this.pivot.style.willChange = 'transform, opacity'
+				this.baseView.style.display = ''
+				this.newView.style.display = ''
+
+				this.baseBbox = this.baseView.getBoundingClientRect()
+				this.newBbox = this.newView.getBoundingClientRect()
+				this.pivotBbox = this.pivot.getBoundingClientRect()
+				this.newComputed   = window.getComputedStyle(this.newView)
+				this.pivotComputed = window.getComputedStyle(pivot)
+
+				this.backdrop = document.createElement('div')
+				this.backdrop.setAttribute('fx-backdrop', '')
+
+				this.sheet = document.createElement('div')
+				//this.sheet.style.outline = '1px solid red'
+				this.sheet.style.position = 'absolute'
+				this.sheet.style.backgroundColor = 'white'
+				this.sheet.style.willChange = 'box-shadow, transform, opacity, border-radius, left, right, top, bottom'
+
+				Object.assign(this.sheet.style, {
+					top: this.pivotBbox.top + 'px',
+					left: this.pivotBbox.left + 'px',
+					width: this.pivotBbox.width + 'px',
+					height: this.pivotBbox.height + 'px',
+				})
+
+				this.baseView.append(this.backdrop)
+				this.baseView.append(this.sheet)
+
+				this.baseView.style.zIndex  = 99
+				this.backdrop.style.zIndex = 100
+				this.sheet.style.zIndex    = 101
+				this.pivot.style.zIndex    = 102
+				this.newView.style.zIndex  = 103
+
+				this.scale = this.newBbox.width / this.pivotBbox.width
+
+				var oldWidth = this.baseBbox.width - this.baseBbox.left
+				var pivotMidpoint = this.pivotBbox.left - this.baseBbox.left + (this.pivotBbox.width / 2)
+				this.originX = pivotMidpoint > this.oldWidth / 2 ? 'right' : 'left'
+				this.originY = 'top'
+
+				this.aboveMain = this.baseView.querySelector(':scope > flexus-toolbar')
+							|| this.baseView.querySelector(':scope > flexus-tabs')
+
+				// MD spec wants to delay the animation until edges of toolbar and animated element are touching
+				// to make it look like the animated element pushes toolbar away.
+				// This is an ugly calculation that somewhat does the job (I'm not a mathematician. send halp pls).
+				// NOTE: It'd be nice to use the actual bezier curve used to animate the element.
+				if (this.aboveMain/* && isElevated(this.aboveMain)*/) {
+					let top = this.pivotBbox.top - this.baseBbox.top
+					// Distance between bottom edge of toolbar and pivot's top edge.
+					let distance = top - this.aboveMain.offsetHeight
+					let radians = mapRange(distance * 2, 0, this.newBbox.height, 0, Math.PI / 2)
+					let delay = 0.1 + (Math.sin(radians) * 0.45)
+					this.schedule(this.aboveMain, {
+						transform: [
+							'translate3d(0, 0%, 0)',
+							'translate3d(0, -100%, 0)',
+						],
+					}, delay, 1)
+				}
+
+				this.schedule(this.backdrop, {opacity: [0, 0.2]}, 0, 0.4)
+
+				this.schedule(this.sheet, {
+					boxShadow: [
+						this.pivotComputed.boxShadow === 'none' ? 'var(--elevation-0)' : this.pivotComputed.boxShadow,
+						'var(--elevation-8)'
+					],
+				}, 0, 0.2)
+
+				var sheetResizeKeyframes = {
+					top: [this.pivotBbox.top + 'px', this.newBbox.top + 'px'],
+					left: [this.pivotBbox.left + 'px', this.newBbox.left + 'px'],
+					width: [this.pivotBbox.width + 'px', this.newBbox.width + 'px'],
+					height: [this.pivotBbox.height + 'px', this.newBbox.height + 'px'],
+					//borderRadius: [this.pivotComputed.borderRadius, this.newComputed.borderRadius],
+				}
+
+				if (this.allowScalingPivot) {
+					var pivotTransformKeyframes = {
+						transformOrigin: ['left top', 'left top'],
+						transform: [
+							`translateX(0) translateY(0) scale(1)`,
+							`translateX(${this.newBbox.left - this.pivotBbox.left}px) translateY(${this.newBbox.top - this.pivotBbox.top}px) scale(${scale})`
+						],
+						boxShadow: ['none', 'none']
+					}
+				} else {
+					var pivotTransformKeyframes = {
+						transform: [
+							`translateX(0) translateY(0)`,
+							`translateX(${this.newBbox.left - this.pivotBbox.left}px) translateY(${this.newBbox.top - this.pivotBbox.top}px)`
+						],
+						boxShadow: ['none', 'none']
+					}
+				}
+
+				if (this.allowOriginEdges && originX === 'right') {
+					var newViewMoveKeyframes = {
+						transform: [
+							`translateX(${this.pivotBbox.right - this.newBbox.right}px) translateY(${this.pivotBbox.top - this.newBbox.top}px)`,
+							`translateX(0) translateY(0)`
+						],
+						clipPath: [
+							`polygon(calc(100% - ${this.pivotBbox.width}px) 0, 100% 0, 100% ${this.pivotBbox.height}px, calc(100% - ${this.pivotBbox.width}px) ${this.pivotBbox.height}px)`,
+							`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
+						],
+					}
+				} else {
+					var newViewMoveKeyframes = {
+						transform: [
+							`translateX(${this.pivotBbox.left - this.newBbox.left}px) translateY(${this.pivotBbox.top - this.newBbox.top}px)`,
+							`translateX(0) translateY(0)`
+						],
+						clipPath: [
+							`polygon(0 0, ${this.pivotBbox.width}px 0, ${this.pivotBbox.width}px ${this.pivotBbox.height}px, 0% ${this.pivotBbox.height}px)`,
+							`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
+						],
+					}
+				}
+
+				this.schedule(this.sheet,   sheetResizeKeyframes,    0.1, 1)
+				this.schedule(this.pivot,   pivotTransformKeyframes, 0.1, 1)
+				this.schedule(this.newView, newViewMoveKeyframes,    0.1, 1)
+
+				this.schedule(this.pivot,   {opacity: [1, 0]}, 0, 0.5)
+				this.schedule(this.newView, {opacity: [0, 1]}, 0.3, 1)
+			}
+
+			async in() {
+				try {
+					await this.runAndCancel()
+				} catch(err) {}
+
+				console.log('CANCELED')
+
+				this.backdrop.remove()
+				this.sheet.remove()
+				this.baseView.style.zIndex = ''
+				this.pivot.style.zIndex = ''
+				this.newView.style.zIndex = ''
+
+				this.baseView.style.display = 'none'
+			}
+
+			async out() {
+				try {
+					await this.runAndCancel('reverse')
+				} catch(err) {}
+
+				console.log('CANCELED')
+
+				this.backdrop.remove()
+				this.sheet.remove()
+				this.baseView.style.zIndex = ''
+				this.pivot.style.zIndex = ''
+				this.newView.style.zIndex = ''
+
+				this.newView.style.display = 'none'
+			}
+
+		}
+
+		function getEventAndPivot(arg, newView) {
+			if (arg instanceof Event) {
+				var e = arg
+				var firstName = newView.getAttribute('name')
+				if (!firstName) {
+					let temp = newView.querySelector('[name]')
+					if (temp) firstName = temp.getAttribute('name')
+				}
+				var pivot = traverseUntil(e.target, node => node.getAttribute('name') === firstName)
+			} else {
+				var pivot = arg
+			}
+			return {e, pivot}
+		}
+
+		function traverseUntil(node, condition) {
+			while (node !== null) {
+				if (condition(node)) return node
+				node = node.parentElement
+			}
+		}
+
+
+
+		function isElevated(node, computed) {
+			var attr = Number(node.getAttribute('elevation'))
+			if (!Number.isNaN(attr)) return attr > 0
+			if (!computed) computed = window.getComputedStyle(node)
+			if (computed.boxShadow === 'none') return false
+			return computed.boxShadow
+				// split string by commas that are outside of parenthesis (rgba colors)
+				.split(/\,\s?(?![^\(]*\))/)
+				.some(shadow => {
+					// Split by all spaces that are outside of parenthesis.
+					var parts = shadow.split(/\s(?![^\(]*\))/)
+					var color = parts.find(isColor)
+					var sizes = parts.filter(part => !isColor(part))
+					var size = sizes.map(str => str.replace(/\D/g, '')).map(Number).reduce((a,b) => a + b)
+					return size > 0 && !isTransparent(color)
+				})
+		}
+
+		function isColor(string) {
+			return string.includes('#')
+				|| string.includes('rgb')
+				|| string.includes('hsl')
+		}
+
+		function isTransparent(string) {
+			if (string.includes('a(')) {
+				var alpha = string.slice(5, -1).split(',').map(Number).pop()
+				return alpha === 0
+			} else {
+				return string.startsWith('#')
+					&& string.length === 5 && string[4] === '0'
+					&& string.length === 9 && string.slice(-2) === '00'
+			}
+		}
+
+		function reverseEntryValues(entry) {
+			return [entry[0], entry[1].reverse()]
+		}
+
+		function objectFromEntries(entries) {
+			var object = {}
+			for (var [key, val] of entries)
+				object[key] = val
+			return object
+		}
+
+
+	</script>
+
+</body>
+</html>

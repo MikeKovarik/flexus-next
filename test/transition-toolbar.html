@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>event</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		body {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		flexus-view {
+			min-width: 300px;
+		}
+		flexus-tabs {
+			display: flex;
+		}
+
+	</style>
+
+</head>
+<body theme="dark" primary="pink">
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<div flex>Basic iconless</div>
+		</flexus-toolbar>
+
+		<flexus-toolbar>
+			<div flex>Next view</div>
+		</flexus-toolbar>
+
+		<main>
+			<p>Basic iconless toolbars. Only the title text transitions.</p>
+			<button class="show-first">Show second toolbar</button>
+			<button class="show-second">Show first toolbar</button>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="search-multisection">
+
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="arrow-back"></button>
+				<div flex>Title</div>
+				<button icon="search"></button>
+				<button icon="more"></button>
+			</section>
+			<section>
+				<button icon="close"></button>
+				<input type="text" flex placeholder="Search">
+				<button icon="more"></button>
+			</section>
+		</flexus-toolbar>
+
+		<main>
+			<button class="show-first">First</button>
+			<button class="show-second">Second</button>
+			<script>
+				//var {ToolbarTransition} = window.flexus
+
+				var view = document.querySelector('#search-multisection')
+				var showButton = view.querySelector('.show-first')
+				var hideButton = view.querySelector('.show-second')
+				var mainSection = view.querySelector('flexus-toolbar > section:first-child')
+				var searchSection = view.querySelector('flexus-toolbar > section:last-child')
+
+				var promiseTimeout = millis => new Promise(res => setTimeout(res, millis))
+
+				var duration = 2000
+				var fill = 'both'
+				var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
+				var rotate = {
+
+					//in(node, duration) {
+					in(node) {
+						var transform = ['rotate(-90deg) scale(0)', 'rotate(0deg) scale(1)']
+						var keyframes = {transform}
+						var options = {duration, easing, fill}
+						return node.animate(keyframes, options)
+					},
+
+					//out(node, duration) {
+					out(node) {
+						var transform = ['rotate(0deg) scale(1)', 'rotate(90deg) scale(0)']
+						var keyframes = {transform}
+						var options = {duration, easing, fill}
+						return node.animate(keyframes, options)
+					}
+
+				}
+
+				var fade = {
+
+					//in(node, duration = 140, easing) {
+					in(node) {
+						var keyframes = {opacity: [0, 1]}
+						var options = {duration, easing, fill}
+						return node.animate(keyframes, options)
+					},
+
+					//out(node, duration = 140, easing) {
+					out(node) {
+						var keyframes = {opacity: [1, 0]}
+						var options = {duration, easing, fill}
+						return node.animate(keyframes, options)
+					}
+
+				}
+/*
+				var rotateIcon = {
+
+					show(node, duration) {
+						var animations = Array.from(node.children)
+							.filter(node => node.localName === 'button')
+							.filter(node => node.textContent === '')
+							.filter(node => node.hasAttribute('icon'))
+							.map(node => rotate.in(node, duration))
+						var promises = animations.map(a => a.finished)
+						return Promise.all(promises)
+					},
+
+					hide(node, duration) {
+						var animations = Array.from(node.children)
+							.filter(node => node.localName === 'button')
+							.filter(node => node.textContent === '')
+							.filter(node => node.hasAttribute('icon'))
+							.map(node => rotate.out(node, duration))
+						var promises = animations.map(a => a.finished)
+						return Promise.all(promises)
+					}
+
+				}
+*/
+
+
+				searchSection.style.display = 'none'
+				showButton.addEventListener('click', async e => {
+					searchSection.style.position = 'absolute'
+					searchSection.style.width = '100%'
+					await transitionSections(mainSection, searchSection)
+					searchSection.style.position = ''
+					searchSection.style.width = ''
+				})
+
+				async function transitionSections(oldSection, newSection) {
+					var oldToAnimate = new Set(oldSection.children)
+					var newToAnimate = new Set(newSection.children)
+					newSection.style.display = ''
+					var oldMatrix = getChildrenMatrix(oldSection)
+					var newMatrix = getChildrenMatrix(newSection)
+					var samePositions = findMatchingNodes(oldMatrix, newMatrix)
+					console.log(samePositions)
+					for (let [o, n] of samePositions) {
+						if (o.icon !== n.icon) continue
+						if (o.text !== n.text) continue
+						oldToAnimate.delete(o.node)
+						newToAnimate.delete(n.node)
+						//o.node.style.visibility = 'hidden'
+						//n.node.style.visibility = ''
+					}
+					for (let node of oldToAnimate) {
+						if (node.localName === 'button')
+							rotate.out(node)
+						//fade.out(node)
+					}
+					for (let node of newToAnimate) {
+						if (node.localName === 'button')
+							rotate.in(node)
+						//fade.in(node)
+					}
+
+					fade.out(oldSection)
+					fade.in(newSection)
+
+					await promiseTimeout(duration)
+					oldSection.style.display = 'none'
+				}
+
+				function getChildrenMatrix(container) {
+					var matrix = new Map
+					var children = Array.from(container.children)
+					for (let node of children) {
+						let bbox = node.getBoundingClientRect()
+						let left = Math.round(bbox.left)
+						let top = Math.round(bbox.top)
+						let pos = `${left}-${top}`
+						let icon = node.getAttribute('icon')
+						let text = node.textContent
+						matrix.set(pos, {node, bbox, icon, text})
+					}
+					return matrix
+				}
+
+				function findMatchingNodes(oldMatrix, newMatrix) {
+					var matches = []
+					for (let [pos, oldDesc] of oldMatrix) {
+						if (!newMatrix.has(pos)) continue
+						var newDesc = newMatrix.get(pos)
+						matches.push([oldDesc, newDesc])
+					}
+					return matches
+				}
+
+				hideButton.addEventListener('click', async e => {
+					mainSection.style.position = 'absolute'
+					mainSection.style.width = '100%'
+					await transitionSections(searchSection, mainSection)
+					mainSection.style.position = ''
+					mainSection.style.width = ''
+				})
+
+			</script>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>Initial</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>New title</div>
+			<button icon="cast"></button>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+			<p>Most usual toolbar. Title changes, arrow icons dont. cast icon shows.</p>
+			<button class="show-first">Show second toolbar</button>
+			<button class="show-second">Show first toolbar</button>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>Same Title</div>
+			<button icon="favorite"></button>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>Same Title</div>
+			<button icon="favorite"></button>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+			<p>Title doesnt change, menu/arrow icon does.</p>
+			<button class="show-first">Show second toolbar</button>
+			<button class="show-second">Show first toolbar</button>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>Initial</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>New title</div>
+			<button icon="favorite"></button>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+			<p>Color changing.</p>
+			<button class="show-first">Show second toolbar</button>
+			<button class="show-second">Show first toolbar</button>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="../dist/flexus.js"></script>
+	<script src="./util/demo-util.js"></script>
+
+	<script>
+		var {ViewTransition} = window.flexus
+
+		var videoView = $('#video')
+		var channelView = $('#channel')
+
+	</script>
+
+</body>
+</html>

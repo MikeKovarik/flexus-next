@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>layout</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../css/flexus-wireframe.css">
+
+</head>
+<body>
+
+	<flexus-view theme="light" wireframe>
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <div flex>card layouts</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main>
+
+			<div card>div[card]</div>
+			<card>card</card>
+
+			<card inset>card[inset]</card>
+			<div card inset>div[card][inset]</div>
+
+			<card offset>card[offset]</card>
+			<div card offset>div[card][offset]</div>
+
+			<card fullbleed>card[fullbleed]</card>
+			<div card fullbleed>div[card][fullbleed]</div>
+
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white" wireframe>
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>Separators on the right ></div>
+			<button icon="search" muted></button>
+			<hr>
+			<button icon="close" muted></button>
+			<hr>
+			<button icon="more" muted></button>
+		</flexus-toolbar>
+		<main>
+			<div fx-item>these are full separators</div>
+			<hr>
+			<div fx-item>this one below is too</div>
+			<hr>
+			<div fx-item spacious>Breakfast - Cosy - Casual</div>
+			<hr inset>
+			<div fx-item icon="timeline">You visited today</div>
+			<div fx-item icon="place">Riegrova 382/24, 779 00 Olomouc</div>
+			<hr inset>
+			<div fx-item icon="plus">H6WX+27 Olomouc</div>
+			<div fx-item icon="internet">crosscafe.cz</div>
+			<div fx-item icon="phone">605 484 796</div>
+			<div fx-item icon="clock">Open now: 9AM–6PM</div>
+			<hr indent>
+			<div fx-item icon="flag">Add a label</div>
+			<hr indent>
+			<div fx-item indent><button tinted>suggest an edit</button></div>
+			<hr indent>
+			<div indent horizontal layout>
+				<span>this is a list</span>
+				<hr>
+				<span>with horizontal separators</span>
+				<hr>
+				<span flex>...</span>
+			</div>
+		</main>
+	</flexus-view>
+
+</body>
+</html>

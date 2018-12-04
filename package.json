@@ -1,0 +1,28 @@
+{
+  "name": "flexus4",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "watch-css-core": "watch-less-do-more -i css/core.less -o dist/core.css",
+    "watch-css-material": "watch-less-do-more -i css/material.less -o dist/material.css",
+    "watch-css-fluent": "watch-less-do-more -i css/fluent.less -o dist/fluent.css",
+    "watch-css-wireframe": "watch-less-do-more -i css/wireframe.less -o dist/wireframe.css",
+    "build-css-core": "lessc css/core.less dist/core.css",
+    "build-css-material": "lessc css/material.less dist/material.css",
+    "build-css-fluent": "lessc css/fluent.less dist/fluent.css",
+    "build-css-wireframe": "lessc css/wireframe.less dist/wireframe.css",
+    "watch-css": "watch-less-do-more -i css/core.less -o dist/core.css -i css/material.less -o dist/material.css -i css/fluent.less -o dist/fluent.css",
+    "build-css": "npm run build-css-core & npm run build-css-material & npm run build-css-fluent",
+    "watch-js": "rollup -c -w",
+    "build-js": "rollup -c",
+    "watch": "npm run watch-css & rollup -c -w",
+    "build": "npm run build-css & rollup -c"
+  },
+  "author": "Mike Kovarik",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "iridescent": "^1.2.0"
+  }
+}

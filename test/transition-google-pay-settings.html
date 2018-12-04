@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>google pay</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+</head>
+<body>
+
+	<flexus-view id="settings" theme="light">
+
+		<flexus-toolbar>
+			<button icon="x"></button>
+			<div flex>Settings</div>
+		</flexus-toolbar>
+
+		<main>
+			<div fx-item seamed="between" id="button-general">General</div>
+			<div fx-item seamed="between" id="button-notifications">Notifications</div>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="settings-general" theme="white">
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>General settings</div>
+		</flexus-toolbar>
+
+		<main spacious>
+			<div fx-item seamed="between">
+				<div vertical layout flex>
+					<div>Email updates</div>
+					<div body2 muted>Get exclusive offers, tips, and invites to give feedback</div>
+				</div>
+				<input type="checkbox" checked>
+			</div>
+			<div fx-item seamed="between">
+				<div vertical layout flex>
+					<div>Location settings</div>
+					<div body2 muted>Google Pay uses location info to improve your experience based on where you are</div>
+				</div>
+			</div>
+			<div fx-item seamed="between">
+				<div vertical layout flex>
+					<div>Edit account info</div>
+					<div body2 muted>Update your name, addresss, or other account info</div>
+				</div>
+				<i icon="launch"></i>
+			</div>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="settings-notifications" theme="white">
+
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>Notification settings</div>
+		</flexus-toolbar>
+
+		<main spacious>
+			<div fx-item seamed="between"></div>
+			<div fx-item seamed="between"></div>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="./util/demo-util.js"></script>
+	<script src="./AnimationOrchestrator.js"></script>
+
+	<script>
+		var $home = $('#settings')
+		var $general = $('#settings-general')
+		var $notifications = $('#settings-notifications')
+
+		$home.setAttribute('fit', '')
+		$general.setAttribute('fit', '')
+		$notifications.setAttribute('fit', '')
+
+		$general.style.display = 'none'
+		$notifications.style.display = 'none'
+
+		var $toGeneral = $('#button-general')
+		var $toNotifications = $('#button-notifications')
+		var $fromGeneral = $('#settings-general flexus-toolbar button[icon="arrow-back"]')
+		var $fromNotifications = $('#button-notifications flexus-toolbar button[icon="arrow-back"]')
+
+		$toGeneral.addEventListener('click', e => {
+
+			var homeStyle = window.getComputedStyle($home)
+			var placeholderBg = document.createElement('div')
+			placeholderBg.setAttribute('fit', '')
+			placeholderBg.style.backgroundColor = homeStyle.backgroundColor
+
+			$home.before(placeholderBg)
+
+			$home.animate({
+				opacity: [1, 0],
+				transform: ['translate(0, 0px)', 'translate(0, -20px)']
+			}, {
+				duration: 250,
+				fill: 'both',
+				easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+			})
+
+			$general.style.display = ''
+			$general.animate({
+				opacity: [0, 1],
+				transform: ['translate(0, 40px)', 'translate(0, 0)'],
+				clipPath: [
+					`polygon(0 90%, 100% 90%, 100% 100%, 0% 100%)`,
+					`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
+				],
+			}, {
+				duration: 250,
+				fill: 'both',
+				easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+			})
+/*
+			var vt = new ViewTransition($home, $general)
+			vt.clipFrom($general, 'bottom')
+*/
+		})
+
+		$fromGeneral.addEventListener('click', e => {
+			$general.style.display = 'none'
+		})
+
+	</script>
+
+</body>
+</html>

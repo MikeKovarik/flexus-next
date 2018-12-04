@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>stepper</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+
+		body {
+			display: flex;
+		}
+		body > flexus-view {
+			flex: 1;
+		}
+		
+
+		flexus-stepper {
+			display: inline-flex;
+			align-items: center;
+		}
+		flexus-stepper:not([vertical]) {
+			margin-bottom: 12px;
+		}
+		flexus-stepper[vertical] {
+			margin-right: 12px;
+		}
+	
+		flexus-stepper > *:not(hr) {
+			width: 24px;
+			height: 24px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			font-size: 12px;
+			color: rgb(var(--theme-base-bg));
+			background-color: rgba(var(--theme-base-fg), 0.38);
+			position: relative;
+		}
+		flexus-stepper > *:not(hr)::after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: -8px;
+			right: -8px;
+			bottom: -8px;
+			left: -8px;
+		}
+
+		flexus-stepper:not([vertical]) > *:not(hr):not(:last-of-type) {
+			margin-right: 8px;
+		}
+		flexus-stepper:not([vertical]) > *:not(hr):not(:first-of-type) {
+			margin-left: 8px;
+		}
+		flexus-stepper[vertical] > *:not(hr):not(:last-of-type) {
+			margin-bottom: 8px;
+		}
+		flexus-stepper[vertical] > *:not(hr):not(:first-of-type) {
+			margin-top: 8px;
+		}
+
+		flexus-stepper > hr {
+			flex: 1;
+		}
+		flexus-stepper:not([vertical]) > hr {
+			height: 1px;
+			margin: auto 0;
+		}
+		flexus-stepper[vertical] > hr {
+			width: 1px;
+			margin: 0 auto;
+		}
+
+		flexus-stepper > *[active],
+		flexus-stepper > *[ok] {
+			background-color: rgb(var(--theme-tint-bg));
+			color: rgb(var(--theme-tint-fg));
+		}
+		flexus-stepper > *[ok] {
+			font-size: 0px;
+		}
+		flexus-stepper > *[ok]::before {
+			content: '✓';
+			font-size: 12px;
+		}
+		flexus-pages {
+			display: block;
+		}
+		flexus-pages > *:not([active]) {
+			display: none;
+		}
+	</style>
+
+</head>
+<body theme="white">
+
+
+	<flexus-view>
+
+		<flexus-toolbar elevated>
+			<div flex>Steppers</div>
+		</flexus-toolbar>
+
+		<main layout>
+			<flexus-stepper vertical>
+				<div ok>1</div>
+				<hr>
+				<div ok>2</div>
+				<hr>
+				<div active>3</div>
+				<hr>
+				<div>4</div>
+				<hr>
+				<div>5</div>
+				<hr>
+				<div>6</div>
+			</flexus-stepper>
+			<flexus-pages flex vertical>
+				<div>
+					<a href="https://material.io/archive/guidelines/components/steppers.html#steppers-usage">MD stepper docs</a>
+				</div>
+				<div>Page 2</div>
+				<div active>Page 3</div>
+				<div>Page 4</div>
+				<div>Page 5</div>
+				<div>Page 6</div>
+			</flexus-pages>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view>
+
+		<flexus-toolbar elevated>
+			<div flex>Steppers as tabs</div>
+		</flexus-toolbar>
+
+		<main layout>
+			<flexus-stepper vertical>
+				<div>1</div>
+				<hr>
+				<div>2</div>
+				<hr>
+				<div active>3</div>
+				<hr>
+				<div>4</div>
+				<hr>
+				<div>5</div>
+				<hr>
+				<div>6</div>
+			</flexus-stepper>
+			<flexus-pages flex vertical>
+				<div>Page 1</div>
+				<div>Page 2</div>
+				<div active>
+					<div ratio="3:2" rounded image-cover style="background-image: url('./img/butterfly.jpg')"></div>
+					<br>
+					<div h6>Making the dough</div>
+					<div muted>20 min</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum vulputate purus, non finibus nisi lobortis a. Fusce lorem sapien, maximus nec nisl non, vestibulum consequat leo. Aenean leo nibh, suscipit eget faucibus non, pretium vitae justo. Quisque ac nisl eget turpis porttitor pretium vel id ligula. Donec sagittis eleifend orci at mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed volutpat sapien vitae ante tempor.</p>
+				</div>
+				<div>Page 4</div>
+				<div>Page 5</div>
+				<div>Page 6</div>
+			</flexus-pages>
+		</main>
+
+	</flexus-view>
+
+
+	<script src="./util/demo-util.js"></script>
+
+	<script>
+		var [$view1, $view2] = $$('flexus-view')
+
+		var $view2stepper = $view2.querySelector('flexus-stepper')
+		var $view2pages = $view2.querySelector('flexus-pages')
+
+		console.log('$view2stepper', $view2stepper)
+
+		$view2stepper.addEventListener('click', e => {
+			var {target} = e
+			if (target.localName === 'hr') return
+			var steps = Array.from($view2stepper.querySelectorAll('*:not(hr)'))
+			if (!steps.includes(target)) return
+			var pages = Array.from($view2pages.children)
+			var index = steps.indexOf(target)
+			console.log(target)
+			console.log(index)
+			var activeStep = $view2stepper.querySelector('[active]')
+			var activePage = $view2pages.querySelector('[active]')
+			activeStep && activeStep.removeAttribute('active')
+			activePage && activePage.removeAttribute('active')
+			steps[index].setAttribute('active', '')
+			pages[index].setAttribute('active', '')
+		})
+
+
+	</script>
+
+</body>
+</html>

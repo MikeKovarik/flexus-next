@@ -1,0 +1,98 @@
+<!--
+UNFINISHED!
+This is just a pseudocode skeleton done in a few minutes, not a real implementation.
+-->
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Shazam</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		flexus-view {
+			max-width: 400px;
+			max-height: 700px;
+			overflow: hidden;
+		}
+
+		#bg {
+			will-change: opacity, filter;
+			top: -30px;
+			right: -30px;
+			bottom: 25%;
+			left: -30px;
+			opacity: 0.8;
+		}
+		#bg::before {
+			content: '';
+			position: absolute;
+			top: 40%;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+			left: 0;
+		}
+		main {
+			padding-top: 20vh !important;
+		}
+	</style>
+
+</head>
+<body theme="black" primary="pink" class="side-comp">
+
+	<flexus-view>
+
+		<div id="bg" fit cover style="background-image: url('./img/artists/odesza.jpg')"></div>
+
+		<flexus-toolbar transparent>
+			<button icon="arrow-back"></button>
+			<flexus-tabs flex round>
+				<div selected>Song</div>
+				<div>Lyrics</div>
+				<div>Video</div>
+				<div>Artist</div>
+			</flexus-tabs>
+			<button icon="share"></button>
+		</flexus-toolbar>
+
+		<main vertical layout center>
+			<button tinted fab icon="play_arrow"></button>
+			<h4>Say My Name</h4>
+			<p>Odesza Feat. Zyra</p>
+			<p body2 thin muted>804 642 Shazams</p>
+			<button big flat neutral icon="more"></button>
+		</main>
+
+	</flexus-view>
+
+	<div layout center space-between>
+		<img src="./img/screenshots/shazam1.png" width="300">
+		<img src="./img/screenshots/shazam2.png" width="300">
+	</div>
+
+
+	<script>
+		var delay = 900
+		var bg = document.querySelector('#bg')
+		bg.animate({
+			filter: ['blur(0px)', 'blur(20px)'],
+			opacity: [0.8, 0.5],
+		}, {
+			duration: 2000,
+			delay,
+			fill: 'both',
+		})
+		setTimeout(() => {
+			var selectedTab = document.querySelector('[selected]')
+			selectedTab.removeAttribute('selected')
+			selectedTab.nextElementSibling.setAttribute('selected', '')
+		}, delay)
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Flexus demo previews</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<style>
+		* {
+			box-sizing: border-box;
+			outline: none;
+		}
+		html,
+		body {
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+		body {
+			font-family: Segoe UI, Roboto;
+			display: flex;
+		}
+
+		[bold] {
+			font-weight: bold;
+		}
+		[flex] {flex: 1}
+		[colspan="2"] {grid-column-end: span 2}
+		[rowspan="2"] {grid-row-end: span 2}
+
+		h3 {
+			margin: 4px 0;
+		}
+
+		a {
+			text-decoration: none;
+			color: unset;
+		}
+
+		grid {
+			display: grid;
+			grid-template-columns: auto auto;
+			gap: 16px;
+			padding: 16px;
+			align-self: center;
+			margin: auto;
+		}
+
+		aside {
+			display: flex;
+			flex-direction: column;
+			width: 260px;
+			flex-shrink: 0;
+			font-size: 13px;
+			padding: 16px;
+			border-right: 1px solid #EEE;
+		}
+		nav {
+			overflow: auto;
+		}
+		nav a {
+			display: block;
+		}
+		#description {
+			color: #444;
+			overflow: auto;
+		}
+
+		#phone {
+			--width: 360px;
+			--height: 640px;
+			--scale: 1;
+		}
+		#tablet {
+			--width: 800px;
+			--height: 500px;
+			--scale: 0.7;
+		}
+		#desktop {
+			--width: 1400px;
+			--height: 900px;
+			--scale: 0.4;
+		}
+
+		#phone {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#tablet {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-end;
+		}
+
+		.container {
+			width:  calc(var(--width)  * var(--scale));
+			height: calc(var(--height) * var(--scale));
+			border: 2px solid #EEE;
+			overflow: hidden;
+		}
+		iframe {
+			width:  var(--width);
+			height: var(--height);
+			transform-origin: top left;
+			transform: scale(var(--scale));
+			border: none;
+		}
+	</style>
+
+</head>
+<body>
+
+	<aside>
+		<h3>Demos</h3>
+		<nav flex></nav>
+		<h3>Description</h3>
+		<div flex id="description">
+			TODO:
+			<br>
+			enable toggling phone / phablet
+			<br>
+			enable toggling tablet into portrait / landscape mode
+			<br>
+			enable toggling desktop between mouse/touch inputs and [optimized] attribute
+		</div>
+	</aside>
+
+	<grid>
+		<div id="phone" rowspan="2">
+			<div class="container"><iframe></iframe></div>
+		</div>
+		<div id="tablet">
+			<div class="container"><iframe></iframe></div>
+		</div>
+		<div id="desktop">
+			<div class="container"><iframe></iframe></div>
+		</div>
+	</grid>
+
+	<script>
+		var $ = document.querySelector.bind(document)
+		var phoneContainer = $('#phone')
+		var tabletContainer = $('#tablet')
+		var desktopContainer = $('#desktop')
+		var phone = $('#phone iframe')
+		var tablet = $('#tablet iframe')
+		var desktop = $('#desktop iframe')
+		var aside = $('aside')
+		var nav = $('nav')
+		var grid = $('grid')
+		var description = $('#description')
+
+		var list = [
+			'app-cart',
+			'app-toothbrush',
+			'app-material-music',
+			'app-material-music-grid',
+			'app-material-music-detail-fixed1',
+			'app-material-music-detail-fixed2',
+			'app-material-music-detail-scrollable',
+			'app-google-photos',
+			'app-google-photos-detail',
+			'app-google-photos-old',
+			'app-google-contacts',
+			'app-google-travel',
+			'app-google-flights',
+			'layout',
+			'layout-keyline',
+			'layout-hr',
+			'scrollable',
+			'snackbar',
+			'transition-event',
+			'transition-collapsible-fab',
+		]
+
+		nav.innerHTML = list.map(name => `
+			<a href="./${name}.html" name="${name}">${name}</a>
+		`).join('')
+
+		nav.addEventListener('click', e => {
+			var {target} = e
+			if (target.localName !== 'a') return
+			e.preventDefault()
+			location.hash = target.getAttribute('name')
+		})
+
+		if (window.location.hash)
+			onHashChange(window.location.hash.slice(1))
+
+		function onHashChange() {
+			var hash = location.hash.slice(1)
+			var url = hash + '.html'
+			var lastLink = document.querySelector('[bold]')
+			if (lastLink) lastLink.removeAttribute('bold')
+			var newLink = document.querySelector(`[name="${hash}"]`)
+			if (newLink) newLink.setAttribute('bold', '')
+			window.location.hash = hash
+			applyUrl(phone,   url, 's', 'portrait')
+			applyUrl(tablet,  url, 'm', 'landscape')
+			applyUrl(desktop, url, 'l', 'landscape')
+			phone.addEventListener('load', e => {
+				var iframe = phone
+				printDescription(iframe)
+			})
+		}
+
+		window.addEventListener('hashchange', onHashChange)
+
+		function printDescription(iframe) {
+				var htmlNode = iframe.contentDocument.documentElement
+				var doctype = htmlNode.previousSibling
+				var comment = doctype.previousSibling
+				if (comment)
+					description.innerText = commentHtml(comment.textContent)
+				else
+					description.innerText = ''
+		}
+
+		function commentHtml(text) {
+			return text.replace(/[\r\n]+/g, '\n\n').trim()
+		}
+
+		function applyUrl(iframe, url, size, orientation) {
+			iframe.src = url
+			iframe.onload = e => {
+				var doc = iframe.contentDocument
+				var htmlNode = doc.documentElement
+				htmlNode.setAttribute('screensize', size)
+				htmlNode.setAttribute(orientation, '')
+				if (doc.body.classList.contains('side-comp'))
+					doc.body.lastElementChild.remove()
+			}
+		}
+
+
+		var tabletComputed = getComputedStyle(tabletContainer)
+		var desktopComputed = getComputedStyle(desktopContainer)
+		var tabletWidth  = parseInt(tabletComputed.getPropertyValue('--width'))
+		var tabletHeight = parseInt(tabletComputed.getPropertyValue('--height'))
+		var desktopWidth  = parseInt(desktopComputed.getPropertyValue('--width'))
+		var desktopHeight = parseInt(desktopComputed.getPropertyValue('--height'))
+
+		var onlyPhone = false
+
+		function onResize(e) {
+			var gridWidth = window.innerWidth - aside.offsetWidth
+			var gridHeight = window.innerHeight
+			var availableWidth  = gridWidth - phoneContainer.offsetWidth - 60
+			console.log(availableWidth)
+			if (availableWidth < 200 && !onlyPhone) {
+				onlyPhone = true
+				tabletContainer.style.display  = 'none'
+				desktopContainer.style.display = 'none'
+			} else if (availableWidth >= 200 && onlyPhone) {
+				onlyPhone = false
+				tabletContainer.style.display  = ''
+				desktopContainer.style.display = ''
+			}
+			var availableHeight = gridHeight - 60
+			var availableHeightSplit = availableHeight / 2
+			var tabletScaleWidth  = availableWidth / tabletWidth
+			var tabletScaleHeight  = availableHeightSplit / tabletHeight
+			var desktopScaleWidth  = availableWidth / desktopWidth
+			var desktopScaleHeight = availableHeightSplit / desktopHeight
+			var tabletScale = Math.min(tabletScaleWidth, tabletScaleHeight)
+			var desktopScale = Math.min(desktopScaleWidth, desktopScaleHeight)
+			tabletContainer.style.setProperty('--scale', tabletScale)
+			desktopContainer.style.setProperty('--scale', desktopScale)
+		}
+
+		onResize()
+
+		window.addEventListener('resize', onResize, {passive: true})
+
+	</script>
+
+</body>
+</html>

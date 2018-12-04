@@ -1,0 +1,99 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	font-family: Roboto;
+	padding: 40px;
+}
+h1,
+h2 {
+	margin-top: 2em;
+	margin-bottom: 0.25em;
+}
+h3 {
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+p {
+	margin: 0.25em 0;
+}
+[layout] {
+	display: flex;
+}
+[flex] {
+	flex: 1;
+}
+[layout][center] {
+	align-items: center;
+}
+[layout] > *:not(:last-child) {
+	margin-right: 16px;
+}
+#control-panel {
+	position: fixed;
+	right: 16px;
+	top: 16px;
+}
+#control-panel > *:not(:last-child) {
+	margin-top: 8px;
+	justify-content: flex-end;
+}
+#status {
+	font-size: 11px;
+	text-align: right;
+}
+
+.source,
+.target {
+	background-color: rgba(0,0,0,0.1);
+	will-change: transform, clip-path, opacity, background-position;
+	position: relative;
+}
+.debug .source,
+.debug .target {
+	visibility: visible !important;
+}
+.debug .source {
+	opacity: 0.85;
+}
+.debug .target {
+	opacity: 0.6;
+}
+.debug .source::before,
+.debug .source::after,
+.debug .target::before,
+.debug .target::after {
+	content: '';
+	display: block;
+	position: absolute;
+	pointer-events: none;
+}
+
+.debug .source::before,
+.debug .target::before {
+	left: var(--origin-x, var(--offset-left));
+	top:  var(--origin-y, var(--offset-top));
+	width: var(--width);
+	height: var(--height);
+}
+.debug .source::before {
+	outline: 1px dashed red;
+}
+.debug .target::before {
+	outline: 1px dashed blue;
+}
+
+.debug .source::after,
+.debug .target::after {
+	top: var(--offset-top);
+	right: var(--offset-right);
+	bottom: var(--offset-bottom);
+	left: var(--offset-left);
+}
+
+.debug .source::after {
+	outline: 1px solid red;
+}
+.debug .target::after {
+	outline: 1px solid blue;
+}

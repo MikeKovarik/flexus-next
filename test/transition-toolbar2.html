@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>event</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+        flexus-tabs {
+            display: flex;
+        }
+
+	</style>
+
+</head>
+<body theme="dark" primary="pink">
+
+
+	<flexus-view id="video">
+
+		<flexus-toolbar elevation="2">
+			<button icon="arrow-back"></button>
+			<div flex>Video name</div>
+            <button icon="cast"></button>
+            <button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+            Content of the first view.
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="channel">
+
+		<flexus-toolbar multisection tinted>
+			<section>
+				<button icon="arrow-back"></button>
+    			<div flex>Channel name</div>
+                <button icon="cast"></button>
+				<button icon="search"></button>
+				<button icon="more"></button>
+			</section>
+			<flexus-tabs>
+                <a href="#/">Home</a>
+                <a href="#/">Videos</a>
+                <a href="#/">Playlist</a>
+                <button>Community</button>
+                <!--a href="#/">Community</a-->
+			</flexus-tabs>
+		</flexus-toolbar>
+
+		<main>
+            Content of the second view.
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="../dist/flexus.js"></script>
+	<script src="./util/demo-util.js"></script>
+
+	<script>
+		var {ViewTransition} = window.flexus
+
+		var videoView = $('#video')
+		var channelView = $('#channel')
+		
+		videoView.setAttribute('fit', '')
+		listView.setAttribute('fit', '')
+
+		class AdvancedViewTransition extends ViewTransition {
+
+			constructor(baseView, newView) {
+				super(baseView, newView)
+				this.duration = 5000
+
+				this.transformTo(newView, origin, pivot, 0, 1)
+				this.clipTo(newView, pivot, 0, 0.7)
+				this.fadeOut(newView, 0.4, 0.7)
+
+				this.transitionSheet(pivot, origin)
+			}
+
+            splitContent() {
+                var selector = ':scope > main, :scope > flexus-pages'
+                this.oldChildren = Array.from(this.children)
+                this.oldMain = this.baseMain.querySelector()
+                this.oldBefore = this.oldChildren.slice(0, this.oldChildren.indexOf(this.oldMain))
+                this.newChildren = Array.from(this.children)
+                this.newMain = this.baseMain.querySelector()
+                this.newBefore = this.newChildren.slice(0, this.newChildren.indexOf(this.newMain))
+            }
+
+            blendAboveMain() {
+                var selector = ':scope > flexus-toolbar, :scope > flexus-tabs'
+                var baseMain = this.baseMain.querySelector()
+            }
+
+            blendMains() {
+            }
+
+		}
+/*
+		fab.addEventListener('click', e => {
+			console.log('close')
+			//let vt = new PivotalCollapse(baseView, newView, newView)
+			let vt = new PivotalCollapse(baseView, newView, gridItem, detailHeader)
+			setTimeout(() => vt.play(), 100)
+		})
+*/
+	</script>
+
+</body>
+</html>

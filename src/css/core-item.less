@@ -1,0 +1,118 @@
+// TODO reimplement toolbar with fx-item in mind. it will be easier to support [dense]
+:root {
+	// padding from top and bottom
+	--fx-item-padding-vertical: 8px;
+	// left and right padding
+	--fx-item-padding-horizontal: var(--theme-sideline);
+}
+[spacious] {
+	--fx-item-padding-vertical: 16px;
+}
+
+/*
+[layout] {
+	display: flex;
+	flex-direction: var(--flex-direction, row);
+	align-items: var(--align-items);
+	justify-content: var(--justify-content);
+}
+[layout][vertical] {
+	--flex-direction: column;
+}
+*/
+
+/*
+[fx-item] {
+	margin: 0 calc(-1 * var(--fx-item-offset, 1rem));
+	padding: 0 var(--fx-item-offset, 1rem);
+}
+*/
+:root,
+[material] {
+	--fx-item-offset: var(--theme-sideline);
+}
+[fluent] {
+	--fx-item-offset: 0.5rem;
+}
+
+
+:root {
+	--theme-keyline: 56px;
+	--keyline: var(--theme-keyline);
+}
+
+[fx-item] {
+
+	--min-height: var(--fx-item-min-height);
+
+	min-height: var(--min-height);
+/*
+	--padding-vertical: var(--fx-item-padding-vertical);
+	--padding-horizontal: var(--fx-item-padding-horizontal);
+	--offset: var(--fx-item-offset);
+	--padding-horizontal: var(--offset);
+
+	margin: 0 calc(-1 * var(--offset));
+	padding: var(--padding-vertical) var(--padding-horizontal);
+*/
+	--offset: var(--fx-item-offset);
+	--padding-horizontal: var(--offset);
+	--padding-vertical: var(--fx-item-padding-vertical);
+
+	margin: 0 calc(-1 * var(--offset));
+	padding: var(--padding-vertical) var(--padding-horizontal);
+
+	//&:extend(.layout-horizontal);
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	//position: relative;
+
+	& > * {
+		margin-left: 0;
+	}
+	& > :not(:last-child) {
+		// exact same behavior that [spaced][horizontal][layout] doest.
+		// Except there it's forced with !important.
+		margin-right: var(--gutter);
+	}
+
+	//& > [icon]:first-child,
+	& > :first-child,
+	&[icon]::before {
+		// TODO: update this.
+		// --size now means elements height or height and with (for things like fab)
+		// and there is default --icon-size and --avatar-size but nothing yet for
+		// checkboxes and radios. these need to be groupped into new variable
+		// which we would use here.
+		margin-right: calc(var(--keyline) - var(--icon-size) - var(--offset, 0px));
+		//margin-right: calc(var(--keyline) - var(--icon-size));
+	}
+
+	[vertical=""] > * + * {
+		margin-top: 4px;
+	}
+}
+
+
+
+
+/*
+USECASE: 
+<flexus-toolbar>
+	<section><button icon="menu"></button></section>
+	<h2>Něco se porouchalo</h2>
+</flexus-toolbar>
+*/
+// wARNING: This won't work with [fab]
+// It's better this way, rather than convoluted line of :not() selectors
+flexus-toolbar[multisection] > * {
+	padding-left:  var(--theme-sideline);
+	padding-right: var(--theme-sideline);
+}
+
+
+
+
+
+

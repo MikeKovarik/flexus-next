@@ -1,0 +1,64 @@
+// hr[fullbleed] goes side to side beyonde --theme-sideline
+// hr[fullwidth] goes side to side beyonde --theme-sideline
+// hr[inset]     doesnt extend beyond --theme-sideline
+// hr[indent]    according to keyline
+// should be able to combine
+// for example hr[indent][fullbleed] indented from left, goes to the right corner
+
+
+hr {
+	// NOTE: color is defined in other css file.
+	border: none;
+	align-self: stretch;
+
+	// Here we use -px variables because one of the variables has 0 (without unit) and the other has 1px (with unit).
+	// Css calc() doesn't allow adding unitful+unitless numbers so while 1px+0px=1px, the other 0+0px=error crashes
+	// and fallback (auto) value will be used instead. That way we can have 1px-tall full-width hr in vertical layout
+	// such as drawer, view, etc... and 1px-wide full-height tall <hr> in horizontal (toolbar, <div horizontal>, etc...)
+	width:  auto;
+	height: auto;
+	width:  calc(var(--is-horizontal-px) + 0px);
+	height: calc(var(--is-vertical-px)   + 0px);
+	// Here we use solely unitless numbers (the -int ones) because of the same calc() breaking reasons. Except here we don't
+	// want to break it. We always have unitful number in --offset variable and only other numbers that can multiply it
+	// must have no unit.
+	--margin-vertical:   calc( (var(--is-horizontal-int) * var(--offset)) + (8px * var(--is-vertical-int)  ) );
+	--margin-horizontal: calc( (var(--is-vertical-int)   * var(--offset)) + (8px * var(--is-horizontal-int)) );
+	margin: var(--margin-vertical) var(--margin-horizontal);
+
+	&:extend([fullbleed]);
+	//&:extend([offset]);
+
+	&[indent] {
+		padding-left: 0;
+		margin-left: var(--keyline);
+	}
+
+}
+
+/*
+hr {
+	width:  var(--hr-width);
+	height: var(--hr-height);
+	border: none;
+	align-self: stretch;
+
+	&[inset] {
+		margin: 0;
+	}
+}
+
+.seam-horizontal-container() {
+	--hr-width: var(--seam-size);
+	--hr-height: auto;
+}
+
+.seam-vertical-container() {
+	--hr-width: auto;
+	--hr-height: var(--seam-size);
+}
+
+:root {
+	.seam-vertical-container();
+}
+*/

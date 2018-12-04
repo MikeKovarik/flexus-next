@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>maps-detail</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./side-comp.css">
+
+	<style>
+		[primary="blue"] {
+			--tint-rgb: 66, 134, 245;
+			--tint-foreground-rgb: 255, 255, 255;
+		}
+
+		div[tinted] {
+			background-color: rgb(var(--tint-rgb));
+			color: rgb(var(--tint-foreground-rgb));
+		}
+
+
+		:root {
+			--fx-item-min-height: 48px;
+		}
+		[dense] {
+			--fx-item-min-height: 32px;
+		}
+		[fx-item] {
+			display: flex;
+			align-items: center;
+			min-height: var(--fx-item-min-height);
+		}
+
+		[card] {
+			border-radius: 8px;
+			box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+		}
+		[card][seam] {
+			box-shadow: none;
+			border: 1px solid rgba(0,0,0,0.1);
+		}
+		[card] {
+			padding: 16px;
+		}
+
+
+		[ratio] {
+			position: relative;
+		}
+		[ratio="2:1"] {
+			padding-top: 50%;
+		}
+		[ratio="16:9"] {
+			padding-top: 56.25%;
+		}
+		[ratio="3:2"] {
+			padding-top: 66.6666%;
+		}
+		[ratio="4:3"] {
+			padding-top: 75%;
+		}
+		[ratio="1:1"] {
+			padding-top: 100%;
+		}
+
+
+		[todo-layout-side] {
+			margin-left:  calc(-1 * var(--core-side));
+			margin-right: calc(-1 * var(--core-side));
+			padding-left:  var(--core-side);
+			padding-right: var(--core-side);
+		}
+	</style>
+
+</head>
+<body primary="blue" class="side-comp">
+
+	<flexus-view>
+		<flexus-toolbar card floating>
+			<button icon="menu"></button>
+			<input type="text" flex placeholder="CrossCafe">
+			<button icon="search" muted></button>
+			<hr>
+			<button icon="close" muted></button>
+		</flexus-toolbar>
+		<main>
+			<div todo-layout-side ratio="16:9" image-cover style="background-image: url('./img/crosscafe.jpg')"></div>
+			<div tinted todo-layout-side relative style="padding: 1rem">
+				<div h5>CrossCafe</div>
+				<div h5>4.3 - 190 reviews</div>
+				<div h5>Cafe</div>
+				<button tinted fab right top icon="directions" title="Directions"></button>
+			</div>
+			<div center layout>
+				<button vertical tinted icon="bookmark_border">Save</button>
+				<button vertical tinted icon="place">Nearby</button>
+				<!--button vertical tinted icon="smartphone">Send to your phone</button-->
+				<button vertical tinted icon="share">Share</button>
+			</div>
+			<hr>
+			<div fx-item spacious>Breakfast - Cosy - Casual</div>
+			<hr>
+			<div fx-item dense body2 icon="timeline">You visited today</div>
+			<div fx-item dense body2 icon="place">Riegrova 382/24, 779 00 Olomouc</div>
+			<div fx-item dense body2 icon="plus">H6WX+27 Olomouc</div>
+			<div fx-item dense body2 icon="internet">crosscafe.cz</div>
+			<div fx-item dense body2 icon="phone">605 484 796</div>
+			<div fx-item dense body2 icon="clock">Open now: 9AM–6PM</div>
+			<div fx-item dense body2 icon="flag">Add a label</div>
+			<div fx-item indent><button tinted>suggest an edit</button></div>
+			<hr>
+		</main>
+	</flexus-view>
+
+	<img src="./img/demo-gmaps-detail.png" width="400">
+
+</body>
+</html>

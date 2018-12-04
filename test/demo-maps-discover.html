@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>maps-discover</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./side-comp.css">
+
+</head>
+<body primary="blue" class="side-comp">
+
+	<flexus-view>
+		<flexus-toolbar waterfall>
+			<section card>
+				<button icon="menu"></button>
+				<input type="text" flex placeholder="Search here">
+				<button icon="close" muted></button>
+			</section>
+		</flexus-toolbar>
+		<main>
+			<div scrollable horizontal spaced layout>
+				<div card flat>
+					Cheap eats
+				</div>
+				<div card flat>
+					Group-friendly dining
+				</div>
+				<div card flat>
+					Cheap spot for groups
+				</div>
+				<div card flat>
+					Casual Bars
+				</div>
+				<div card flat>
+					Coffee and Wi-Fi
+				</div>
+			</div>
+			<div card>
+				<h2 text-center>The Foodie List</h2>
+				<div fx-item>
+					<span bold>1</span>
+					<div flex vertical>
+						<div bold>Plan B</div>
+						<div muted>4.5 * (341)</div>
+						<div muted>Bar & Grill</div>
+					</div>
+					<img rounded big avatar>
+				</div>
+				<div fx-item>
+					<span bold>2</span>
+					<div flex vertical>
+						<div bold>Aroma Indian Restaurant</div>
+						<div muted>4.6 * (160)</div>
+						<div muted>Restaurant</div>
+					</div>
+					<img rounded big avatar>
+				</div>
+			</div>
+		</main>
+	</flexus-view>
+
+	<img src="./img/demo-gmaps-detail.png" width="400">
+
+</body>
+</html>

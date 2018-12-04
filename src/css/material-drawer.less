@@ -1,0 +1,143 @@
+:root {
+	--drawer-width: 240px;
+}
+[screensize="s"] {
+	--drawer-width: calc(100vw - 56px);
+}
+
+
+
+/*
+
+TODO: solve these ludicous selectors such as
+
+
+[elevation="1"]flexus-drawer a,
+[elevation="1"]flexus-drawer button,
+[elevation="1"]flexus-drawer [fx-item],
+[elevation="1"]flexus-drawer flexus-toolbar:not([multisection]),
+[elevation="1"]flexus-drawer flexus-toolbar > section,
+[elevation="1"]flexus-drawer flexus-drawer a,
+[elevation="1"]flexus-drawer flexus-drawer button {
+
+
+or
+
+
+[elevated][clickable],
+[elevation="2"][clickable],
+[elevated]input:not([type="checkbox"]):not([type="radio"]),
+[elevation="2"]input:not([type="checkbox"]):not([type="radio"]),
+[elevated]select,
+[elevation="2"]select,
+[elevated]flexus-drawer a,
+[elevation="2"]flexus-drawer a,
+[elevated]flexus-drawer button,
+[elevation="2"]flexus-drawer button,
+[elevated]flexus-drawer [fx-item],
+[elevation="2"]flexus-drawer [fx-item],
+[elevated]flexus-drawer flexus-toolbar:not([multisection]),
+[elevation="2"]flexus-drawer flexus-toolbar:not([multisection]),
+[elevated]flexus-drawer flexus-toolbar > section,
+[elevation="2"]flexus-drawer flexus-toolbar > section,
+[elevated]flexus-drawer flexus-drawer a,
+[elevation="2"]flexus-drawer flexus-drawer a,
+[elevated]flexus-drawer flexus-drawer button,
+[elevation="2"]flexus-drawer flexus-drawer button {
+
+
+*/
+
+
+
+flexus-drawer {
+
+	&:extend([vertical-axis] all);
+	header,
+	nav,
+	main,
+	& {
+		display: flex;
+		flex-direction: column;
+	}
+
+	// Drawers width changes based on screensize and look.
+	// On small devices it's 100% - 56px,
+	// Than it's something around 240px or so.
+
+	width: var(--drawer-width);
+
+	.apply-colors();
+
+	&[modal] {
+		box-shadow: var(--elevation-16);
+	}
+
+	// 16px by default everywhere. disregarding tablets 24px sides because those are mainly for views.
+	--side: 16px;
+	// Adding basic padding in case user doesn't use <header> or <nav> or <main>.
+	padding: 8px var(--side);
+
+	header {
+		min-height: var(--toolbar-min-height);
+		justify-content: center;
+	}
+	nav,
+	main {
+		// TODO: inherit vertical scrollable.
+		margin-top: 8px;
+		margin-bottom: 8px;
+		&:extend([vertical-scrollable] all);
+	}
+
+	hr {
+		margin-top: 8px;
+		margin-bottom: 8px;
+	}
+
+	//> a,
+	//> button, {
+	a,
+	button, {
+		&:extend([fx-item] all);
+	}
+
+	//> a,
+	//> button,
+	a,
+	button,
+	[fx-item] {
+		display: flex;
+		border-radius: 4px;
+		//&:extend(button[flat] all);
+
+		// TOOD: make it so that we inherit [button] instead of defining font size and weight manually.
+		// NOW it madly inflates the selectors.
+		// TODO: 
+		&:extend([button]);
+		//font-size: 14px;
+		//font-weight: 500;
+
+		--bg-base-opacity: 0;
+		&:extend([hoverable] all);
+		&:extend([clickable] all);
+		.apply-colors();
+		//.apply-foreground();
+		//&:extend(button[neutral] all);
+		--fg-opacity: 0.87;
+		margin-top: 8px;
+		margin-bottom: 8px;
+		// Drawer - the parent vertical layout has 16px side padding.
+		// Drawer list items cut out 8px back and have 8px horizontal padding.  
+		--offset: 8px;
+		// TODO
+		--min-height: 40px;
+		--height: 40px;
+		--size: 40px;
+	}
+
+}
+
+[offsetted] {
+	--offset: 8px;
+}

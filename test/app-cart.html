@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>cart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+</head>
+<body theme="white" primary="purple" class="side-comp">
+
+	<flexus-view id="cart">
+		<flexus-toolbar tinted elevation="0">
+			<button icon="menu"></button>
+			<div flex>Cart</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main>
+
+			<div v-on:click="openDetail($event, product.id)"
+			fx-item seamed="between" :name="`product-${product.id}`"
+			v-for="product in products">
+				<img square avatar :src="product.image" name="product-image">
+				<div vertical layout flex>
+					<div name="product-name">${product.name}</div>
+					<div name="product-status" body2 muted>${product.status}</div>
+				</div>
+				<span name="product-price">$${product.price.toFixed(2)}</span>
+			</div>
+
+			<div fx-item>
+				<span flex muted>TOTAL</span>
+				<span h5>$41.24</span>
+			</div>
+
+			<p layout body2>
+				<span flex>Subtotal</span>
+				<span muted>$36.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Shipping</span>
+				<span muted>$2.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Tax</span>
+				<span muted>$3.24</span>
+			</p>
+
+		</main>
+
+		<button flat fullwidth bottom>checkout</button>
+
+	</flexus-view>
+
+
+	<img src="./img/screenshots/app-eshop-cart2.png" width="180">
+
+</body>
+</html>

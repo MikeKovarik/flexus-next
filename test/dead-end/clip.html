@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>flexus-toolbar demo</title>
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		flexus-toolbar {
+			background-color: #6200ee;
+			color: #FFF;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			height: 56px;
+			padding: 0 16px;
+		}
+		button {
+			background-color: transparent;
+		}
+		button[fab] {
+			margin: 0 !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+			border-radius: 50% !important;
+			background-color: #000;
+			justify-content: center;
+			--size: 24px;
+			--size2: 56px;
+			width: var(--size2) !important;
+			height: var(--size2) !important;
+			position: absolute;
+		}
+		[fab][top] {
+			top: calc(-0.5 * var(--size2));
+		}
+		[fab][center] {
+			left: calc(50% + -0.5 * var(--size2));
+		}
+
+		#myClip circle {
+			cx: calc(50vw);
+		}
+	</style>
+
+</head>
+<body primary="blue" secondary="yellow">
+
+	<flexus-toolbar tinted>
+		<button icon="menu"></button>
+		<button icon="plus" fab center top></button>
+		<div flex></div>
+		<button icon="search"></button>
+	</flexus-toolbar>
+
+</body>
+</html>

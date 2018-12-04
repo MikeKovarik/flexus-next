@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>keyline</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" href="../dist/wireframe.css">
+<!--
+	<link rel="stylesheet" href="../dist/core.css">
+	<link rel="stylesheet" href="../dist/material.css">
+-->
+	<link rel="stylesheet" href="/flexus/css/flexus-material.css">
+	<link rel="stylesheet" href="/flexus/css/flexus-material-icons.css">
+
+</head>
+<body wireframe light>
+
+
+
+	<flexus-view>
+
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="menu"></button>
+				<div>Keyline aligned</div>
+			</section>
+			<section>default position</section>
+			<div>default position</div>
+			<h1>default position</h1>
+			<section indent>Keyline aligned</section>
+			<div indent>Keyline aligned</div>
+			<h1 indent>Keyline aligned</h1>
+			<h2 indent>Keyline aligned</h2>
+			<section><span indent>Keyline aligned</span></section>
+			<section><i icon="info"></i>Keyline aligned</section>
+			<section icon="info">Keyline aligned</section>
+		</flexus-toolbar>
+
+		<main>
+			<div indent display1 style="margin-top: 1rem">Keyline aligned</div>
+			<div indent subhead style="height: 48px;">Jun 12, 2013</div>
+			<div fx-item>Non-indent</div>
+			<div fx-item icon="info">Non-indent with icon</div>
+			<div fx-item><i icon="info"></i>Non-indent with icon</div>
+			<div fx-item indent>indent</div>
+
+			<div fx-item>hr</div>
+			<hr>
+
+			<div fx-item>hr[fullbleed]</div>
+			<hr fullbleed>
+
+			<div fx-item>hr[inset]</div>
+			<hr inset>
+
+			<div fx-item>hr[indent]</div>
+			<hr indent>
+
+			<div fx-item>hr[fullbleed][indent]</div>
+			<hr fullbleed indent>
+
+			<div fx-item>hr[inset][indent]</div>
+			<hr inset indent>
+
+		</main>
+
+	</flexus-view>
+
+
+<!--
+	<flexus-view>
+
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="menu"></button>
+				<span>Keyline aligned</span>
+			</section>
+			<h1 indent>Keyline aligned</h1>
+		</flexus-toolbar>
+
+		<main>
+			<div indent display1 style="margin-top: 1rem">Keyline aligned</div>
+			<div indent subhead style="height: 48px;">Jun 12, 2013</div>
+			<div fx-item>Non-indent</div>
+			<div fx-item icon="info">Non-indent with icon</div>
+			<div fx-item><i icon="info"></i>Non-indent with icon</div>
+			<div fx-item indent>indent</div>
+		</main>
+
+		<main nopadding>
+			<div indent display1 style="margin-top: 1rem">Keyline aligned</div>
+			<div indent subhead style="height: 48px;">Jun 12, 2013</div>
+			<div fx-item>Non-indent</div>
+			<div fx-item icon="info">Non-indent with icon</div>
+			<div fx-item><i icon="info"></i>Non-indent with icon</div>
+			<div fx-item indent>indent</div>
+		</main>
+
+	</flexus-view>
+-->
+
+
+</body>
+</html>

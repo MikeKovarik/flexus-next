@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>shapes</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+	<style>
+		:root {
+			--edge-size: 10px;
+		}
+		[shaped] {
+			--theme-radius: 0px;
+			border-radius: 0px;
+			clip-path: polygon(
+				/* left top*/
+				0 var(--edge-size, 0),
+				var(--edge-size, 0) 0,
+				/* right top*/
+				100% 0,
+				/* right bottom*/
+				100% 100%,
+				/* left bottom*/
+				0 100%
+			);
+		}
+		.shape-diag {
+			clip-path: polygon(
+				/* left top*/
+				0 var(--edge-size, 0),
+				var(--edge-size, 0) 0,
+				/* right top*/
+				100% 0,
+				/* right bottom*/
+				100% calc(100% - var(--edge-size, 0)),
+				calc(100% - var(--edge-size, 0)) 100%,
+				/* left bottom*/
+				0 100%
+			);
+		}
+		.shape-all {
+			--edge-size: 6px;
+			clip-path: polygon(
+				/* left top*/
+				0 var(--edge-size, 0),
+				var(--edge-size, 0) 0,
+				/* right top*/
+				calc(100% - var(--edge-size, 0)) 0,
+				100% var(--edge-size, 0),
+				/* right bottom*/
+				100% calc(100% - var(--edge-size, 0)),
+				calc(100% - var(--edge-size, 0)) 100%,
+				/* left bottom*/
+				var(--edge-size, 0) 100%,
+				0 calc(100% - var(--edge-size, 0))
+			);
+		}
+		.shape-customizable {
+			--edge-top-left: 10px;
+			--edge-bottom-right: 10px;
+			--edge-top-right: 4px;
+			--edge-bottom-left: 4px;
+			clip-path: polygon(
+				/* left top*/
+				0 var(--edge-top-left, var(--edge-size, 0)),
+				var(--edge-top-left, var(--edge-size, 0)) 0,
+				/* right top*/
+				calc(100% - var(--edge-top-right, var(--edge-size, 0))) 0,
+				100% var(--edge-top-right, var(--edge-size, 0)),
+				/* right bottom*/
+				100% calc(100% - var(--edge-bottom-right, var(--edge-size, 0))),
+				calc(100% - var(--edge-bottom-right, var(--edge-size, 0))) 100%,
+				/* left bottom*/
+				var(--edge-bottom-left, var(--edge-size, 0)) 100%,
+				0 calc(100% - var(--edge-bottom-left, var(--edge-size, 0)))
+			);
+		}
+	</style>
+
+</head>
+<body padded>
+
+	<button>Normal</button>
+	<button round>Round</button>
+	<button rounded>Rounded</button>
+	<button shaped class="shape1">Shaped left top</button>
+	<button shaped class="shape-diag">Shaped diagonal</button>
+	<button shaped class="shape-all">Shaped everywhere</button>
+	<button shaped class="shape-customizable">customizable</button>
+	
+	<br>
+
+	<button tinted>Normal</button>
+	<button tinted round>Round</button>
+	<button tinted rounded>Rounded</button>
+	<button tinted shaped class="shape1">Shaped left top</button>
+	<button tinted shaped class="shape-diag">Shaped diagonal</button>
+	<button tinted shaped class="shape-all">Shaped everywhere</button>
+	<button tinted shaped class="shape-customizable">customizable</button>
+
+</body>
+</html>

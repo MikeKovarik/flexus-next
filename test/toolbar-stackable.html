@@ -1,0 +1,147 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>flexus-toolbar demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		body {
+			padding: 16px;
+		}
+		body > * {
+			margin-top: 16px;
+		}
+		flexus-view,
+		flexus-toolbar {
+			outline: 1px solid #aaa;
+		}
+	</style>
+
+</head>
+<body>
+
+	<flexus-toolbar>
+		<button icon="menu"></button>
+		<div flex>Stackable</div>
+		<button icon="favorite" title="Add to Favorites"></button>
+		<button icon="plus" title="Add to List"></button>
+		<button icon="share" title="Share"></button>
+		<button icon="delete" title="Delete"></button>
+		<button icon="map" title="Show map"></button>
+		<button icon="sort" title="Sort by"></button>
+		<button icon="edit" title="Edit"></button>
+	</flexus-toolbar>
+
+	<flexus-menu>
+		<button icon="map">Show map</button>
+		<button icon="sort">Sort by</button>
+		<hr>
+		<button icon="edit">Edit</button>
+		<button icon="delete">Delete</button>
+	</flexus-menu>
+<!--
+
+	<flexus-toolbar>
+		<button icon="menu"></button>
+		<div flex>Stackable</div>
+		<button icon="favorite" title="Add to Favorites"></button>
+		<button icon="share" title="Share"></button>
+		<hr>
+		<button icon="plus" title="Add to List"></button>
+		<button icon="delete" title="Delete"></button>
+		<button icon="edit" title="Edit"></button>
+		<hr>
+		<button icon="map" title="Show map"></button>
+		<button icon="sort" title="Sort by"></button>
+	</flexus-toolbar>
+-->
+
+	<flexus-toolbar>
+		<button icon="menu"></button>
+		<div flex>Downloads</div>
+		<input search type="text" placeholder="Search">
+		<div flex></div>
+		<button icon="search"></button>
+	</flexus-toolbar>
+
+	<flexus-toolbar>
+		<button icon="menu"></button>
+		<div flex>Downloads</div>
+		<section search light flex-2>
+			<button icon="arrow-back"></button>
+			<input type="text" placeholder="Search">
+		</section>
+		<div flex></div>
+		<button icon="search"></button>
+	</flexus-toolbar>
+
+	<flexus-toolbar>
+		<button icon="menu"></button>
+		<div flex>Downloads</div>
+		<section search light flex-2 hidden="s m">
+			<button icon="arrow-back"></button>
+			<input type="text" card="l" placeholder="Search">
+		</section>
+		<div flex></div>
+		<button icon="search"></button>
+	</flexus-toolbar>
+<!--
+	<flexus-toolbar>
+		<section main>
+			<button icon="menu"></button>
+			<div flex>Main & Search light</div>
+			<button icon="search"></button>
+		</section>
+		<section search light>
+			<button icon="arrow-back"></button>
+			<input type="text" placeholder="Search">
+			<button icon="more"></button>
+		</section>
+	</flexus-toolbar>
+
+	<flexus-toolbar>
+		<section main>
+			<button icon="menu"></button>
+			<div flex>Main & Selection</div>
+			<button icon="map"></button>
+			<button icon="more"></button>
+		</section>
+		<section selection>
+			<button icon="arrow-back"></button>
+			<div flex title>Selected: 1</div>
+			<button icon="share"></button>
+			<button icon="delete"></button>
+			<button icon="more"></button>
+		</section>
+	</flexus-toolbar>
+-->
+
+	<div style="margin-top: 20px">
+		<button onclick="fire('fx-selection')">event: selection</button>
+		<button onclick="fire('fx-selection-clear')">event: selection-clear</button>
+		<br>
+		<button onclick="fire('fx-search')">event: search</button>
+		<button onclick="fire('fx-search-close')">event: search-close</button>
+		<br>
+		<button onclick="menu.hide()">menu hide</button>
+		<button onclick="menu.show()">menu show</button>
+	</div>
+
+	<script>
+	function fire(name) {
+		var e = new Event(name);
+		document.dispatchEvent(e);
+	}
+	</script>
+
+	<script src="/platform-detect/index.js"></script>
+	<script src="/flexus/lib/ganymede.js"></script>
+	<script src="/flexus/lib/flexus.js"></script>
+	<script src="/flexus/elements/flexus-toolbar.js"></script>
+
+</body>
+</html>

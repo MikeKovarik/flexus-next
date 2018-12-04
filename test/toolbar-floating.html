@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>floating toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../css/flexus-wireframe.css">
+
+	<style>
+	</style>
+
+</head>
+<body theme="white" wireframe vertical>
+
+
+	<flexus-view style="border-bottom: 3px solid red;">
+
+		<flexus-toolbar elevated>
+			<button icon="menu"></button>
+			<div flex>Default toolbar</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<card seamed rounded>
+				<div h6>Default toolbar</div>
+				<p>Usually a flexus-toolbar (in accordance with Material Design spec) is <strong>56px tall</strong> (except for tablets where it's 64px, because default gutter and side margins raise from 16px to 24px).</p>
+				<p>Speaking of gutter and margins... The toolbar has a <strong>16px</strong> padding on both sides. Followed by a 24x24px hamburger or navigation arrow icon/button. That's 40px so far. Indentation keyline is 56px away from content margin (16px on the phone), which positions the title at exactly 72px (16+56) from the left edge, with 32px space between nav icon and the title.</p>
+			</card>
+
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view>
+
+		<flexus-toolbar floating card>
+			<button icon="menu"></button>
+			<input type="text" placeholder="Floating [card] toolbar" flex>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<card seamed rounded>
+				This demo is a bit inspired by the way the floating card-like toolbar works and looks in Google Photos.
+			</card>
+
+			<card seamed rounded>
+				<div h6>Floating toolbar</div>
+				<p>Floating toolbar aligns to the same keyline, though the space between nav icon and title is only 16px.</p>
+				<p>The toolbar also has side paddings of 16px, but it's absolutely positioned another 16px from the border of the view/screen. 16px (position) + 16px (padding) + 24px (icon) makes it 56px and the title lies another 16px away at exactly 72px from the left edge.</p>
+			</card>
+
+		</main>
+	</flexus-view>
+
+
+</body>
+</html>

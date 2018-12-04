@@ -1,0 +1,10 @@
+body.side-comp {
+	display: flex;
+}
+body.side-comp > flexus-view {
+	flex: 1;
+}
+body.side-comp > img {
+	min-width: 360px;
+	align-self: flex-start
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>gphotos detail transition</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+
+		flexus-view[hidden] {
+			display: flex;
+			visibility: hidden;
+			pointer-events: none;
+		}
+
+		body {
+			animation: 300ms fade-in;
+		}
+		@keyframes fade-in {
+			from {opacity: 0}
+			to   {opacity: 1}
+		}
+
+		flexus-toolbar [fab] {
+			background-color: #FFF;
+			color: #000;
+		}
+
+		#the-img {
+			will-change: transform, clip-path;
+		}
+
+		/* TODO */
+		#bottom-bar {
+			justify-content: space-around;
+		}
+		#bottom-bar > *:not(:last-child) {
+			margin: 0;
+		}
+
+		#info {
+			display: none;
+		}
+
+		img, [cover], [ratio] {
+			will-change: transform, clip-path, opacity;
+		}
+		flexus-view {
+			will-change: backgound, opacity, visibility, display;
+		}
+	</style>
+
+</head>
+<body google theme="white">
+
+
+	<flexus-view fit id="gallery">
+		<flexus-toolbar>
+			<button icon="arrow-back"></button>
+			<div flex>Longboarding</div>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main nopadding="s">
+			<div grid columns="5" spaced="4px">
+			</div>
+		</main>
+	</flexus-view>
+
+
+	<flexus-view fit hidden theme="black" id="detail">
+		<flexus-toolbar transparent floating>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<img id="the-img" fit contain>
+		<flexus-toolbar transparent absolute bottom id="bottom-bar">
+			<button icon="share"></button>
+			<button icon="settings"></button>
+			<button icon="delete"></button>
+		</flexus-toolbar>
+	</flexus-view>
+
+
+	<flexus-view fit hidden theme="white" id="info">
+		<flexus-toolbar transparent floating>
+			<button icon="arrow-back" small fab></button>
+		</flexus-toolbar>
+		<main>
+
+			<div fullbleed style="margin-top: -40%">
+				<img src="./img/longboard/medium/IMG_20180908_190443.jpg">
+			</div>
+
+			<input type="text" placeholder="Add a description">
+
+			<div fx-item icon="event">
+				<div vertical layout>
+					<div>September 8, 2018</div>
+					<div>Saturday 7:04 PM</div>
+				</div>
+			</div>
+			<div fx-item icon="image">
+				<div vertical layout>
+					<div>IMG_20180908_190443.jpg</div>
+					<div>12.3MP   4048 x 3036   4.4 MB</div>
+				</div>
+			</div>
+			<div fx-item icon="image">
+				<div vertical layout>
+					<div>Google Pixel</div>
+					<div>f/2.0   1/585   4.67mm   ISO50</div>
+				</div>
+			</div>
+
+			<br>
+
+			<p overline>LOCALTION</p>
+
+			<div ratio="16:9"></div>
+			<div fx-item>
+				<div vertical layout>
+					<div>Map coordinates</div>
+					<div body2>49.614, 17.250</div>
+				</div>
+			</div>
+
+			<br><br><br><br>
+
+		</main>
+	</flexus-view>
+
+
+	<script src="../dist/flexus.js"></script>
+
+	<script type="module">
+		import {Transition} from '../src/js/animations/Transition.js'
+		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
+		import {ImageDescriptor, parseBgUrl} from '../src/js/animations/ImageDescriptor.js'
+		import {ImageTransition} from '../src/js/animations/ImageTransition.js'
+
+		var galleryNames = [
+			'IMG_20180725_163337.jpg',
+			'IMG_20180812_183819.jpg',
+			'IMG_20180812_191249.jpg',
+			'IMG_20180908_181634.jpg',
+			'IMG_20180908_182759.jpg',
+			'IMG_20180908_183039.jpg',
+			'IMG_20180908_183159.jpg',
+			'IMG_20180908_190443.jpg',
+			'IMG_20180908_190716.jpg',
+			'IMG_20180908_191647.jpg',
+			'IMG_20180908_193226.jpg',
+			'IMG_20180908_194719.jpg',
+			'IMG_20180912_163950.jpg',
+			'IMG_20180912_184044.jpg',
+			'IMG_20180912_184217.jpg',
+			'IMG_20180930_171024.jpg',
+			'IMG_20181007_112052.jpg',
+			'IMG_20181110_144054.jpg',
+		]
+
+		var galleryView = document.querySelector('#gallery')
+		var detailView = document.querySelector('#detail')
+		var infoView = document.querySelector('#info')
+		var grid = document.querySelector('#gallery [grid]')
+		var detailImg = document.querySelector('#detail img')
+		var detailViewBackButton = detailView.querySelector('[icon="arrow-back"]')
+
+		function getLink(name, size = 'medium') {
+			return `./img/longboard/${size}/${name}`
+		}
+
+		grid.innerHTML = galleryNames
+			.map(name => `
+				<div
+					ratio="1:1" cover name="${name}"
+					style="background-image: url(${getLink(name, 'small')})"
+				></div>
+			`)
+			.join('')
+
+		var duration = 500
+		var fill = 'both'
+		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+		var options = {duration, easing}
+
+		async function openDetail(gridImg) {
+
+			var name = gridImg.getAttribute('name')
+			detailImg.setAttribute('name', name)
+
+			var urlSmall = getImgOrBgUrl(gridImg)
+			var urlMedium = urlSmall.replace('/small', '/medium')
+			detailImg.src = urlMedium
+
+			var transition = new ImageTransition(gridImg, detailImg, {duration})
+			await transition.ready
+
+			detailView.removeAttribute('hidden')
+			detailView.animate({
+				backgroundColor: ['transparent', 'black']
+			}, options)
+
+			await transition.play()
+		}
+
+		async function closeDetail() {
+			detailView.setAttribute('hidden', '')
+			return
+			// TODO, implement reverse mode in ImageTransition (so that source could be scaled down)
+			var name = detailImg.getAttribute('name')
+			var gridImg = grid.querySelector(`[name="${name}"]`)
+			var transition = new ImageTransition(detailImg, gridImg, {duration})
+			await transition.ready
+			detailView.removeAttribute('hidden')
+			detailView.animate({
+				backgroundColor: ['black', 'transparent']
+			}, options)
+			await transition.play()
+		}
+
+		setTimeout(() => {
+			openDetail(grid.children[6])
+			//detailView.removeAttribute('hidden')
+			//detailImg.src = './img/longboard/medium/IMG_20180908_190443.jpg'
+			//detailImg.setAttribute('name', 'IMG_20180908_190443.jpg')
+		}, 600)
+
+
+		grid.addEventListener('click', e => {
+			if (e.target.hasAttribute('name') && e.target.hasAttribute('cover'))
+				openDetail(e.target)
+		})
+		
+		detailViewBackButton.addEventListener('click', e => {
+			closeDetail()
+		})
+
+		function getImgOrBgUrl(node) {
+			if (node.localStorage === 'img') {
+				return node.src
+			} else {
+				var {backgroundImage} = window.getComputedStyle(node)
+				if (backgroundImage)
+					return parseBgUrl(backgroundImage)
+			}
+		}
+
+	</script>
+
+</body>
+</html>

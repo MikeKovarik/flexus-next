@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>image descriptor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="./util/transition-demos.css">
+
+</head>
+<body>
+
+
+	<h3>img cover to img cover</h3>
+	<div spaced layout>
+		<img class="source" width="100" height="100" src="http://localhost/flexus4/test/img/artists/kodaline.jpg" style="object-fit: cover">
+		<div class="target" style="
+			background-size: cover;
+			background-image: url('http://localhost/flexus4/test/img/artists/kodaline.jpg');
+			background-position: center;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+		"></div>
+	</div>
+
+
+
+	<script type="module" src="util/transition-demos.js"></script>
+
+</body>
+</html>

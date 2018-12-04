@@ -1,0 +1,19 @@
+:root {
+	--toast-size: 44px;
+	--toast-padding: 24px;
+}
+
+flexus-toast {
+	// TODO: condensed font
+	--size: var(--chip-size);
+	// rounded
+	&:extend([rounded]);
+	height: var(--size);
+	padding: 0 var(--toast-padding);
+
+	// default positioning
+	position: absolute;
+	bottom: 64px;
+	left: 50%;
+	transform: translateX(-50%);
+}

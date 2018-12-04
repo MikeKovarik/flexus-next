@@ -1,0 +1,50 @@
+:root {
+	// cards, avatars, chips, buttons and basically everything can be have slightly rounded borders.
+	// Default value is 8px, buttons and inputs calculate it from size and height, otherwise can be customized. 
+	--theme-radius: 8px;
+}
+
+[circle] {
+	--radius: 50%;
+	border-radius: 50% !important;
+}
+
+[square] {
+	--radius: 0;
+	border-radius: 0 !important;
+}
+
+// TODO: RENAME
+// WARNING: THIS IS PRESET ALREADY USED IN INPUTS
+[almost-square] {
+	--radius: 4px;
+	border-radius: var(--radius) !important;
+}
+
+// strictly applies theme's radius
+//[shaped] {
+[rounded] {
+	--radius: var(--theme-radius);
+	border-radius: var(--radius) !important;
+}
+// Tries to use element's size/height to make the edges circular/round.
+// Otherwise falls back to locally defined custom radius, or theme's radius.
+// Example: button has default radius of 4px, [rounded] makes it fully circular.
+[round] {
+	// Large px values do not warp the shape, percent values do.
+	// So we can use riddiculously high PX value and we're good.
+	border-radius: 1000px !important;
+	/*
+	//--radius: calc(var(--size) / 2);
+	--size-based-radius: calc(var(--size) / 2);
+	--radius: var(--size-based-radius, var(--theme-radius));
+	//border-radius: var(--size-based-radius, var(--radius, var(--theme-radius))) !important;
+	border-radius: var(--radius) !important;
+	*/
+}
+
+/*
+[rounded-by-size] {
+	height: var(--element-size);
+}
+*/

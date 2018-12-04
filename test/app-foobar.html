@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>cart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		flexus-toolbar[tinted] section:not(:first-of-type) {
+			padding-bottom: 16px;
+		}
+		flexus-toolbar[tinted] section:not(:first-of-type) button {
+			--fg: 255, 255, 255;
+			border: 1px solid #FFF !important;
+			width: 100% !important;
+			padding: 8px !important;
+			margin-top: 8px;
+		}
+	</style>
+
+</head>
+<body theme="white" primary="purple" class="side-comp">
+
+	<flexus-view id="cart">
+
+		<flexus-toolbar tinted multisection>
+			<section>
+				<button icon="menu"></button>
+				<div flex>Cart</div>
+				<button icon="search"></button>
+				<button icon="more"></button>
+			</section>
+			<section layout>
+				<div flex>
+					<card>
+						<div top cover ratio="3:4" style="background-image: url('../demos/img/products/toothbrush.jpg')"></div>
+						<p h6>Product name</p>
+						<p body2 muted>Highly rated</p>
+					</card>
+					<button seamed fullwidth>$128</button>
+				</div>
+				<div flex>
+					<card>
+						<div top cover ratio="3:4" style="background-image: url('../demos/img/products/toothbrush.jpg')"></div>
+						<p h6>Product name</p>
+						<p body2 muted>Highly rated</p>
+					</card>
+					<button seamed fullwidth>$128</button>
+				</div>
+			</section>
+
+		</flexus-toolbar>
+
+		<main>
+
+			<h6>Categories</h6>
+
+			<div fx-item card>
+				<div vertical layout>
+					<span>Photography</span>
+					<span body2 muted>2001 items</span>
+				</div>
+			</div>
+			<div fx-item card>
+				<div vertical layout>
+					<span>Photography</span>
+					<span body2 muted>2001 items</span>
+				</div>
+			</div>
+
+		</main>
+
+	</flexus-view>
+
+</body>
+</html>

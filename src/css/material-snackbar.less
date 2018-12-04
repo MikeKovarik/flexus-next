@@ -1,0 +1,104 @@
+/*
+button[tinted] {
+	color: rebeccapurple !important;
+}
+[tinted]:not(button) {
+	background-color: rebeccapurple !important;
+}
+button[plain] {
+	background-color: transparent !important;
+	//outline: 1px solid red;
+	height: auto;
+	min-width: auto !important;
+	margin: 4px;
+}
+*/
+flexus-snackbar {
+
+	// MD spec strictly makes this 4px radius.
+	border-radius: 4px;
+	&:extend([card-look]);
+
+	--bg: 46, 46, 46; 
+	--fg: 255, 255, 255;
+	--fg-opacity: 0.87;
+	.apply-colors();
+	//--local-fg: 255, 255, 255;
+	//--local-fg-opacity: 0.87;
+	//background-color: rgba(46,46,46,1);
+	//background-color: #2e2e2e;
+	//color: rgba(var(--fg), 0.87);
+
+	// layout
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	justify-content: flex-start;
+
+	flex-wrap: wrap;
+	white-space: nowrap;
+
+	font-size: 14px;
+
+	min-height: 48px;
+	padding: 0 16px;
+
+	position: absolute;
+
+	button {
+		&:extend([tinted]);
+		&:extend(button[plain]);
+		&:extend(button[nopadding]);
+		margin-left: 24px;
+		//margin-right: -8px; // TODO: remove this if [plain] ends up without any padding at all.
+		//&:extend([text]);
+	}
+
+	[screensize="s"] & {
+	}
+
+	[screensize="m"] &,
+	[screensize="l"] & {
+		max-width: 288px;
+		left: 24px;
+		bottom: 24px;
+	}
+
+/*
+	button {
+		background: transparent !important;
+		box-shadow: none !important;
+	}
+*/
+}
+
+
+/*
+#snackbar.show {
+    visibility: visible;
+    // Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+    // However, delay the fade out process for 2.5 seconds
+   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+*/

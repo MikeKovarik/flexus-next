@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>flexus-toolbar demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		[tinted] {
+			--tint-rgb: 98, 0, 238;
+			background-color: rgb(var(--tint-rgb));
+		}
+		body {
+			padding: 16px;
+		}
+		body > * {
+			margin-top: 16px;
+		}
+		flexus-view {
+			outline: 1px solid #aaa;
+		}
+		flexus-view {
+			max-height: 200px;
+		}
+
+		[card] {
+			border-radius: 8px;
+			box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+		}
+		[card][seam] {
+			box-shadow: none;
+			border: 1px solid rgba(0,0,0,0.1);
+		}
+		[card] {
+			padding: 16px;
+		}
+	</style>
+
+</head>
+<body primary="blue" secondary="yellow">
+
+	<flexus-toolbar tinted>
+		<section card>
+			<button icon="search"></button>
+			<input type="search" placeholder="search people">
+			<button icon="mic"></button>
+			<button icon="more"></button>
+		</section>
+	</flexus-toolbar>
+
+	<flexus-view>
+		<flexus-toolbar waterfall>
+			<button icon="menu"></button>
+			<div text-center flex>Messages</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main>Main view of Andoroid P Contacts app</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar card>
+			<button icon="arrow-back"></button>
+			<span chip small seam>Links</span>
+			<input type="text">
+			<button icon="x"></button>
+		</flexus-toolbar>
+		<main>Search view (that's right, it does not transform the toolbar, it navigates to a whole new view) of Andoroid P Contacts app</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar card floating>
+			<button icon="arrow-back"></button>
+			<span chip small seam>Links</span>
+			<input type="text" flex>
+			<button icon="close"></button>
+		</flexus-toolbar>
+		<main>
+			<div vertical spaced layout>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+				<div card seam>A card</div>
+			</div>
+		</main>
+	</flexus-view>
+
+<!--
+	<flexus-toolbar tinted>
+		<section card style="visibility: visible">
+			<button icon="search"></button>
+			<input type="search" placeholder="search people">
+			<button icon="mic"></button>
+			<button icon="more"></button>
+		</section>
+		<section card collapse fade fx-item>
+			<div avatar></div>
+			<div two-line>
+				<div normal>Mike Kovařík</div>
+				<div secondary>Mobile, 5 minutes ago</div>
+			</div>
+		</section>
+		<flexus-tabs fixed>
+			<div>Speed dial</div>
+			<div>Recents</div>
+			<div>Contacts</div>
+		</flexus-tabs>
+	</flexus-toolbar>
+-->
+</body>
+</html>

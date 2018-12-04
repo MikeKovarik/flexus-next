@@ -1,0 +1,514 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>cart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		[ratio] {
+			margin-top: -1rem !important;
+			margin-bottom: 1rem !important;
+		}
+
+		[hidden2] {
+			visibility: hidden;
+			opacity: 0;
+		}
+		[click-through] {
+			pointer-events: none;
+		}
+		flexus-view {
+			will-change: transform, opacity;
+			/*
+			background-color: rgb(var(--local-bg, var(--surface-bg, var(--theme-bg))));
+			*/
+		}
+	</style>
+
+</head>
+<body theme="white" primary="purple">
+
+	<flexus-view id="cart">
+		<flexus-toolbar tinted elevation="0">
+			<button icon="menu"></button>
+			<div flex>Cart</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main>
+<!--
+			<p fx-item button seamed>
+				4 items in your cart
+			</p>
+			<a :href="`#/detail/${product.id}`"></a>
+-->
+			<div v-on:click="openDetail($event, product.id)"
+			fx-item seamed="between" :name="`product-${product.id}`"
+			v-for="product in products">
+				<img square avatar :src="product.image" name="product-image">
+				<div vertical layout flex>
+					<div name="product-name">${product.name}</div>
+					<div name="product-status" body2 muted>${product.status}</div>
+				</div>
+				<span name="product-price">$${product.price.toFixed(2)}</span>
+			</div>
+<!--
+			<div grid spaced>
+				<div v-on:click="openDetail($event, product.id)"
+				card vertical layout relative
+				name="product"
+				v-for="product in products">
+					<div ratio="3:2" fullbleed>
+						<img fit :src="product.image" name="product-image">
+					</div>
+					<div layout>
+						<div vertical layout flex>
+							<div name="product-name">${product.name}</div>
+							<div name="product-status" body2 muted>${product.status}</div>
+						</div>
+						<span name="product-price">$${product.price.toFixed(2)}</span>
+					</div>
+				</div>
+			</div>
+-->
+
+			<div fx-item>
+				<span flex muted>TOTAL</span>
+				<span h5>$41.24</span>
+			</div>
+
+			<p layout body2>
+				<span flex>Subtotal</span>
+				<span muted>$36.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Shipping</span>
+				<span muted>$2.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Tax</span>
+				<span muted>$3.24</span>
+			</p>
+
+		</main>
+
+		<button flat fullwidth bottom>checkout</button>
+
+	</flexus-view>
+
+
+	<flexus-view id="detail" :name="`product-${product.id}`">
+
+		<flexus-toolbar seamed>
+			<button icon="x" v-on:click="goBack"></button>
+			<div flex>Product details</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main vertical layout>
+			<div fullbleed ratio="4:3">
+				<img fit :src="product.image" name="product-image">
+			</div>
+			<div layout top>
+				<div vertical layout flex>
+					<span name="product-name" h5>${product.name}</span>
+					<span name="product-status" body2 muted>${product.status}</span>
+				</div>
+				<span h5 muted name="product-price">$${product.price.toFixed(2)}</span>
+			</div>
+			<p body2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla tempus massa, et mollis nisl laoreet et. Aliquam feugiat odio at luctus ultrices.</p>
+			<p body2></p>Integer elementum imperdiet risus. Mauris hendrerit massa vel nulla tempus, non semper felis semper. Nulla gravida dignissim lorem, eu volutpat nibh ornare at. Integer hendrerit dapibus tempor. Aenean at hendrerit risus. Integer vehicula porttitor nibh.</p>
+			<button seamed fullwidth bottom v-on:click="remove">remove from cart</button>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="./util/vue.js"></script>
+	<!--
+	<script src="../dist/flexus.js"></script>
+	-->
+
+	<script type="module">
+		//var {ViewTransition} = window.flexus
+		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
+
+
+		class FlexusView extends HTMLElement {}
+		class FlexusToolbar extends HTMLElement {}
+		customElements.define('flexus-view', FlexusView)
+		customElements.define('flexus-toolbar', FlexusToolbar)
+
+		var asyncTimeout = millis => new Promise(resolve => setTimeout(resolve, millis))
+
+		var cart
+		var detail
+
+		async function main() {
+
+			var products = await fetch('./products.json').then(res => res.json())
+
+			cart = new Vue({
+				delimiters: ['${', '}'],
+				el: '#cart',
+				data: {
+					products,
+				},
+				methods: {
+					async openDetail(e, id) {
+						detail.product = products[id]
+						await asyncTimeout()
+						animateOverlapIn(cart.$el, detail.$el, e)
+						//animateCircleIn(cart.$el, detail.$el, e)
+					}
+				}
+			})
+
+			detail = new Vue({
+				delimiters: ['${', '}'],
+				el: '#detail',
+				data: {
+					product: products[0]
+				},
+				methods: {
+					async goBack(e) {
+						await asyncTimeout()
+						animateOverlapOut(cart.$el, detail.$el, e)
+						//animateCircleOut(cart.$el, detail.$el, e)
+					},
+					remove() {
+						console.log('remove from cart')
+					}
+				}
+			})
+
+			cart.$el.setAttribute('fit', '')
+			detail.$el.setAttribute('fit', '')
+
+			//cart.$el.style.display = 'none'
+			detail.$el.style.display = 'none'
+
+		}
+
+		main()
+
+
+		function clamp(num, min, max) {
+			return num < min ? min : num > max ? max : num
+		}
+
+		function mapRange(num, inMin, inMax, outMin, outMax) {
+			return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+		}
+
+		function distanceToFurthestCorner(x, y, rect) {
+			const distX = Math.max(Math.abs(x - rect.left), Math.abs(x - rect.right));
+			const distY = Math.max(Math.abs(y - rect.top), Math.abs(y - rect.bottom));
+			return Math.sqrt(distX * distX + distY * distY);
+		}
+
+
+
+/*
+
+		cart.$el.setAttribute('fit', '')
+		detail.$el.setAttribute('fit', '')
+		detail.$el.style.display = 'none'
+		function animateCircle(this.baseView, this.newView, e) {
+			//var {e, pivot} = getEventAndOrigin(eventOrPivot, this.newView)
+			// TODO: test and fix on scrollable lists / tree.
+			var {x, y} = e
+
+			this.baseView.style.display = ''
+			this.newView.style.display = ''
+			this.baseView.style.zIndex = 100
+			this.newView.style.zIndex = 101
+
+			var this.newViewBbox = this.newView.getBoundingClientRect()
+			var distance = distanceToFurthestCorner(x, y, this.newViewBbox)
+
+			var animation = this.newView.animate({
+				clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${distance}px at ${x}px ${y}px)`],
+			}, animOpts)
+
+			animation.finished.then(() => {
+				this.baseView.style.display = 'none'
+				this.newView.style.display = ''
+			})
+		}
+
+		function animateCircleOut(this.baseView, this.newView, e, pivot) {
+			console.log('animateCircleOut', e)
+			//var {e, pivot} = getEventAndOrigin(eventOrPivot, this.newView)
+			// TODO: test and fix on scrollable lists / tree.
+			var {x, y} = e
+
+			this.baseView.style.display = ''
+			this.newView.style.display = ''
+			this.baseView.style.zIndex = 100
+			this.newView.style.zIndex = 101
+
+			var this.newViewBbox = this.newView.getBoundingClientRect()
+			var distance = distanceToFurthestCorner(x, y, this.newViewBbox)
+
+			var animation = this.newView.animate({
+				clipPath: [`circle(${distance}px at ${x}px ${y}px)`, `circle(0px at ${x}px ${y}px)`],
+			}, animOpts)
+
+			animation.finished.then(() => {
+				this.baseView.style.display = ''
+				this.newView.style.display = 'none'
+			})
+		}
+*/
+
+
+/*
+		async function animateOverlapIn(baseView, newView, e, options) {
+			console.log('this.baseView', this.baseView)
+			console.log('this.newView', this.newView)
+			console.log('backdrop', backdrop)
+			console.log('pivot', pivot)
+			console.log('sheet', sheet)
+
+			var fromNodes = {}
+			for (var node of this.newView.querySelectorAll('[name]'))
+				fromNodes[node.getAttribute('name')] = node
+			var toNodes = {}
+			for (var node of pivot.querySelectorAll('[name]'))
+				toNodes[node.getAttribute('name')] = node
+			//console.log('fromNodes', fromNodes)
+			//console.log('toNodes', toNodes)
+
+			//var newTargets = Array.from(this.newView.querySelectorAll('[name]'))
+			//var pivotTargets = Array.from(pivot.querySelectorAll('[name]'))
+			//console.log('newTargets', newTargets)
+			//newTargets.forEach(t => t.style.outline = '1px solid green')
+			//console.log('pivotTargets', pivotTargets)
+			//pivotTargets.forEach(t => t.style.outline = '1px solid red')
+
+		}
+
+*/
+
+
+		async function animateOverlapIn(baseView, newView, e, options) {
+			var {origin} = getEventAndOrigin(e, newView)
+			console.log('getEventAndOrigin', origin)
+			var transition = new TransitionOverlap(baseView, newView, origin, options)
+			await transition.in()
+		}
+
+
+		async function animateOverlapOut(baseView, newView, e, options) {
+			var name = newView.getAttribute('name')
+			var origin = baseView.querySelector(`[name="${name}"]`)
+			var transition = new TransitionOverlap(baseView, newView, origin, options)
+			await transition.out()
+		}
+
+
+		class TransitionOverlap extends ViewTransition {
+
+			setup() {
+				super.setup()
+				console.log('TransitionOverlap SETUP')
+				console.log('this.originBbox', this.originBbox)
+				this.duration = 5000
+
+				console.log('origin', origin)
+
+				this.origin.style.willChange = 'transform, opacity'
+				this.calculateOrigin()
+
+				this.createBackdrop()
+				this.createSheet()
+/*
+				this.baseView.style.zIndex = ZINDEX_BASEVIEW
+				this.backdrop.style.zIndex = ZINDEX_BACKDROP
+				this.sheet.style.zIndex    = ZINDEX_SHEET
+				//this.originBg.style.zIndex = ZINDEX_ORIGINBG
+				this.origin.style.zIndex   = ZINDEX_ORIGIN
+				this.newView.style.zIndex  = ZINDEX_NEWVIEW
+*/
+				this.aboveMain = this.baseView.querySelector(':scope > flexus-toolbar')
+							|| this.baseView.querySelector(':scope > flexus-tabs')
+
+				// MD spec wants to delay the animation until edges of toolbar and animated element are touching
+				// to make it look like the animated element pushes toolbar away.
+				// This is an ugly calculation that somewhat does the job (I'm not a mathematician. send halp pls).
+				// NOTE: It'd be nice to use the actual bezier curve used to animate the element.
+				if (this.aboveMain/* && isElevated(this.aboveMain)*/) {
+					let top = this.originBbox.top - this.baseViewBbox.top
+					// Distance between bottom edge of toolbar and origin's top edge.
+					let distFromToolbar = top - this.aboveMain.offsetHeight
+					let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
+					let delay = 0.1 + (Math.sin(radians) * 0.45)
+					this.schedule(this.aboveMain, {
+						transform: [
+							'translate3d(0, 0%, 0)',
+							'translate3d(0, -100%, 0)',
+						],
+					}, delay, 1)
+				}
+
+				//this.schedule(this.backdrop, {opacity: [0, 0.2]}, 0, 0.4)
+				this.fade(this.backdrop, 0, 0.2, 0, 0.4)
+
+				this.elevate(this.sheet, this.originComputed.boxShadow, 8, 0, 0.2)
+
+				if (this.allowScalingOrigin) {
+					var originTransformKeyframes = {
+						transformOrigin: ['left top', 'left top'],
+						transform: [
+							`translateX(0) translateY(0) scale(1)`,
+							`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px) scale(${scale})`
+						],
+						boxShadow: ['none', 'none']
+					}
+				} else {
+					var originTransformKeyframes = {
+						transform: [
+							`translateX(0) translateY(0)`,
+							`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px)`
+						],
+						boxShadow: ['none', 'none']
+					}
+				}
+
+				if (this.allowOriginEdges && this.originSideX === 'right') {
+					var newViewMoveKeyframes = {
+						transform: [
+							`translateX(${this.originBbox.right - this.newViewBbox.right}px) translateY(${this.originBbox.top - this.newViewBbox.top}px)`,
+							`translateX(0) translateY(0)`
+						],
+						clipPath: [
+							`polygon(calc(100% - ${this.originBbox.width}px) 0, 100% 0, 100% ${this.originBbox.height}px, calc(100% - ${this.originBbox.width}px) ${this.originBbox.height}px)`,
+							`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
+						],
+					}
+				} else {
+					var newViewMoveKeyframes = {
+						transform: [
+							`translateX(${this.originBbox.left - this.newViewBbox.left}px) translateY(${this.originBbox.top - this.newViewBbox.top}px)`,
+							`translateX(0) translateY(0)`
+						],
+						clipPath: [
+							`polygon(0 0, ${this.originBbox.width}px 0, ${this.originBbox.width}px ${this.originBbox.height}px, 0% ${this.originBbox.height}px)`,
+							`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
+						],
+					}
+				}
+
+				this.scheduleSheetResize(0.1, 1)
+				this.schedule(this.origin,  originTransformKeyframes, 0.1, 1)
+				this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
+
+				//this.schedule(this.origin,  {opacity: [1, 0]}, 0, 0.5)
+				//this.schedule(this.newView, {opacity: [0, 1]}, 0.3, 1)
+				this.fadeOut(this.origin, 0, 0.5)
+				this.fadeIn(this.newView, 0.3, 1)
+
+			}
+
+			async in() {
+				try {
+					await super.in()
+				} catch(err) {
+					throw err
+				} finally {
+					this.backdrop.remove()
+					this.sheet.remove()
+				}
+			}
+
+			async out() {
+				try {
+					await super.out()
+				} catch(err) {
+					throw err
+				} finally {
+					this.backdrop.remove()
+					this.sheet.remove()
+				}
+			}
+
+		}
+
+		function getEventAndOrigin(arg, newView) {
+			if (arg instanceof Event) {
+				var e = arg
+				var firstName = newView.getAttribute('name')
+				if (!firstName) {
+					let temp = newView.querySelector('[name]')
+					if (temp) firstName = temp.getAttribute('name')
+				}
+				var origin = traverseUntil(e.target, node => node.getAttribute('name') === firstName)
+			} else {
+				var origin = arg
+			}
+			return {e, origin}
+		}
+
+		function traverseUntil(node, condition) {
+			while (node !== null) {
+				if (condition(node)) return node
+				node = node.parentElement
+			}
+		}
+
+
+
+		function isElevated(node, computed) {
+			var attr = Number(node.getAttribute('elevation'))
+			if (!Number.isNaN(attr)) return attr > 0
+			if (!computed) computed = window.getComputedStyle(node)
+			if (computed.boxShadow === 'none') return false
+			return computed.boxShadow
+				// split string by commas that are outside of parenthesis (rgba colors)
+				.split(/\,\s?(?![^\(]*\))/)
+				.some(shadow => {
+					// Split by all spaces that are outside of parenthesis.
+					var parts = shadow.split(/\s(?![^\(]*\))/)
+					var color = parts.find(isColor)
+					var sizes = parts.filter(part => !isColor(part))
+					var size = sizes.map(str => str.replace(/\D/g, '')).map(Number).reduce((a,b) => a + b)
+					return size > 0 && !isTransparent(color)
+				})
+		}
+
+		function isColor(string) {
+			return string.includes('#')
+				|| string.includes('rgb')
+				|| string.includes('hsl')
+		}
+
+		function isTransparent(string) {
+			if (string.includes('a(')) {
+				var alpha = string.slice(5, -1).split(',').map(Number).pop()
+				return alpha === 0
+			} else {
+				return string.startsWith('#')
+					&& string.length === 5 && string[4] === '0'
+					&& string.length === 9 && string.slice(-2) === '00'
+			}
+		}
+
+		function objectFromEntries(entries) {
+			var object = {}
+			for (var [key, val] of entries)
+				object[key] = val
+			return object
+		}
+
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head screensize="s">
+
+	<meta charset="utf-8">
+	<title>event</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+
+		flexus-view#event {
+			--todobackdrop-bg: 244, 236, 238;
+		}
+		[indent] {
+			padding-left: calc(16px + 56px) !important;
+		}
+		[transition-part="event-header"] {
+			padding-top: 24px;
+			padding-bottom: 24px;
+		}
+		[transition-part="event-header"] [h6] {
+			margin-bottom: 8px;
+		}
+		.bgsection {
+			background-image: url('./img/crosscafe.jpg');
+			padding-top: 16px;
+			padding-bottom: 130px;
+		}
+
+		.rows {
+			display: flex;
+			flex-direction: column;
+		}
+		.row {
+			height: 60px;
+			padding: 8px;
+			display: flex;
+			align-items: stretch;
+			justify-content: center;
+		}
+		.event {
+			padding: 8px 16px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+		}
+		.row + .row {
+			border-top: 1px solid #EEE;
+		}
+		.row > * {
+			margin: 2px;
+		}
+
+		flexus-view main {
+			flex: 1;
+		}
+	</style>
+
+</head>
+<body theme="white" primary="blue" class="side-comp">
+
+	<flexus-view id="event" primary="purple">
+
+		<flexus-toolbar multisection>
+			<section class="bgsection">
+				<button icon="arrow-back"></button>
+				<div flex></div>
+				<button icon="info"></button>
+				<button icon="share"></button>
+			</section>
+			<section indent tinted transition-part="event-header" transition-pivot>
+				<div vertical layout flex>
+					<div h6 transition-part="event-name">Workshop name</div>
+					<div subtitle1>Subtitle</div>
+				</div>
+			</section>
+			<button small fab icon="event" elevation="3" left bottom></button>
+		</flexus-toolbar>
+
+		<main indent>
+			<p>Click the white FAB button on the left!</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis vel lacus a lacinia. Vestibulum faucibus fermentum augue, non ultrices purus scelerisque sed. Aenean quis lacinia purus, a posuere nisi. Dictum commodo velit. Aenean et laoreet augue. Nulla rutrum posuere urna ut consectetur.</p>
+			<!--
+			<p>Nam faucibus, leo in feugiat accumsan, velit erat pellentesque turpis, sed ullamcorper nisi tortor eget magna. Morbi mi libero, condimentum vel sagittis vel, vehicula sed tortor. Cras sodales viverra finibus. Proin venenatis tempor odio, ac interdum risus commodo eget. Quisque ut pretium dolor. Etiam in velit sem. Proin sem diam, pellentesque nec purus et, dictum tristique dui. Nulla lobortis mattis turpis.</p>
+			-->
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="list">
+
+		<flexus-toolbar elevation="2">
+			<button icon="menu"></button>
+			<div flex>Harmonogram</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main class="rows" nopadding>
+			<div class="row"></div>
+			<div class="row"></div>
+			<div class="row"></div>
+			<div class="row">
+				<div class="event" tinted primary="purple" transition-part="event-header" transition-origin>
+					<span transition-part="event-name">Workshop name</span>
+				</div>
+			</div>
+			<div class="row"></div>
+			<div class="row"></div>
+			<div class="row">
+				<div class="event" tinted primary="blue" transition-part="event-header">
+					<span transition-part="event-name">Concert</span>
+				</div>
+				<div class="event" tinted primary="pink" transition-part="event-header">
+					<span transition-part="event-name">Seminar</span>
+				</div>
+			</div>
+			<div class="row"></div>
+			<div class="row">
+				<div class="event" tinted primary="pink" transition-part="event-header">
+					<span transition-part="event-name">Seminar</span>
+				</div>
+				<div class="event" tinted primary="purple" transition-part="event-header">
+					<span transition-part="event-name">Workshop with a very long name</span>
+				</div>
+			</div>
+			<div class="row"></div>
+		</main>
+
+	</flexus-view>
+
+
+	<script src="./util/demo-util.js"></script>
+
+	<script type="module">
+		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
+
+		var fab = $('[fab]')
+		var eventView = $('#event')
+		var gridItem = $('.event[transition-part="event-header"]')
+		var listView = $('#list')
+		
+		eventView.setAttribute('fit', '')
+		listView.setAttribute('fit', '')
+
+		var baseView = listView
+		var newView = eventView
+
+		baseView.style.zIndex = 99
+		newView.style.zIndex  = 104
+
+		class PivotalCollapse extends ViewTransition {
+			setup() {
+				super.setup()
+				this.duration = 4500
+				this.transformFrom(newView, this.origin, this.pivot, 0, 1)
+				this.clipFrom(newView, this.pivot, 0.3, 1)
+				this.fadeIn(newView, 0.3, 0.6)
+				this.transitionSheet(this.origin, this.pivot)
+			}
+		}
+
+		var eventItems = Array.from(listView.querySelectorAll('.event'))
+		eventItems.forEach(node => {
+			node.addEventListener('click', e => {
+				gridItem = node
+				newView.querySelector('[transition-part="event-name"]').innerText = gridItem.textContent.trim()
+				newView.setAttribute('primary', gridItem.getAttribute('primary'))
+				newView.style.display = ''
+				let vt = new PivotalCollapse(baseView, newView, gridItem)
+				vt.in()
+			})
+		})
+
+		fab.addEventListener('click', e => {
+			console.log('close')
+			let vt = new PivotalCollapse(baseView, newView, gridItem)
+			//setTimeout(() => vt.play(), 100)
+			vt.out()
+			vt.finished.then(() => {
+				newView.style.display = 'none'
+			})
+		})
+
+	</script>
+	<style>
+		flexus-view[hidden] {
+			display: flex;
+			visibility: visible;
+		}
+		[fab] {
+			transform: scale(1);
+			transition: 200ms transform var(--bezier-curve);
+		}
+		[hidden] [fab] {
+			transform: scale(0);
+		}
+	</style>
+
+</body>
+</html>

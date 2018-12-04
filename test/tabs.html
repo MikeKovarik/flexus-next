@@ -1,0 +1,42 @@
+<!--
+UNFINISHED!
+This is just a pseudocode skeleton done in a few minutes, not a real implementation.
+-->
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Tabs</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+</head>
+<body theme="dark" primary="pink" class="side-comp">
+
+	<template variants-row="round plain seamed transparent">
+
+		<h6>default, with bar</h6>
+		<flexus-tabs>
+			<div selected>Song</div>
+			<div>Lyrics</div>
+			<div>Video</div>
+			<div>Artist</div>
+		</flexus-tabs>
+
+		<h6>each item with different color</h6>
+		<flexus-tabs>
+			<div selected pink>pink</div>
+			<div red>red</div>
+			<div cyan>cyan</div>
+			<div orange>orange</div>
+		</flexus-tabs>
+
+	</template>
+
+	<script src="./util/testbed.js"></script>
+
+</body>
+</html>

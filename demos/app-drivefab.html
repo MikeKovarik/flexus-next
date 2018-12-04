@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>drivefab</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		[black] {
+			--bg: 0,0,0;
+			--fg: 255,255,255;
+		}
+	</style>
+
+</head>
+<body theme="white" class="side-comp">
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="more"></button>
+			</section>
+			<section indent>
+					<div h6>My files</div>
+			</section>
+			<button fab icon="add" bottom left black>
+				<span hidden="phone">Create</span>
+			</button>
+		</flexus-toolbar>
+		<flexus-drawer>
+			<a href="#" icon="folder" selected>My Files</a>
+			<a href="#" icon="group">Shares with me</a>
+		</flexus-drawer>
+		<main>
+			<div fx-item muted body2 hidden="s">
+				<i icon="del me"></i>
+				<span flex-4>Title</span>
+				<span flex-2>Owner</span>
+				<span flex-2>Last modified</span>
+				<span flex-1>Size</span>
+			</div>
+			<div fx-item>
+				<icon>folder</icon>
+				<span flex-4 bold>Photos</span>
+				<span flex-2 muted>Sandra Adams</span>
+				<span flex-2 muted>May 26, 2018</span>
+				<span flex-1 muted>16kb</span>
+			</div>
+			<!--div fx-item>
+				<icon>folder</icon>
+				<div flex layout vertical="s">
+					<span flex-4 bold>Photos</span>
+					<span flex-2 muted>Sandra Adams</span>
+					<span flex-2 muted>May 26, 2018</span>
+					<span flex-1 muted>16kb</span>
+				</div>
+			</div-->
+		</main>
+	</flexus-view>
+
+	<img src="./img/screenshots/app-drivefab.png" width="360">
+
+</body>
+</html>

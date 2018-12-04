@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>gphotos detail transition</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		body {
+			display: grid;
+			gap: 16px;
+			padding: 16px;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+		}
+	</style>
+
+</head>
+<body google theme="white">
+
+	<!--
+		These examples are the many way you could use to create image gallery.
+
+		<flexus-toolbar> can have [floating] attribute which would set position:absolute
+		and top:0, but it would also increate padding of <main> to compensate for the size
+		of the toolbar. It's meant for scrollable content and we wouldn't want the toolbar
+		to lay on its first 60 or so pixels.
+		Photo galleries usually want to overlay the toolbar over the image. [absolute][top]
+		or [absolute-top] is more suitable in this case.
+	-->
+	
+
+	<flexus-view theme="black" id="detail">
+		<flexus-toolbar transparent absolute-top>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<img id="the-img" fit contain src="../demos/img/longboard/IMG_20180912_163950.jpg">
+	</flexus-view>
+
+	<flexus-view theme="black" id="detail">
+		<flexus-toolbar transparent absolute-top>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<div fit contain style="background-image: url('../demos/img/longboard/IMG_20180912_163950.jpg'); background-repeat: no-repeat"></div>
+	</flexus-view>
+
+	<flexus-view theme="black" id="detail" contain style="background-image: url('../demos/img/longboard/IMG_20180912_163950.jpg'); background-repeat: no-repeat">
+		<flexus-toolbar transparent absolute-top>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+	</flexus-view>
+
+	<flexus-view theme="black" id="detail">
+		<flexus-toolbar transparent>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main contain style="background-image: url('../demos/img/longboard/IMG_20180908_190716.jpg'); background-repeat: no-repeat"></main>
+	</flexus-view>
+
+	<flexus-view theme="black" id="detail">
+		<flexus-toolbar transparent>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main vertical center layout nopadding>
+			<img src="../demos/img/longboard/IMG_20180908_190716.jpg">
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="black" id="detail">
+		<flexus-toolbar transparent>
+			<button icon="arrow-back"></button>
+			<div flex></div>
+			<button icon="favorite_outline"></button>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main vertical center layout>
+			<div fullbleed>
+				<img src="../demos/img/longboard/IMG_20180908_190716.jpg">
+			</div>
+		</main>
+	</flexus-view>
+
+
+</body>
+</html>

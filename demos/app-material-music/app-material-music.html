@@ -1,0 +1,372 @@
+<!doctype html>
+<html screensize="l">
+<head>
+
+	<meta charset="utf-8">
+	<title>material music player</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./app-material-music.css">
+
+</head>
+<body theme="dark">
+
+
+
+	<flexus-view id="list-view" style="opacity: 0">
+
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>My library</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main responsive grid columns="5" spaced="3px" nopadding>
+		</main>
+
+	</flexus-view>
+
+
+
+	<flexus-view id="detail-view" theme="light" scrollable cover style="display: none">
+
+		<flexus-toolbar sticky transparent theme="dark">
+			<button icon="arrow-back"></button>
+		</flexus-toolbar>
+
+		<main nopadding card elevation="16">
+
+			<flexus-toolbar absolute top transparent theme="dark">
+				<div flex></div>
+				<button icon="star_outline"></button>
+				<button icon="more"></button>
+			</flexus-toolbar>
+
+			<div layout tinted>
+				<img cover height="300" width="300" src="">
+				<div flex vertical layout class="album-info">
+					<div padded muted flex class="album-info-name" relative>
+						<p id="album-name" h3></p>
+						<p id="album-artist"></p>
+						<button fab icon="play_arrow" bottom right></button>
+					</div>
+					<div padded muted
+					class="album-info-release"
+					id="album-release"
+					style="background-color: rgba(255,255,255,0.05)">
+					</div>
+				</div>
+			</div>
+			<table class="list" inset fullwidth></table>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script type="module">
+		import {renderGrid, renderDetail, getUrl, promiseImageLoaded} from './app-material-music.js'
+		import {albums, artists} from './app-material-music.js'
+		import {listView, detailView} from './app-material-music.js'
+		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
+
+
+		var platform = {screensize: 'l'}
+
+		var duration = 600
+		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
+		renderGrid(albums)
+		fadeAndSlideIn(listView)
+
+		var listViewMain = listView.querySelector('[grid]')
+		var gridItems = Array.from(listViewMain.children)
+		for (let gridItem of gridItems) {
+			gridItem.addEventListener('click', e => showDetail(gridItem, e))
+		}
+
+		var currentAlbumIndex = 0
+
+		detailView.setAttribute('fit', '')
+
+		renderDetail(albums[0])
+
+
+
+		// TODO: if pivot is image and it's not loaded at the time the animation starts,
+		// an ugly flash appears. TODO: implement some 'prerequisites' API, with promises
+		// that need to resolve before the animation can be played.
+		class PivotalCollapse extends ViewTransition {
+
+			setupIn() {
+				this.duration = duration
+				var newMain = this.newView.querySelector('main')
+				this.transformFrom(newMain, this.origin, this.pivot, 0.1, 1)
+				this.clipFrom(newMain, this.pivot, 0.3, 1)
+				//this.schedule(newMain, {background: 'transparent'})
+				this.schedule(newMain.offsetParent, {overflow: 'hidden'})
+				//this.newView.style.background = 'transparent'
+			}
+
+			setupOut() {
+				this.duration = duration
+				var newMain = this.newView.querySelector('main')
+				this.transformTo(newMain, this.origin, this.pivot)
+				this.clipTo(newMain, this.pivot)
+				//this.schedule(newMain, {background: 'transparent'})
+				this.schedule(newMain.offsetParent, {overflow: 'hidden'})
+			}
+
+			async in() {
+				super.in()
+				await this.animateInBgFrom(this.newView, this.origin)
+			}
+
+			async out() {
+				super.out()
+				await this.animateOutBgTo(this.newView, this.origin)
+			}
+
+			async animateInBgFrom(node, originPos, options = {}) {
+				originPos = createOriginCoords(originPos)
+				var computed = window.getComputedStyle(node)
+				var originalBgColor = node.style.backgroundColor
+				var originalBgImage = node.style.backgroundImage
+				var computedBgColor = computed.backgroundColor
+				var computedBgImage = computed.backgroundImage
+
+				console.log('originPos', originPos)
+
+				node.style.backgroundColor = 'transparent'
+				node.style.backgroundImage = 'none'
+
+				var circle = createDisposableDiv()
+				node.after(circle)
+				circle.style.backgroundColor = originalBgColor
+
+				var circleAnimation = this.animateCircleTransform(circle, originPos)
+				await circleAnimation.finished
+				console.log('originPos', originPos)
+
+				if (computedBgImage !== 'none') {
+					// Creating the div in advance before even running the circle animation
+					var bgDiv = createDisposableDiv()
+					circle.after(bgDiv)
+					bgDiv.style.backgroundImage    = computedBgImage
+					bgDiv.style.backgroundColor    = computedBgColor
+					bgDiv.style.backgroundSize     = computed.backgroundSize
+					bgDiv.style.backgroundPosition = computed.backgroundPosition
+
+					var fadeInAnimation = fadeIn(bgDiv, 400)
+					await fadeInAnimation.finished
+					// Reset bg-image to its original value, cancel animation and remove the teporary bg-image element.
+					node.style.backgroundImage = originalBgImage
+					fadeInAnimation.cancel()
+					//bgDiv.remove()
+					setTimeout(() => bgDiv.remove(), 200)
+
+				}
+				// Reset bg-color to its original value, cancel animation and remove the teporary bg-color element.
+				node.style.backgroundColor = originalBgColor
+				circleAnimation.cancel()
+				//circle.remove()
+				setTimeout(() => circle.remove(), 200)
+			}
+
+			async animateOutBgTo(node, originPos, options = {}) {
+				originPos = createOriginCoords(originPos)
+				var computed = window.getComputedStyle(node)
+				var originalBgColor = node.style.backgroundColor
+				var originalBgImage = node.style.backgroundImage
+				var computedBgColor = computed.backgroundColor
+				var computedBgImage = computed.backgroundImage
+
+				node.style.backgroundColor = 'transparent'
+				node.style.backgroundImage = 'none'
+
+				var circle = createDisposableDiv()
+				node.after(circle)
+				circle.style.backgroundColor = originalBgColor
+
+				if (computedBgImage !== 'none') {
+					circle.style.backgroundImage    = computedBgImage
+					circle.style.backgroundColor    = computedBgColor
+					circle.style.backgroundSize     = computed.backgroundSize
+					circle.style.backgroundPosition = computed.backgroundPosition
+				}
+
+				//var circleAnimation = animateCircleTransform(circle, originPos)
+				var circleAnimation = this.animateCircleClip(circle, originPos, true)
+				await circleAnimation.finished
+
+				// Reset bg-color to its original value, cancel animation and remove the teporary bg-color element.
+				node.style.display = 'none'
+				circleAnimation.cancel()
+				circle.remove()
+				node.style.backgroundColor = originalBgColor
+				node.style.backgroundImage = originalBgImage
+			}
+
+
+
+			animateCircleTransform(node, {x, y}, reverse = false) {
+				var radius = distanceToFurthestCorner(x, y, document.body.getBoundingClientRect())
+				console.log('radius', radius)
+				var radiusPx = (radius * 2) + 'px'
+				var left = x - radius + 'px'
+				var top  = y - radius + 'px'
+				var keyframes = {
+					left: [left, left],
+					top:  [top, top],
+					width:  [radiusPx, radiusPx],
+					height: [radiusPx, radiusPx],
+					borderRadius: ['50%', '50%'],
+					transform: [`scale(0)`, `scale(1)`]
+				}
+				if (reverse) keyframes = reverseKeyframes(keyframes)
+				var duration = 300
+				return node.animate(keyframes, {duration, fill: 'both'})
+			}
+
+			animateCircleClip(node, {x, y}, reverse = false) {
+				var radius = distanceToFurthestCorner(x, y, document.body.getBoundingClientRect())
+				var keyframes = {
+					clipPath: [
+						`circle(0px         at ${x}px ${y}px)`,
+						`circle(${radius}px at ${x}px ${y}px)`,
+					]
+				}
+				var options = {
+					duration,
+					fill: 'both',
+				}
+				if (reverse) keyframes = reverseKeyframes(keyframes)
+				return node.animate(keyframes, options)
+			}
+
+
+
+
+		}
+
+
+
+		var baseView = listView
+		var newView = detailView
+
+		baseView.style.zIndex = 99
+		newView.style.zIndex  = 104
+
+		function getThings() {
+			var album = albums[currentAlbumIndex]
+			var originContainer = listViewMain.children[currentAlbumIndex]
+			var origin = originContainer.querySelector('img')
+			var pivot = detailView.querySelector('img')
+			return {album, origin, pivot}
+		}
+
+		var backToGrid = detailView.querySelector('flexus-toolbar button[icon="arrow-back"]')
+		backToGrid.addEventListener('click', hideDetail)
+
+		async function showDetail(gridItem, e) {
+			currentAlbumIndex = gridItems.indexOf(gridItem)
+			var {album, origin, pivot} = getThings()
+			renderDetail(album)
+
+			if (platform.screensize === 's') {
+				console.log('TODO: use some simpler transition')
+			} else {
+				var transition = new PivotalCollapse(baseView, newView, origin, pivot)
+			}
+			var transitionpromise = transition.in()
+		}
+
+		async function hideDetail() {
+			//detailView.style.display = 'none'
+			var {album, origin, pivot} = getThings()
+
+			if (platform.screensize === 's') {
+				console.log('TODO: use some simpler transition')
+			} else {
+				var transition = new PivotalCollapse(baseView, newView, origin, pivot)
+			}
+			var transitionpromise = transition.out()
+		}
+
+		function createOriginCoords(arg) {
+			if (arg instanceof Event) {
+				var {x, y} = arg
+			} else if (arg instanceof Element) {
+				var bbox = arg.getBoundingClientRect()
+				var x = bbox.x + bbox.width / 2
+				var y = bbox.y + bbox.height / 2
+			} else if (arg instanceof DOMRect) {
+				var x = bbox.x + bbox.width / 2
+				var y = bbox.y + bbox.height / 2
+			} else {
+				var {x, y} = arg
+			}
+			return {x, y}
+		}
+
+		function fadeIn(node, duration = 200) {
+			node.style.opacity = 0
+			node.style.display = ''
+			var fadeInAnimation = node.animate({
+				opacity: [0, 1],
+			}, {
+				duration,
+				fill: 'both',
+			})
+			fadeInAnimation.finished.then(() => {
+				node.style.opacity = 1
+			})
+			return fadeInAnimation
+		}
+
+
+		function reverseKeyframes(keyframes) {
+			var reversed = {}
+			for (let [key, values] of Object.entries(keyframes))
+				reversed[key] = [values[1], values[0]]
+			return reversed
+		}
+
+		function createDisposableDiv() {
+			var div = document.createElement('div')
+			div.setAttribute('fit', '')
+			div.style.willChange = 'clip-path, opacity, background, transform'
+			div.style.zIndex = 100
+			document.body.append(div)
+			return div
+		}
+
+		function distanceToFurthestCorner(x, y, rect) {
+			const distX = Math.max(Math.abs(x - rect.left), Math.abs(x - rect.right))
+			const distY = Math.max(Math.abs(y - rect.top), Math.abs(y - rect.bottom))
+			return Math.sqrt(distX * distX + distY * distY)
+		}
+
+		function fadeAndSlideIn(node) {
+			node.style.opacity = 0
+			node.style.display = ''
+			var slideInAnimation = node.animate({
+				opacity: [0, 1],
+				transform: ['translate(0px, 20px)', 'translate(0px, 0px)'],
+			}, {
+				duration: 80,
+				fill: 'both',
+			})
+			return slideInAnimation.finished.then(() => {
+				node.style.opacity = 1
+				slideInAnimation.cancel()
+			})
+		}
+
+	</script>
+
+</body>
+</html>

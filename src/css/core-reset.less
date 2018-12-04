@@ -1,0 +1,61 @@
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+* {
+	//all: unset; // TODO: work towards enabling this
+	-webkit-tap-highlight-color: transparent;
+	// autohide scrollbar in vertical mode
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+}
+:focus {
+    outline: none !important;
+}
+
+img {
+	max-width: 100%;
+}
+
+// prevents 300ms click delay
+// note: may conflict with pan-x/pan-y drag/scroll
+a,
+input,
+textarea,
+button {
+	touch-action: manipulation;
+}
+
+button,
+input,
+select {
+	font: inherit;
+    border: none;
+	background: transparent;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+	//color: rgb(var(--accent, var(--fg)));
+}
+
+/*
+
+[tag] {
+	padding: 4px 8px;
+	font-size: 14px;
+	background-color: var(--background);
+	color: var(--foreground);
+}
+
+progress {
+	&[value] {
+		-webkit-appearance: none;
+		appearance: none;
+		&::-webkit-progress-value {
+			background-color: var(--tint);
+		}
+	}
+}
+
+*/

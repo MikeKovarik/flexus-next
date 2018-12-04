@@ -1,0 +1,86 @@
+<!--
+Unifinished prototype of google travel search website
+https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ82YXDbMEVAEet6gJFxwVHAGioKGxGodiXW8sNRwBmMQ2KLPy1FQAnqXdDJDKraQBoGCJAHEPkGJZqZUUEwAlqgAQoFCNg2EAAiA0NaSyoWCgcI4g8QCxgZEgcI4g8QCxgaGAEoAIoBVAoSCdigHD6UJUVAETK4wLBTyFHAEhIJmJbvIQQ0RUARHjWKi06-UcAaKgobEah2JR5Rw1HAGbgbBjDMLEVACbRzxKpuqupAGgYIkAcQ-QYlmplRQZoBCBIGQm9zdG9uogESCggvbS8wMWN4XxIGQm9zdG9ukgECIAE&g2lb=4181926%2C4208110%2C4208993%2C4207631%2C4219394%2C4220469&hl=en&gl=cz&un=0&q=google%20hotels%20in%20boston&rp=OAJAAA&ictx=1&ved=0ahUKEwj23cv86eXeAhUSy6QKHdXeBEYQjGoIdQ&hrf=CgUI2DYQACIDQ1pLKhYKBwjiDxALGBkSBwjiDxALGBoYASgAigFUChIJCVFjpqMpRUARZXLKGnTGUcASEgkPNmFw2zBFQBHreoCRccFRwBoqChsRqHYl1vLDUcAZjENiiz8tRUAJ6l3QyQyq2kAaBgiQBxD5BiWamVFBmgEIEgZCb3N0b26iARIKCC9tLzAxY3hfEgZCb3N0b26SAQIgAQ&tcfs=EiwKCC9tLzAxY3hfEgZCb3N0b24aGAoKMjAxOC0xMS0yNRIKMjAxOC0xMS0yNlIA
+-->
+
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>google travel</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+</head>
+<body google theme="white" primary="blue" class="side-comp">
+
+	<flexus-view>
+
+		<flexus-toolbar elevated>
+			<div flex>Google</div>
+		</flexus-toolbar>
+
+		<main layout>
+			<div flex-2>
+
+				<div layout>
+					<input big seamed flex-3 type="text">
+					<div big seamed flex-3 layout>
+						<icon>calendar</icon>
+						<span>Mon, Nov 19</span>
+						<hr>
+						<span>Mon, Nov 20</span>
+					</div>
+					<select big seamed flex-1></select>
+				</div>
+
+				<div>
+					<select spacious><option>Guest Rating</option></select>
+					<select spacious><option>Amenities</option></select>
+					<span tinted icon="filter">More Filters</span>
+				</div>
+
+				<hr>
+
+				<div spaced layout center>
+					<div h6>Bostol hotels</div>
+					<div bold muted>238 places</div>
+					<div flex></div>
+					<select seamed small rounded><option>Sort</option></select>
+				</div>
+
+				<div spaced grid columns="3">
+					<card flat hoverable>
+						<img top ratio="16:9">
+						<div headline>YOTEL Boston</div>
+						<div body2 muted>Trendy lodging offering a 24-hour fitness room, plus a rooftop restaurant/bar with city views.</div>
+					</card>
+				</div>
+
+				<div vertical layout center>
+					<button seamed>Next ></button>
+					<span muted>Showing results 1 - 13 of 238</span>
+				</div>
+
+			</div>
+
+			<div flex-1 hidden="s" rounded>map</div>
+
+		</main>
+
+	</flexus-view>
+
+
+	<div vertical layout center space-between>
+		<img src="./img/screenshots/google-travel.jpg" width="700">
+		<div layout center>
+			<img src="./img/screenshots/google-travel-dialog.png" width="300">
+			<img src="./img/screenshots/google-travel-datepicker.jpg" width="300">
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,1669 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>image descriptor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+		body {
+			font-family: Roboto;
+		}
+		[layout] {
+			display: flex;
+		}
+		[layout] > *:not(:last-child) {
+			margin-right: 16px;
+		}
+		pre {
+			white-space: pre-line;
+			margin: 0;
+			font-size: 11px;
+		}
+		.demo-wrapper {
+			position: relative;
+			background-color: #EEE;
+			align-self: center;
+		}
+		.demo-wrapper > *:not(.highlight) {
+			width: 100px;
+			height: 100px;
+			display: block;
+		}
+		h3 {
+			margin: 16px 0px 0px 0px;
+		}
+	</style>
+
+</head>
+<body>
+
+<!--
+	<h3>div, square of exact same size as container</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/100x100.jpg);
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 0
+			contained: true
+			cropped: false
+			inset: false
+			outset: false
+		</pre>
+	</div>
+
+	<h3>div, cover, larger than container, downscaled</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x200.jpg);
+				background-size: cover;
+			"></div>
+		</div>
+		<pre>
+			contained: true
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 200
+			naturalHeight: 200
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 0
+		</pre>
+	</div>
+
+	<h3>div, cover, smaller than container, upscaled</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-size: cover;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 120
+			contentHeight: 120
+			offsetTop: 0
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 0
+			contained: true
+			cropped: false
+			outset: false
+			inset: false
+		</pre>
+	</div>
+
+	<h3>div, contain, smaller than container, upscaled</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-size: contain;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 120
+			contentHeight: 120
+			offsetTop: 0
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 0
+			contained: true
+			cropped: false
+			outset: false
+			inset: false
+		</pre>
+	</div>
+
+	<hr>
+
+	<h3>div, default sizing, smaller than container, no offset (only implicit right+bottom))</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 20
+			offsetBottom: 20
+			offsetLeft: 0
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, smaller than container, 10px offset (all around)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-position: 10px 10px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 10
+			offsetRight: 10
+			offsetBottom: 10
+			offsetLeft: 10
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, smaller than container, 20px offset</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-position: 20px 20px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 20
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 20
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, smaller than container, 30px offset, cropped</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-position: 30px 30px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 30
+			offsetRight: -10
+			offsetBottom: -10
+			offsetLeft: 30
+			contained: false
+			cropped: true
+			outset: true
+			inset: true
+		</pre>
+	</div>
+
+	<hr>
+
+	<h3>div, default sizing, smaller than container, offset and clip all around</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-position: 10px 10px;
+				background-repeat: no-repeat;
+				clip-path: inset(20px);
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 10
+			offsetRight: 10
+			offsetBottom: 10
+			offsetLeft: 10
+			clipTop: 20
+			clipRight: 20
+			clipBottom: 20
+			clipLeft: 20
+			contained: true
+			cropped: true
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, smaller than container, left+top clip (with implicit bottom+right offset due to smaller image size)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-repeat: no-repeat;
+				clip-path: inset(20px 0px 0px 20px);
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 20
+			offsetBottom: 20
+			offsetLeft: 0
+			clipTop: 20
+			clipRight: 0
+			clipBottom: 0
+			clipLeft: 20
+			contained: true
+			cropped: true
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, smaller than container, left+top offset and bottom+right clip</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/100x100.jpg);
+				background-repeat: no-repeat;
+				background-position: 20px 20px;
+				clip-path: inset(0px 20px 20px 0px);
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 100
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 100
+			offsetTop: 20
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 20
+			clipTop: 0
+			clipRight: 20
+			clipBottom: 20
+			clipLeft: 0
+			contained: true
+			cropped: true
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<hr>
+
+	<h3>div, default sizing, portrait smaller than container, implicit right+bottom offset</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				width: 120px;
+				height: 120px;
+				background-image: url(./img/50x100.jpg);
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 120
+			containerHeight: 120
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 70
+			offsetBottom: 20
+			offsetLeft: 0
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>div, default sizing, landscape larger than container, implicit right+bottom offset</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x120.jpg);
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			contained: false
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 200
+			naturalHeight: 120
+			contentWidth: 200
+			contentHeight: 120
+			offsetTop: 0
+			offsetRight: -100
+			offsetBottom: -20
+			offsetLeft: 0
+			contained: false
+			cropped: true
+			outset: true
+			inset: false
+		</pre>
+	</div>
+
+	<hr>
+
+	<h3>div, contain, landscape, default position (top left)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x120.jpg);
+				background-size: contain;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			contained: true
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 200
+			naturalHeight: 120
+			contentWidth: 100
+			contentHeight: 60
+			offsetTop: 0
+			offsetRight: 0
+			offsetBottom: 40
+			offsetLeft: 0
+		</pre>
+	</div>
+
+	<h3>div, contain, landscape, centered position</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x120.jpg);
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			contained: true
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 200
+			naturalHeight: 120
+			contentWidth: 100
+			contentHeight: 60
+			offsetTop: 20
+			offsetRight: 0
+			offsetBottom: 20
+			offsetLeft: 0
+		</pre>
+	</div>
+
+	<h3>img, contain, landscape, default position (cetered)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/200x120.jpg"
+			style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			contained: true
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 200
+			naturalHeight: 120
+			contentWidth: 100
+			contentHeight: 60
+			offsetTop: 20
+			offsetRight: 0
+			offsetBottom: 20
+			offsetLeft: 0
+		</pre>
+	</div>
+
+	<h3>div, contain, portrait, centered position</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x100.jpg);
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 25
+			offsetBottom: 0
+			offsetLeft: 25
+		</pre>
+	</div>
+
+	<h3>img, contain, portrait, centered position</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 25
+			offsetBottom: 0
+			offsetLeft: 25
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>img, contain, portrait, centered position, clipped (same as offset, not cropped)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+				clip-path: inset(0 25px);
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 25
+			offsetBottom: 0
+			offsetLeft: 25
+			clipTop: 0
+			clipRight: 25
+			clipBottom: 0
+			clipLeft: 25
+			cropTop: 0
+			cropRight: 25
+			cropBottom: 0
+			cropLeft: 25
+			contained: true
+			cropped: false
+			outset: false
+			inset: true
+		</pre>
+	</div>
+
+	<h3>img, contain, portrait, centered position, clipped more (cropped)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+				clip-path: inset(0 calc(25% + 25%/2));
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: 25
+			offsetBottom: 0
+			offsetLeft: 25
+			contentOffsetTopRatio: 0
+			contentOffsetRightRatio: 0.25
+			contentOffsetBottomRatio: 0
+			contentOffsetLeftRatio: 0.25
+			clipTop: 0
+			clipRight: 37.5
+			clipBottom: 0
+			clipLeft: 37.5
+			cropTop: 0
+			cropRight: 37.5
+			cropBottom: 0
+			cropLeft: 37.5
+			contentWidth: 50
+			contentHeight: 100
+			contentWidthRatio: 0.25
+			contentHeightRatio: 1
+			contained: true
+			cropped: true
+			outset: false
+			inset: true
+		</pre>
+	</div>
+-->
+	<hr>
+<!--
+
+	<h3>div, cover, landscape, overflowing, default position (top left)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/400x200.jpg);
+				background-size: cover;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 400
+			naturalHeight: 200
+			contentWidth: 200
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: -100
+			offsetBottom: 0
+			offsetLeft: 0
+			contained: false
+			cropped: true
+			outset: true
+			inset: false
+		</pre>
+	</div>
+
+	<h3>div, cover, landscape, overflowing, centered</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/400x200.jpg);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 400
+			naturalHeight: 200
+			contentWidth: 200
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: -50
+			offsetBottom: 0
+			offsetLeft: -50
+			contained: false
+			cropped: true
+			outset: true
+			inset: false
+		</pre>
+	</div>
+
+	<h3>img, cover, landscape, overflowing, default position (centered)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/400x200.jpg" style="
+				object-fit: cover;
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 400
+			naturalHeight: 200
+			contentWidth: 200
+			contentHeight: 100
+			offsetTop: 0
+			offsetRight: -50
+			offsetBottom: 0
+			offsetLeft: -50
+			contained: false
+			cropped: true
+			outset: true
+			inset: false
+		</pre>
+	</div>
+
+	<h3>div, cover, portrait, overflowing, centered</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x100.jpg);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 100
+			contentHeight: 200
+			offsetTop: -50
+			offsetRight: 0
+			offsetBottom: -50
+			offsetLeft: 0
+			contained: false
+			cropped: true
+			outset: true
+			inset: false
+		</pre>
+	</div>
+
+	<hr>
+
+	<h3>img center</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/100x100.jpg">
+		</div>
+		<pre>
+			naturalWidth: 100
+			contentWidth: 100
+			offsetLeft: 0
+			offsetRight: 0
+			offsetLeftPercent: 0
+			offsetRightPercent: 0
+		</pre>
+	</div>
+
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/100x100.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			naturalWidth: 100
+			contentWidth: 100
+			offsetLeft: 0
+			offsetRight: 0
+			offsetLeftPercent: 0
+			offsetRightPercent: 0
+		</pre>
+	</div>
+
+	<h3>left top</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/100x100.jpg);
+				background-position: left;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			naturalWidth: 100
+			contentWidth: 100
+			offsetLeft: 0
+			offsetRight: 0
+			offsetLeftPercent: 0
+			offsetRightPercent: 0
+		</pre>
+	</div>
+
+
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -50
+			offsetRight: -50
+			offsetLeftPercent: -0.25
+			offsetRightPercent: -0.25
+		</pre>
+	</div>
+-->
+
+	<h1>Offsets</h1>
+
+	<h2>landscape, cropped, left</h2>
+
+	<h3>left</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: left;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: 0
+			offsetRight: -100
+			contentOffsetLeftRatio: 0
+			contentOffsetRightRatio: -0.5
+			containerOffsetLeftRatio: 0
+			containerOffsetRightRatio: -1
+		</pre>
+	</div>
+
+	<h3>0%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: 0%;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: 0
+			offsetRight: -100
+			contentOffsetLeftRatio: 0
+			contentOffsetRightRatio: -0.5
+			containerOffsetLeftRatio: 0
+			containerOffsetRightRatio: -1
+		</pre>
+	</div>
+
+	<h3>0px</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: 0px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: 0
+			offsetRight: -100
+			contentOffsetLeftRatio: 0
+			contentOffsetRightRatio: -0.5
+			containerOffsetLeftRatio: 0
+			containerOffsetRightRatio: -1
+		</pre>
+	</div>
+
+	<h2>landscape, cropped, center</h2>
+
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -50
+			offsetRight: -50
+			contentOffsetLeftRatio: -0.25
+			contentOffsetRightRatio: -0.25
+			containerOffsetLeftRatio: -0.5
+			containerOffsetRightRatio: -0.5
+		</pre>
+	</div>
+
+	<h3>50%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: 50%;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -50
+			offsetRight: -50
+			contentOffsetLeftRatio: -0.25
+			contentOffsetRightRatio: -0.25
+			containerOffsetLeftRatio: -0.5
+			containerOffsetRightRatio: -0.5
+		</pre>
+	</div>
+
+	<h3>-50px</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: -50px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -50
+			offsetRight: -50
+			contentOffsetLeftRatio: -0.25
+			contentOffsetRightRatio: -0.25
+			containerOffsetLeftRatio: -0.5
+			containerOffsetRightRatio: -0.5
+		</pre>
+	</div>
+
+	<h2>landscape, cropped, right</h2>
+
+	<h3>right</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: right;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -100
+			offsetRight: 0
+			contentOffsetLeftRatio: -0.5
+			contentOffsetRightRatio: 0
+			containerOffsetLeftRatio: -1
+			containerOffsetRightRatio: 0
+		</pre>
+	</div>
+
+	<h3>100%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: 100%;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -100
+			offsetRight: 0
+			contentOffsetLeftRatio: -0.5
+			contentOffsetRightRatio: 0
+			containerOffsetLeftRatio: -1
+			containerOffsetRightRatio: 0
+		</pre>
+	</div>
+
+	<h3>-100px</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: -100px;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			contentWidth: 200
+			offsetLeft: -100
+			offsetRight: 0
+			contentOffsetLeftRatio: -0.5
+			contentOffsetRightRatio: 0
+			containerOffsetLeftRatio: -1
+			containerOffsetRightRatio: 0
+		</pre>
+	</div>
+
+	<h2>portrait</h2>
+
+	<h3>img, contain, portrait, centered position</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			naturalWidth: 50
+			contentWidth: 50
+			offsetRight: 25
+			offsetLeft: 25
+			contentOffsetRightRatio: 0.5
+			contentOffsetLeftRatio: 0.5
+			containerOffsetRightRatio: 0.25
+			containerOffsetLeftRatio: 0.25
+		</pre>
+	</div>
+
+	<h2>larger square</h2>
+
+	<h3>img, contain, portrait, centered position</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x200.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			naturalWidth: 200
+			contentWidth: 200
+			offsetTop: -50
+			offsetRight: -50
+			offsetBottom: -50
+			offsetLeft: -50
+			contentOffsetRightRatio: -0.25
+			contentOffsetLeftRatio: -0.25
+			containerOffsetRightRatio: -0.5
+			containerOffsetLeftRatio: -0.5
+		</pre>
+	</div>
+
+	<h2>smaller square, 50x50 inside 100x100 container</h2>
+
+	<h3>left-top</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-position: left top;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			offsetTop: 0
+			offsetRight: 50
+			offsetBottom: 50
+			offsetLeft: 0
+			contentOffsetTopRatio: 0
+			contentOffsetRightRatio: 1
+			contentOffsetBottomRatio: 1
+			contentOffsetLeftRatio: 0
+			containerOffsetTopRatio: 0
+			containerOffsetRightRatio: 0.5
+			containerOffsetBottomRatio: 0.5
+			containerOffsetLeftRatio: 0
+			-----------------
+			insetTop: 0
+			insetRight: 50
+			insetBottom: 50
+			insetLeft: 0
+			insetTopRatio: 0
+			insetRightRatio: 0.50
+			insetBottomRatio: 0.50
+			insetLeftRatio: 0
+		</pre>
+	</div>
+
+	<h3>right-bottom</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-position: right bottom;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			offsetTop: 50
+			offsetRight: 0
+			offsetBottom: 0
+			offsetLeft: 50
+			contentOffsetTopRatio: 1
+			contentOffsetRightRatio: 0
+			contentOffsetBottomRatio: 0
+			contentOffsetLeftRatio: 1
+			containerOffsetTopRatio: 0.5
+			containerOffsetRightRatio: 0
+			containerOffsetBottomRatio: 0
+			containerOffsetLeftRatio: 0.5
+			-------------------
+			insetTop: 50
+			insetRight: 0
+			insetBottom: 0
+			insetLeft: 50
+			insetTopRatio: 0.50
+			insetRightRatio: 0
+			insetBottomRatio: 0
+			insetLeftRatio: 0.50
+		</pre>
+	</div>
+
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			offsetTop: 25
+			offsetRight: 25
+			offsetBottom: 25
+			offsetLeft: 25
+			contentOffsetTopRatio: 0.5
+			contentOffsetRightRatio: 0.5
+			contentOffsetBottomRatio: 0.5
+			contentOffsetLeftRatio: 0.5
+			containerOffsetTopRatio: 0.25
+			containerOffsetRightRatio: 0.25
+			containerOffsetBottomRatio: 0.25
+			containerOffsetLeftRatio: 0.25
+			------------
+			insetTop: 25
+			insetRight: 25
+			insetBottom: 25
+			insetLeft: 25
+			insetTopRatio: 0.25
+			insetRightRatio: 0.25
+			insetBottomRatio: 0.25
+			insetLeftRatio: 0.25
+		</pre>
+	</div>
+
+
+
+	<h2>Ratios</h2>
+
+	<h3>wider than container</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: left;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			offsetLeft: 0
+			offsetRight: -100
+			contentWidth: 200
+			voidWidth: 0
+			voidWidthRatio: 0
+			fillWidthRatio: 1
+		</pre>
+	</div>
+
+
+	<h3>thinner than container</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			containerWidth: 100
+			naturalWidth: 50
+			offsetRight: 25
+			offsetLeft: 25
+			contentWidth: 50
+			voidWidth: 50
+			voidWidthRatio: 0.5
+			fillWidthRatio: 0.5
+		</pre>
+	</div>
+
+	<h1>Visible positions</h1>
+
+	<h3>exact same square</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/100x100.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 1
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0
+			contained: true
+		</pre>
+	</div>
+
+	<h3>landscape</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x100.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 0.75
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0.25
+			contained: false
+		</pre>
+	</div>
+
+	<h3>larger square</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/200x200.jpg);
+				background-position: center;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			visibleEdgeTop: 0.25
+			visibleEdgeRight: 0.75
+			visibleEdgeBottom: 0.75
+			visibleEdgeLeft: 0.25
+			contained: false
+		</pre>
+	</div>
+
+	<h3>thinner than container</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg" style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 1
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0
+			contained: true
+		</pre>
+	</div>
+
+	<h2>smaller square</h2>
+
+	<h3>smaller square fills container</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x50.jpg">
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 1
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0
+			contained: true
+		</pre>
+	</div>
+
+	<h3>smaller square left-top</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-position: left top;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 1
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0
+			contained: true
+		</pre>
+	</div>
+
+	<h3>smaller square right-bottom</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-position: right bottom;
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			visibleEdgeTop: 0
+			visibleEdgeRight: 1
+			visibleEdgeBottom: 1
+			visibleEdgeLeft: 0
+			contained: true
+		</pre>
+	</div>
+
+
+
+
+
+	<h1>background-size / object-fit</h1>
+
+	<h2>basic division into groups</h2>
+
+	<h3>div, default background-size</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-repeat: no-repeat;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: true
+			fill: false
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: 50% 50%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-repeat: no-repeat;
+				background-size: 50% 50%;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: false
+			hardCodedSize: true
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: 50px 50px</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-repeat: no-repeat;
+				background-size: 50px 50px;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: false
+			hardCodedSize: true
+			contained: true
+		</pre>
+	</div>
+
+	<h3>img, default object-fit</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x50.jpg">
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: true
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: 100% 100% (emulates default 'fill' behavior of img)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-size: 100% 100%;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: true
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>img, object-fit: cover</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x50.jpg" style="
+				object-fit: cover;
+			">
+		</div>
+		<pre>
+			cover: true
+			contain: false
+			natural: false
+			fill: false
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: cover</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-size: cover;
+			"></div>
+		</div>
+		<pre>
+			cover: true
+			contain: false
+			natural: false
+			fill: false
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>img, object-fit: contain</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x50.jpg" style="
+				object-fit: contain;
+			">
+		</div>
+		<pre>
+			cover: false
+			contain: true
+			natural: false
+			fill: false
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: contain</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x50.jpg);
+				background-size: contain;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: true
+			natural: false
+			fill: false
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>img, default object-fit</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<img src="./img/50x100.jpg">
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: true
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h3>div, background-size: 100% 100% (emulates default 'fill' behavior of img)</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x100.jpg);
+				background-size: 100% 100%;
+			"></div>
+		</div>
+		<pre>
+			cover: false
+			contain: false
+			natural: false
+			fill: true
+			hardCodedSize: false
+			contained: true
+		</pre>
+	</div>
+
+	<h2>percentual sizes</h2>
+
+	<h3>div, background-size: 25%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x100.jpg);
+				background-repeat: no-repeat;
+				background-size: 25%;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 25
+			contentHeight: 50
+		</pre>
+	</div>
+
+	<h3>div, background-size: 50% 50%</h3>
+	<div spaced layout>
+		<div class="demo-wrapper">
+			<div style="
+				background-image: url(./img/50x100.jpg);
+				background-repeat: no-repeat;
+				background-size: 50% 50%;
+			"></div>
+		</div>
+		<pre>
+			containerWidth: 100
+			containerHeight: 100
+			naturalWidth: 50
+			naturalHeight: 100
+			contentWidth: 50
+			contentHeight: 50
+		</pre>
+	</div>
+
+
+
+
+
+	<script type="module">
+		import {ImageDescriptor} from '../src/js/animations/ImageDescriptor.js'
+
+		var images = Array.from(document.querySelectorAll('.demo-wrapper > *'))
+		Array.from(document.querySelectorAll('.demo-wrapper > *'))
+			.forEach(async image => {
+				let desc = new ImageDescriptor(image)
+				await desc.ready
+				let expectations = image.parentElement.nextElementSibling
+				let reality = document.createElement('pre')
+
+				highlight({
+					width:  desc.contentWidth,
+					height: desc.contentHeight,
+					top:  desc.offsetTop,
+					left: desc.offsetLeft,
+				}, image.parentElement, 'solid black')
+
+				if (desc.clipTop || desc.clipRight || desc.clipBottom || desc.clipLeft) {
+					highlight({
+						top:    desc.clipTop || 0,
+						right:  desc.clipRight || 0,
+						bottom: desc.clipBottom || 0,
+						left:   desc.clipLeft || 0,
+					}, image.parentElement, 'dashed blue')
+				}
+
+				if (desc.cropTop || desc.cropRight || desc.cropBottom || desc.cropLeft) {
+					highlight({
+						top:    desc.cropTop || 0,
+						right:  desc.cropRight || 0,
+						bottom: desc.cropBottom || 0,
+						left:   desc.cropLeft || 0,
+					}, image.parentElement, 'dashed red')
+				}
+
+				reality.innerHTML = expectations
+					.textContent
+					.trim()
+					.split('\n')
+					.map(line => {
+						if (!line.includes(':')) return line
+						let [key, expectedValue] = line.split(':')
+						key = key.trim()
+						expectedValue = primitivize(expectedValue.trim())
+						let realValue = desc[key]
+						var color = expectedValue === realValue ? 'green' : 'red'
+						return `<span style="color: ${color}">${key}: ${realValue}</span>`
+					})
+					.join('\n')
+				expectations.after(reality)
+			})
+
+		function highlight(bbox, container = document.body, style = 'solid red') {
+			var {width, height, top, right, bottom, left} = bbox
+			var node = document.createElement('div')
+			node.className = 'highlight'
+			width = pxUnit(width)
+			height = pxUnit(height)
+			top = pxUnit(top)
+			right = pxUnit(right)
+			bottom = pxUnit(bottom)
+			left = pxUnit(left)
+			Object.assign(node.style, {
+				pointerEvents: 'none',
+				border: `1px ${style}`,
+				position: 'absolute',
+				zIndex: 9999,
+				top, right, bottom, left,
+				width, height,
+			})
+			container.append(node)
+		}
+
+		function primitivize(arg) {
+			if (arg === 'true') return true
+			if (arg === 'false') return false
+			if (!Number.isNaN(Number(arg))) return Number(arg)
+			return arg
+		}
+
+		function pxUnit(arg) {
+			if (arg === undefined || arg === null || Number.isNaN(arg))
+				return arg
+			if (typeof arg === 'number' || !arg.endsWidth('px'))
+				return arg + 'px'
+			else
+				return arg
+		}
+
+	</script>
+
+</body>
+</html>

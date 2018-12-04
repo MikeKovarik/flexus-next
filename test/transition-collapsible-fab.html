@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>event</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		:root,
+		[purple] {
+			--fg: 98, 0, 238;
+		}
+	
+		[blue] {
+			--fg: 3, 169, 244;
+		}
+
+		[pink] {
+			--fg: 216, 27, 96;
+		}
+
+		[red] {
+			--fg: 255,0,0;
+		}
+
+	</style>
+
+</head>
+<body google theme="white" primary="blue" class="side-comp">
+
+	<flexus-view id="list">
+
+		<flexus-toolbar waterfall>
+			<div flex text-center>Messages</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<div fx-item>
+				<img avatar src="./img/coulson.jpg">
+				<div vertical layout flex bold>
+					<span>Agent Coulson</span>
+					<span body2 muted>We have a situation.</span>
+				</div>
+				<span body2 muted>Sat</span>
+			</div>
+			<div fx-item>
+				<img avatar src="./img/coulson.jpg">
+				<div vertical layout flex>
+					<span>Agent Coulson</span>
+					<span body2 muted>Tahiti? It's a magical place.</span>
+				</div>
+				<span body2 muted>Sat</span>
+			</div>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+		</main>
+
+		<button big fab icon="message" bottom right>
+			<span collapse>Start chat</span>
+		</button>
+
+	</flexus-view>
+
+
+	<flexus-view id="new-conversation">
+
+		<flexus-toolbar elevation="1" multisection>
+			<section>
+				<button icon="arrow-back"></button>
+				<div flex>New conversation</div>
+				<button icon="more"></button>
+			</section>
+			<section>
+				<span>To</span>
+				<input type="text" plain flex placeholder="Type a name, phone number or email">
+				<icon>dialpad</icon>
+			</section>
+		</flexus-toolbar>
+
+		<main>
+			<div fx-item icon="plus">Start group conversation</div>
+
+			<p overline>Top contacts</p>
+			<p h6><icon>favorite</icon></p>
+			<div fx-item>
+				<div avatar green>P</div>
+				<div vertical layout flex>
+					<span>Pizza</span>
+					<span body2 muted>123 456 798</span>
+				</div>
+				<span body2 muted>Mobile</span>
+			</div>
+			<p h6>B</p>
+			<div fx-item>
+				<img avatar src="./img/coulson.jpg">
+				<div vertical layout flex>
+					<span>Agent Coulson</span>
+					<span body2 muted>123 456 798</span>
+				</div>
+				<span body2 muted>Mobile</span>
+			</div>
+			<p h6>B</p>
+			<div fx-item>
+				<div avatar red>B</div>
+				<div vertical layout flex>
+					<span>Barry Allen</span>
+					<span body2 muted>123 456 798 (+1 more)</span>
+				</div>
+				<span body2 muted>Multiple</span>
+			</div>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="../dist/flexus.js"></script>
+	<script src="./util/demo-util.js"></script>
+<!--
+	<script src="./AnimationOrchestrator.js"></script>
+-->
+	<script>
+		var {ViewTransition} = window.flexus
+
+		var fab = $('[fab]')
+		var listView = $('#list')
+		var listToolbar = $('#list > flexus-toolbar')
+		var listMain = $('#list > main')
+		var newConvView = $('#new-conversation')
+		newConvView.style.display = 'none'
+
+		listMain.addEventListener('scroll', onScroll, {passive: true})
+
+		var scrolledToStart
+		var wasScrolledToStart
+		wasScrolledToStart = scrolledToStart = listMain.scrollTop === 0
+		function onScroll(e) {
+			scrolledToStart = listMain.scrollTop === 0
+			if (scrolledToStart !== wasScrolledToStart)
+				if (scrolledToStart) {
+					fabExpand()
+					listToolbar.removeAttribute('elevated')
+				} else {
+					fabCollapse()
+					listToolbar.setAttribute('elevated', '')
+				}
+			wasScrolledToStart = scrolledToStart
+		}
+
+		var fabCollapsible = $('[fab] > [collapse]')
+
+		var animation
+
+		function cloneObject(object) {
+			return JSON.parse(JSON.stringify(object))
+		}
+
+		function fabCollapse() {
+			var node = fabCollapsible
+			runAnimation(node, ['width'], () => node.style.width = 0)
+		}
+
+		function fabExpand() {
+			var node = fabCollapsible
+			runAnimation(node, ['width'], () => node.style.width = '')
+		}
+
+		async function runAnimation(node, props, changeCb) {
+			var bbox = window.getComputedStyle(node)
+			var bboxBefore = cloneObject(bbox)
+			changeCb()
+			var bboxAfter = cloneObject(bbox)
+
+			if (animation) {
+				animation.cancel()
+				animation = undefined
+			}
+
+			var keyframes = {}
+			for (var prop of props)
+				keyframes[prop] = [bboxBefore[prop], bboxAfter[prop]]
+			var options = {
+				fill: 'both',
+				duration: 150,
+				easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+			}
+			animation = node.animate(keyframes, options)
+
+			await animation.finished
+			animation.cancel()
+			animation = undefined
+		}
+
+	</script>
+
+</body>
+</html>

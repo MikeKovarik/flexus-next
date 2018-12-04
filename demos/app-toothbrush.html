@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>toolbrush</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+
+		[fullbleed] {
+			margin: 0 -16px;
+		}
+
+		[fit] {
+			width: 100%;
+			height: 100%;
+		}
+
+		[medium] {
+			font-weight: 500;
+		}
+
+		main {
+			padding-top: 0 !important;
+		}
+	</style>
+
+</head>
+<body theme="white" class="side-comp">
+
+	<flexus-view>
+		<flexus-toolbar overlay>
+			<button icon="x"></button>
+			<div flex></div>
+			<button icon="heart-outline"></button>
+			<button icon="shopping_cart"></button>
+		</flexus-toolbar>
+		<main>
+			<div fullbleed ratio="3:2">
+				<img fit src="./img/toothbrush.jpg">
+			</div>
+			<p layout>
+				<span h4 flex>Toothbrush</span>
+				<span h6>$4.50</span>
+			</p>
+			<p muted>Our blouses are available in 8 colors. You can custom order a built-in arch support for any of the models.</p>
+			<hr>
+			<p medium>Select type</p>
+			<div spaced nowrap scrollable layout style="width: 400px; overflow: auto">
+				<span chip>Extra Soft</span>
+				<span chip>Soft</span>
+				<span chip selected>Medium</span>
+				<span chip>Hard</span>
+				<span chip>Other options</span>
+				<span chip>to showcase</span>
+				<span chip>scrollability</span>
+				<span chip>of this layout</span>
+			</div>
+
+			<br><br>
+
+			<button raised tinted fullwidth>add to cart</button>
+			<h5>Related Items</h5>
+			<div spaced grid>
+				<div flat card></div>
+				<div flat card></div>
+				<div flat card></div>
+				<div flat card></div>
+				<div flat card></div>
+				<div flat card></div>
+			</div>
+		</main>
+	</flexus-view>
+
+	<img src="./img/screenshots/app-toothbrush.png" width="360">
+
+</body>
+</html>

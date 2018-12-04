@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>card</title>
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../css/flexus-wireframe.css">
+
+	<style>
+		/*
+		[tinted] {
+			--bg: var(--tint-bg);
+			--fg: var(--tint-fg);
+			background-color: rgb(var(--bg));
+			color:            rgb(var(--fg));
+		}
+		*/
+	</style>
+
+</head>
+<body primary="blue">
+
+
+	<template>
+
+		<p overline>looks</p>
+
+		<div card>default</div>
+		<div card elevated>
+			[elevated]
+			<span body2 muted>Same as default</span>
+		</div>
+		<div card seamed>[seamed]</div>
+		<div card flat>[flat]</div>
+		<div card flat>[flat]
+			<span body2 muted>TODO - mixin with elevation0 but the same bg as elevated (aka the sheets in google news)</span>
+		</div>
+		<card tinted>
+			[tinted]
+			<span body2 muted>Uses tint as <code>background-color</code> and tint's -fg as <code>color</code></span>
+		</card>
+
+
+		<p overline>shapes</p>
+
+		<div card>default</div>
+		<div card round>[round]</div>
+		<div card rounded>
+			[rounded]
+			<span body2 muted>Doesn't apply here</span>
+		</div>
+		<div card square>[square]</div>
+
+
+		<p overline>sizes</p>
+
+		<div card>
+			default
+			<span body2 muted>Aligned to --side (or --theme-side). That is 16px (or 24 on tablet) from left edge</span>
+		</div>
+		<div card inset>
+			[inset]
+			<span body2 muted>Same as default</span>
+		</div>
+		<div card offset>
+			[offset]
+			<span body2 muted>Offsetted by 8px to the left (16px default side padding minus 8px)</span>
+		</div>
+		<div card fullbleed>
+			[fullbleed]
+			<span body2 muted>Goes all the way edge-to-edge by setting --offset to exact negative of --side (or --theme-side)</span>
+			<p body2 muted>Also removes left and right borders and their radius, effectivelly cancelling [round], [rounded] and sides from [seamed]</p>
+		</div>
+		<card fullbleed>
+			card[fullbleed]
+			<span muted body2>card element</span>
+		</card>
+
+
+		<p overline>styling</p>
+
+		<card tinted>[tinted]</card>
+		<card red>[red]</card>
+
+
+		<p overline>combination</p>
+
+		<div card seamed offset>[seamed][offset]</div>
+		<div card seamed fullbleed>[seamed][fullbleed]</div>
+		<div card seamed fullbleed>[seamed][fullbleed]</div>
+
+	</template>
+
+
+	<flexus-view theme="white">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <div flex>Cards on white</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view theme="light">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <div flex>Cards on light</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view theme="dark">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <div flex>Cards on dark</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+<!--
+	<flexus-view theme="black">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <div flex>Cards on black</div>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+-->
+
+	<flexus-view>
+		<flexus-toolbar>
+			<button icon="menu"></button>
+            <span tinted flex>Cards on tinted</span>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main tinted></main>
+	</flexus-view>
+
+
+	<script>
+		var template = document.querySelector('template')
+		Array.from(document.querySelectorAll('flexus-view main'))
+			.forEach(main => main.append(template.content.cloneNode(true)))
+	</script>
+
+
+</body>
+</html>

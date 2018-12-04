@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+<head>
+	<base href="../">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+		body {
+			font-size: 15px;
+			font-family: Roboto;
+			/*
+			display: flex;
+			flex-wrap: wrap;
+			*/
+		}
+		h1 {
+			font-size: 22px;
+			font-weight: 500;
+		}
+
+		.row {
+			display: flex;
+			width: 100%;
+		}
+
+		.grid {
+			display: flex;
+			flex-wrap: wrap;
+			width: 400px;
+			flex-shrink: 0;
+		}
+		[title]::before {
+			content: attr(title);
+			display: block;
+			width: 100%;
+			flex-shrink: 0;
+			font-family: Consolas;
+			font-size: 24px;
+		}
+
+		wrapper {
+			display: inline-flex;
+			flex-direction: column;
+			--align-items: center;
+			margin: 8px;
+		}
+			wrapper card {
+				display: inline-block;
+				height: 100px;
+				padding: 2px;
+				border-radius: 4px;
+				box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+			}
+			wrapper card,
+			wrapper code {
+				width: 100px;
+			}
+			wrapper code {
+				font-family: Consolas;
+				font-size: 8px;
+				color: #999;
+				text-align: center;
+				margin-top: 6px;
+				overflow: hidden;
+				text-overflow: clip;
+			}
+
+		span {
+			background-color: #EEE;
+			margin: 2px;
+			padding: 0px 4px 1px 4px;
+			border-radius: 3px;
+		}
+
+		[flex] {
+			flex: 1;
+		}
+
+		:root {
+			--align-items: inherit;
+		}
+		[layout] {
+			display: flex;
+			flex-direction: var(--flex-direction);
+			justify-content: var(--justify-content);
+			align-items: var(--align-items);
+		}
+
+		[layout]:not([vertical]),
+		[layout][horizontal] {
+			flex-direction:  row;
+			--align-items: inherit;
+		}
+		[layout][vertical] {
+			flex-direction: column;
+			--align-items: inherit;
+		}
+
+		[layout][horizontal][center] {
+			--justify-content: center;
+		}
+		[layout][horizontal][top] {
+			--align-items: flex-start;
+		}
+		[layout][horizontal][right] {
+			--justify-content: flex-end;
+		}
+		[layout][horizontal][bottom] {
+			--align-items: flex-end;
+		}
+		[layout][horizontal][left] {
+			--justify-content: flex-start;
+		}
+
+		[layout][vertical][center] {
+			--justify-content: center;
+		}
+		[layout][vertical][top] {
+			--justify-content: flex-start;
+		}
+		[layout][vertical][right] {
+			--align-items: flex-end;
+		}
+		[layout][vertical][bottom] {
+			--justify-content: flex-end;
+		}
+		[layout][vertical][left] {
+			--align-items: flex-start;
+		}
+
+		[self-start] {
+			align-self: flex-start;
+		}
+		[self-center] {
+			align-self: flex-center;
+		}
+		[self-end] {
+			align-self: flex-end;
+		}
+		
+		[self-center],
+		[center] {
+			--align-self-vertical: flex-center;
+			--align-self-horizontal: flex-center;
+		}
+		[self-top],
+		[top] {
+			--align-self-horizontal: flex-start;
+		}
+		[self-right],
+		[right] {
+			--align-self-vertical: flex-end;
+		}
+		[self-bottom],
+		[bottom] {
+			--align-self-horizontal: flex-end;
+		}
+		[self-left],
+		[left] {
+			--align-self-vertical: flex-start;
+		}
+
+		[layout][vertical] > * {
+			align-self: var(--align-self-vertical);
+		}
+		[layout][horizontal] > * {
+			align-self: var(--align-self-horizontal);
+		}
+/*
+
+		[left] {
+			text-align: left;
+		}
+		[center] {
+			text-align: center;
+			margin: auto;
+		}
+		[right] {
+			text-align: right;
+		}
+
+		[layout][left] {
+		}
+		[layout][center] {
+		}
+		[layout][right] {
+		}
+
+		[layout] > [left] {
+			align-self: flex-start;
+		}
+		[layout] > [center] {
+			align-self: center;
+		}
+		[layout] > [right] {
+			align-self: flex-end;
+		}
+		*/
+
+
+	</style>
+
+</head>
+<body>
+
+
+
+
+
+	<div class="row">
+		<card layout horizontal><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal left><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal center><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal right><span>1</span><span>2</span><span>3</span></card>
+	</div>
+
+	<div class="row">
+		<card layout vertical><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical left><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical center><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical right><span>1</span><span>2</span><span>3</span></card>
+	</div>
+
+	<div class="row">
+		<card layout horizontal><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal top><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal center><span>1</span><span>2</span><span>3</span></card>
+		<card layout horizontal bottom><span>1</span><span>2</span><span>3</span></card>
+	</div>
+
+	<div class="row">
+		<card layout vertical><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical top><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical center><span>1</span><span>2</span><span>3</span></card>
+		<card layout vertical bottom><span>1</span><span>2</span><span>3</span></card>
+	</div>
+
+
+
+
+
+
+
+	
+	<div layout>
+
+		<div class="grid" title="[horizontal]" ignore="layout, horizontal">
+			<card layout horizontal top left><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal top center><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal top right><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal center left><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal center center><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal center right><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal bottom left><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal bottom center><span>1</span><span>2</span><span>3</span></card>
+			<card layout horizontal bottom right><span>1</span><span>2</span><span>3</span></card>
+		</div>
+
+		<div class="grid" title="[vertical]" ignore="layout, vertical">
+			<card layout vertical top left><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical top center><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical top right><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical center left><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical center center><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical center right><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical bottom left><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical bottom center><span>1</span><span>2</span><span>3</span></card>
+			<card layout vertical bottom right><span>1</span><span>2</span><span>3</span></card>
+		</div>
+
+	</div>
+
+
+
+
+
+	
+	<div layout>
+
+		<div class="grid" title="[horizontal]" ignore="layout, horizontal">
+			<card layout horizontal><span top left>1</span></card>
+			<card layout horizontal><span top center>1</span></card>
+			<card layout horizontal><span top right>1</span></card>
+			<card layout horizontal><span center left>1</span></card>
+			<card layout horizontal><span center center>1</span></card>
+			<card layout horizontal><span center right>1</span></card>
+			<card layout horizontal><span bottom left>1</span></card>
+			<card layout horizontal><span bottom center>1</span></card>
+			<card layout horizontal><span bottom right>1</span></card>
+		</div>
+
+		<div class="grid" title="[vertical]" ignore="layout, vertical">
+			<card layout vertical><span top left>1</span></card>
+			<card layout vertical><span top center>1</span></card>
+			<card layout vertical><span top right>1</span></card>
+			<card layout vertical><span center left>1</span></card>
+			<card layout vertical><span center center>1</span></card>
+			<card layout vertical><span center right>1</span></card>
+			<card layout vertical><span bottom left>1</span></card>
+			<card layout vertical><span bottom center>1</span></card>
+			<card layout vertical><span bottom right>1</span></card>
+		</div>
+
+	</div>
+
+
+
+
+	<script>
+		Array.from(document.querySelectorAll('card'))
+			.forEach(card => {
+				var ignoreAttr = card.parentElement.getAttribute('ignore')
+				var ignoreList = ignoreAttr && ignoreAttr.split(',').map(a => a.trim()) || []
+				var wrapper = document.createElement('wrapper')
+				var code = document.createElement('code')
+				code.innerHTML += card.getAttributeNames()
+					.filter(attr => attr !== 'layout')
+					.filter(attr => !ignoreList.includes(attr))
+					.map(attr => `[${attr}]`).join('')
+				card.before(wrapper)
+				wrapper.append(card)
+				card.after(code)
+			})
+	</script>
+
+</body>
+</html>

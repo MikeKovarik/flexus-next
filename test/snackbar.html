@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>snackbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./testbed.css">
+
+	<style>
+		flexus-snackbar {
+			position: relative !important;
+			margin: 4px;
+		}
+	</style>
+
+</head>
+<body>
+
+	<template>
+
+		<flexus-snackbar>Simple text one</flexus-snackbar>
+
+		<flexus-snackbar>
+			Single line with action.
+			<button>action</button>
+		</flexus-snackbar>
+
+		<flexus-snackbar>
+			<div>Single line with in div.</div>
+			<button>action</button>
+		</flexus-snackbar>
+
+		<flexus-snackbar>
+			<div vertical layout>
+				<div>Two-line message</div>
+				<div>with action.</div>
+			</div>
+			<button>action</button>
+		</flexus-snackbar>
+
+		<flexus-snackbar>
+			<div vertical layout>
+				<div>Two-line message</div>
+				<div>with action.</div>
+			</div>
+			<button>longer action text</button>
+		</flexus-snackbar>
+
+		<flexus-snackbar>
+			<div>This is a very long text. The button should automatically display below.</div>
+			<button>longer action text</button>
+		</flexus-snackbar>
+
+	</template>
+
+
+	<h3>TODO</h3>
+	<ul>
+		<li></li>
+	</ul>
+
+
+	<script src="./testbed.js"></script>
+
+</body>
+</html>

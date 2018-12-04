@@ -1,0 +1,49 @@
+// phone 2 cols
+// tablet 4 cols
+// custom cols
+
+:root,
+[screensize="s"] {
+	--default-columns: 2;
+}
+[screensize="m"] {
+	--default-columns: 3;
+}
+[screensize="l"] {
+	--default-columns: 4;
+}
+
+grid,
+[grid] {
+	display: grid;
+	--columns: var(--default-columns, 4);
+	grid-template-columns: repeat(var(--columns), 1fr);
+}
+
+// WARNING: Do not move [columns] above [grid].
+// Default columns defined in [grid] would override [columns="n"] and we don't to use !important.
+[columns="2"] {--columns: 2;}
+[columns="3"] {--columns: 3;}
+[columns="4"] {--columns: 4;}
+[columns="5"] {--columns: 5;}
+[columns="6"] {--columns: 6;}
+[columns="7"] {--columns: 7;}
+[columns="8"] {--columns: 8;}
+
+// Mimics <table>esque attributes in display:grid layout.
+[colspan="2"] {grid-column-end: span 2}
+[colspan="3"] {grid-column-end: span 3}
+[colspan="4"] {grid-column-end: span 4}
+[colspan="5"] {grid-column-end: span 5}
+[colspan="6"] {grid-column-end: span 6}
+[colspan="7"] {grid-column-end: span 7}
+[colspan="8"] {grid-column-end: span 8}
+[colspan="9"] {grid-column-end: span 9}
+[rowspan="2"] {grid-row-end: span 2}
+[rowspan="3"] {grid-row-end: span 3}
+[rowspan="4"] {grid-row-end: span 4}
+[rowspan="5"] {grid-row-end: span 5}
+[rowspan="6"] {grid-row-end: span 6}
+[rowspan="7"] {grid-row-end: span 7}
+[rowspan="8"] {grid-row-end: span 8}
+[rowspan="9"] {grid-row-end: span 9}

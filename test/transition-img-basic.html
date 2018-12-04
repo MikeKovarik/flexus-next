@@ -1,0 +1,693 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>image descriptor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="./util/transition-demos.css">
+
+</head>
+<body>
+
+
+	<h2>Reposition</h2>
+
+	<h3>img to img</h3>
+	<div spaced layout>
+		<img class="source" src="./img/100x100.jpg">
+		<img class="target" src="./img/100x100.jpg">
+	</div>
+
+	<h3>div to img</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/100x100.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<img class="target" src="./img/100x100.jpg">
+	</div>
+
+
+
+
+	<h2>Recrop</h2>
+
+	<h3>div -> div, left -> right (no overlap</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: left;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: right;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>div -> div, center -> right, (partial overlap)</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: right;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>div -> div, left-top -> right-bottom, (no overlap)</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+			background-position: left top;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+			background-position: left bottom;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>div -> div, left-top -> right-bottom, (no overlap)</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+			background-position: left top;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+			background-position: right bottom;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>div to div crop-up, left to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div crop-up, center to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+
+
+	<h2>inset background shift (no cropping or scaling)</h2>
+
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>center in larger container</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>smaller square, left-top -> bottom-right</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: left top;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: right bottom;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>smaller square, left-top -> bottom-right</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: right bottom;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>smaller portrait, left->right</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x100.jpg);
+			background-position: left;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x100.jpg);
+			background-position: right;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+
+
+
+
+	<h2>Re-scale</h2>
+
+	<h3>upscale</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 200px;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<h3>downscale</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 200px;
+			height: 200px;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+
+	<h2>Crop re-size</h2>
+
+	<h3>crop to upsize</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 200px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<h3>crop to downsize</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 200px;
+			height: 200px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+
+
+	<h2>bg-size/object-fit changes</h2>
+
+	<h3>cover to default</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<h3>cover to default, bottom right</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-position: bottom right;
+			background-size: cover;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-position: bottom right;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<h3>inset background to contain</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-size: contain;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>inset background to cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-image: url(./img/50x50.jpg);
+			background-position: center;
+			background-size: cover;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+
+
+
+
+
+	<h2>Reposition</h2>
+
+	<h3>img to img, center</h3>
+	<div spaced layout>
+		<img class="source" src="./img/100x100.jpg">
+		<img class="target" src="./img/200x100.jpg">
+	</div>
+
+	<h3>div to div, center</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/100x100.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h2>Physically cropped into larger</h2>
+	<p>Initial image is a 100x100 cutout of the target image which is 200x100.</p>
+	<p>Offset inside the target is selected based on sources background-position since the images aren't the same (url) and they aren't even of the same aspect ratio (which would suggest source is just lower quality, lower resolution version)</p>
+	<h3>div to img, center</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/100x100.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+		<img class="target" src="./img/200x100.jpg">
+	</div>
+
+	<h3>div to div, left</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/100x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+	</div>
+
+
+	<h2>upscale, crop</h2>
+	<p>Source and target are two different images (url) but the aspect ratio is the same (200x100 and 400x200). It's expected source is just a lower resolution version of target.</p>
+
+	<h3>div to div swap, left, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div swap, center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div recrop, left to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: left;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div crop-up, left to left, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-size: cover;
+			background-position: left;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div crop-up, left to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div crop-up, center to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 100px;
+			background-size: cover;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+
+	<h3>div to div crop-up, center to center, cover</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-size: cover;
+			background-position: center;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 400px;
+			height: 200px;
+			background-size: cover;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+
+	<h3>div to div upscale left, default sizing</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 200px;
+			background-image: url(./img/400x200.jpg);
+		"></div>
+	</div>
+
+	<h3>div to div upscale center, default sizing</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: center;
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 200px;
+			background-image: url(./img/400x200.jpg);
+			background-position: center;
+		"></div>
+	</div>
+
+	<h3>img to img upscale, center, cover</h3>
+	<div spaced layout>
+		<img class="source" src="./img/200x100.jpg" style="
+			width: 100px;
+			height: 100px;
+			object-fit: cover;
+		">
+		<img class="target" src="./img/400x200.jpg" style="
+			width: 200px;
+			height: 200px;
+			object-fit: cover;
+		">
+	</div>
+
+	<h3>div to div upscale left to center, default sizing</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x100.jpg);
+			background-position: left;
+		"></div>
+		<div class="target" style="
+			width: 200px;
+			height: 200px;
+			background-image: url(./img/400x200.jpg);
+			background-position: center;
+		"></div>
+	</div>
+
+
+
+
+	<h2>TODO</h2>
+<!--
+	<h3>center</h3>
+	<div spaced layout>
+		<div class="source" style="
+			background-image: url(./img/200x100.jpg);
+			background-position: center;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+
+	<h3>left top</h3>
+	<div spaced layout>
+		<div class="source" style="
+			background-image: url(./img/200x100.jpg);
+			background-position: left;
+			background-repeat: no-repeat;
+		"></div>
+	</div>
+-->
+
+	<hr>
+
+	<h3>same sized container, upscale and crop to left-top quarter</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/100x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<h3>same container, upscale and crop to bottom-right quarter</h3>
+	<div spaced layout>
+		<div class="source" style="
+			width: 100px;
+			height: 100px;
+			background-position: bottom right;
+			background-image: url(./img/100x100.jpg);
+		"></div>
+		<div class="target" style="
+			width: 100px;
+			height: 100px;
+			background-position: bottom right;
+			background-image: url(./img/200x200.jpg);
+		"></div>
+	</div>
+
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+
+
+	<script type="module" src="util/transition-demos.js"></script>
+
+</body>
+</html>

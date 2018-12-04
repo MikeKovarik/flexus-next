@@ -1,0 +1,39 @@
+:root {
+	--avatar-size: 40px;
+}
+[avatar][mini] {
+	--avatar-size: 24px;
+}
+[avatar][small] {
+	--avatar-size: 28px;
+}
+[avatar][dense] {
+	--avatar-size: 32px;
+}
+[avatar][big] {
+	--avatar-size: 56px;
+}
+
+// Following attributes can be used with [avatar] and pretty much any other element.
+// [avatar][circle]  circle
+// [avatar][rounded] square with slightly round edges
+// [avatar][square]  sharp square
+[avatar] {
+	display: inline-block;
+	--size: var(--avatar-size);
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	object-fit: cover;
+	background-size: cover;
+	background-position: center;
+	vertical-align: middle;
+	// useful for mockups
+	background-color: rgba(var(--fg), 0.1);
+	color:            rgba(var(--fg), 0.6);
+	font-weight: 500;
+}
+

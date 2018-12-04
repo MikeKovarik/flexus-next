@@ -1,0 +1,92 @@
+.responsive-screensize(relative, {
+	position: relative;
+});
+
+.responsive-screensize(absolute, {
+	position: absolute;
+});
+
+.responsive-screensize(sticky, {
+	position: sticky;
+});
+[sticky] {
+	// NOTE: position:sticky doesn't work without at least one position set.
+	// Hence the default top:0px. We also don't include this inside the responsive mixin
+	// because we want this selector to be easily overriden by user.
+	top: 0px;
+}
+/*
+[relative=""] {
+	position: relative;
+}
+
+[absolute=""] {
+	position: absolute;
+}
+
+[sticky=""] {
+	position: sticky;
+}
+*/
+.fit,
+[fit=""] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+img[fit=""] {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+// TODO: figure out how to combine multiple responsive-screensize mixins.
+[absolute=""][top=""],
+[absolute="top"] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+[absolute=""][right=""],
+[absolute="right"] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+[absolute=""][bottom=""],
+[absolute="bottom"] {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+[absolute=""][left=""],
+[absolute="left"] {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+}
+
+[absolute=""][center=""],
+[absolute="center"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/*
+[sticky=""]:not(flexus-toolbar):not(flexus toolbar > *) {
+	top: 0;
+	position: sticky !important;
+}
+*/
+

@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>todolist</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+
+		
+
+		flexus-toolbar[seamed] {
+			border-bottom: 1px solid #EEE;
+		}
+		flexus-view > [fab][bottom][right] {
+			bottom: 16px;
+			right: 16px;
+		}
+		flexus-toolbar[tinted] {
+			background-color: rgb(98, 0, 238);
+			color: #FFF;
+			padding-bottom: 24px;
+		}
+		flexus-toolbar[tinted] input {
+			border-bottom: 1px solid rgba(255,255,255,0.6);
+			padding: 8px 0;
+			margin: 8px 16px;
+			width: 100%;
+			max-width: -webkit-fill-available;
+		}
+		flexus-toolbar[tinted] input[indent] {
+			margin-left: 56px;
+		}
+		flexus-toolbar[tinted] input::placeholder {
+			color: rgba(255,255,255,0.6);
+		}
+	</style>
+
+</head>
+<body theme="white" primary="purple" class="side-comp">
+
+	<flexus-view id="list">
+
+		<flexus-toolbar floating card>
+			<button icon="search"></button>
+			<input type="text" placeholder="Search" flex>
+			<button icon="mic"></button>
+		</flexus-toolbar>
+
+		<main style="padding-top: 100px">
+			<dix fx-item>
+				<input type="checkbox">
+				make toolbar navigation buttons flash (fade out before fade in)
+			</dix>
+			<dix fx-item>
+				<input type="checkbox">
+				make toolbar mic buttons bled (fade out while fade in)
+			</dix>
+		</main>
+
+		<button fab bottom right icon="add"></button>
+
+	</flexus-view>
+
+
+	<flexus-view id="add">
+
+		<flexus-toolbar multisection tinted elevation="2">
+			<section>
+				<button icon="x"></button>
+				<div flex></div>
+				<button icon="more"></button>
+			</section>
+			<input type="text" indent h4 placeholder="Title">
+			<input type="text" indent placeholder="Description">
+		</flexus-toolbar>
+
+		<main>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="search">
+
+		<flexus-toolbar seamed>
+			<button icon="arrow-back"></button>
+			<input type="text" placeholder="Search" flex>
+			<button icon="mic"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<dix fx-item button>Yesterday</dix>
+			<div fx-item icon="clock">Search item 1</div>
+			<div fx-item icon="home">Search item 2</div>
+			<hr>
+			<dix fx-item button>This week</dix>
+			<div fx-item icon="clock">Search item 1</div>
+			<div fx-item icon="clock">Search item 2</div>
+			<div fx-item icon="clock">Search item 3</div>
+			<div fx-item icon="arrow-forward">Next week</div>
+
+		</main>
+
+	</flexus-view>
+
+
+	<script src="./util/demo-util.js"></script>
+	<script src="./AnimationOrchestrator.js"></script>
+	<script>
+		var $fab = $('[fab]')
+		var $listView = $('#list')
+		var $addView = $('#add')
+		var $searchView = $('#search')
+		var $listToolbar = $('#list > flexus-toolbar')
+		var $searchToolbar = $('#search > flexus-toolbar')
+		$addView.style.backgroundColor = '#EEE'
+
+		
+		$listView.setAttribute('fit', '')
+		$addView.setAttribute('fit', '')
+		$searchView.setAttribute('fit', '')
+
+		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
+		var fabBbox = $fab.getBoundingClientRect()
+		var listViewBbox = $listView.getBoundingClientRect()
+		var addViewBbox = $addView.getBoundingClientRect()
+		var searchViewBbox = $addView.getBoundingClientRect()
+		var listToolbarBbox = $listToolbar.getBoundingClientRect()
+		var searchToolbarBbox = $searchToolbar.getBoundingClientRect()
+
+		$addView.style.display = 'none'
+		$searchView.style.display = 'none'
+
+		var duration = 800
+		var fill = 'both'
+
+		$fab.addEventListener('click', e => {
+
+			$addView.style.display = ''
+			$addView.style.opacity = 0
+			$addView.style.pointerEvents = 'none'
+			$addView.style.zIndex = '999'
+
+			$addView.animate({
+				clipPath: [
+					`inset(0px 0px ${addViewBbox.height - addViewBbox.width}px 0px round ${addViewBbox.width}px)`,
+					`inset(0px 0px 0px 0px round 0px)`,
+				],
+				transformOrigin: ['top left', 'top left'],
+				transform: [
+					`translate(${fabBbox.left}px, ${fabBbox.top}px) scale(${fabBbox.width / addViewBbox.width})`,
+					`translate(0, 0) scale(1)`,
+				],
+				opacity: [0, 1],
+			}, {duration, easing, fill})
+
+			$fab.animate({
+				transformOrigin: ['top left', 'top left'],
+				transform: [
+					`translate(0, 0) scale(1)`,
+					`translate(${-fabBbox.left}px, ${-fabBbox.top}px) scale(${addViewBbox.width / fabBbox.width})`,
+				],
+				opacity: [1, 0],
+			}, {duration, easing, fill})
+		})
+
+
+		console.log('listToolbarBbox', listToolbarBbox)
+		console.log('searchToolbarBbox', searchToolbarBbox)
+		$listToolbar.addEventListener('click', e => {
+
+			$searchView.style.display = ''
+
+			transitionNodes($listToolbar, $searchToolbar)
+			//transitionNodes($listToolbar.firstElementChild, $searchToolbar.firstElementChild)
+			//transitionNodes($listToolbar.lastElementChild, $searchToolbar.lastElementChild)
+			//transitionNodes($listToolbar.querySelector('input'), $searchToolbar.querySelector('input'), {scale: false})
+
+		})
+
+		function transitionNodes($from, $to, options = {}) {
+			var fromBbox = $from.getBoundingClientRect()
+			var toBbox = $to.getBoundingClientRect()
+
+			var fromTransform = [
+				`translate(0, 0)`,
+				`translate(${toBbox.left - fromBbox.left}px, ${toBbox.top - fromBbox.top}px)`,
+			]
+			var toTransform = [
+				`translate(${fromBbox.left - toBbox.left}px, ${fromBbox.top - toBbox.top}px)`,
+				`translate(0, 0)`,
+			]
+
+			if (options.scale !== false) {
+				fromTransform[0] += ` scale(1, 1)`
+				fromTransform[1] += ` scale(${toBbox.width / fromBbox.width}, ${toBbox.height / fromBbox.height})`
+				toTransform[0] += ` scale(${fromBbox.width / toBbox.width}, ${fromBbox.height / toBbox.height})`
+				toTransform[1] += ` scale(1, 1)`
+			}
+
+			$from.animate({
+				transformOrigin: ['top left', 'top left'],
+				transform: fromTransform,
+				opacity: [1, 0],
+			}, {duration, easing, fill})
+
+			$to.animate({
+				transformOrigin: ['top left', 'top left'],
+				transform: toTransform,
+				opacity: [0, 1],
+			}, {duration, easing, fill})
+		}
+
+/*
+		$fab.addEventListener('click', e => {
+			var top = fabBbox.top
+			var right  = listViewBbox.width  - fabBbox.right
+			var bottom = listViewBbox.height - fabBbox.bottom
+			var left = fabBbox.left
+			var keyFrames = {
+				clipPath: [
+					`inset(${top}px ${right}px ${bottom}px ${left}px round ${fabBbox.height / 2}px)`,
+					`inset(0px 0px 0px 0px round 0px)`,
+				]
+			}
+			var duration = 500
+			$addView.animate(keyFrames, {duration, easing})
+		})
+*/
+
+
+	</script>
+
+</body>
+</html>

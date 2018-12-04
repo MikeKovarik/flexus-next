@@ -1,0 +1,635 @@
+.hover-ink() {
+
+	position: relative;
+
+	&::after {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		z-index: -1;
+
+		opacity: 0;
+		transform: scale(0);
+		//background-color: rgb(var(--local-fg));
+		background-color: rgb(var(--fg, var(--theme-fg)));
+		// defined by button, or rewritten by modifers such as [rounded]
+		border-radius: inherit;
+
+		transition-duration: 150ms;
+		transition-timing-function: var(--bezier-curve);
+		transition-property: transform, opacity;
+
+		top:    calc(-1 * var(--hitbox-offset, 0px));
+		bottom: calc(-1 * var(--hitbox-offset, 0px));
+		left:   calc(-1 * var(--hitbox-offset, 0px));
+		right:  calc(-1 * var(--hitbox-offset, 0px));
+		//left:   calc(-1 * var(--padding-left,  var(--hitbox-offset, 0px)));
+		//right:  calc(-1 * var(--padding-right, var(--hitbox-offset, 0px)));
+
+	}
+
+	&:not([disabled]):not(:disabled) {
+		&:hover::after {
+			opacity: var(--state-hover-opacity);
+			transform: scale(1);
+		}
+		&:active::after {
+			opacity: var(--state-focus-opacity);
+		}
+	}
+
+}
+
+
+
+:root {
+	--icon-size: 24px;
+}
+[dense],
+[mouse][optimized] {
+	// https://material.io/design/iconography/system-icons.html#grid-keyline-shapes
+	--icon-size: 20px;
+}
+
+[mini],
+[size="24"] {--input-height: 24px;}
+[condensed],
+[size="28"] {--input-height: 28px;}
+[dense],
+[small],
+[size="32"] {--input-height: 32px;}
+:root,
+[size="36"] {--input-height: 36px;}
+[tall],
+[size="40"] {--input-height: 40px;}
+[big],
+[size="48"] {--input-height: 48px;}
+[giant],
+[size="56"] {--input-height: 56px;}
+
+
+
+
+[size="18"]:not([icon]) {--size: 18px;}
+[size="20"]:not([icon]) {--size: 20px;}
+[size="24"]:not([icon]) {--size: 24px;}
+[size="28"]:not([icon]) {--size: 28px;}
+[size="32"]:not([icon]) {--size: 32px;}
+[size="36"]:not([icon]) {--size: 36px;}
+[size="40"]:not([icon]) {--size: 40px;}
+[size="44"]:not([icon]) {--size: 44px;}
+[size="48"]:not([icon]) {--size: 48px;}
+
+[size="18"][icon] {--icon-size: 18px;}
+[size="20"][icon] {--icon-size: 20px;}
+[size="24"][icon] {--icon-size: 24px;}
+[size="28"][icon] {--icon-size: 28px;}
+[size="32"][icon] {--icon-size: 32px;}
+[size="36"][icon] {--icon-size: 36px;}
+[size="40"][icon] {--icon-size: 40px;}
+[size="44"][icon] {--icon-size: 44px;}
+[size="48"][icon] {--icon-size: 48px;}
+
+
+/*
+button {
+	outline: 1px solid red !important;
+}
+*/
+button {
+
+	// Uses typographic [button] mixin.
+	&:extend([button]);
+
+	align-items: center;
+	display: inline-flex;
+	justify-content: center;
+
+	cursor: pointer;
+
+	/* ICON BUTTON */
+
+	&[icon]:empty {
+		//--icon-size: 20px;
+		border-radius: 50%;
+		width: var(--size);
+		//--hitbox-offset: 10px;
+		&:not([elevated]):not([seamed]):not([flat]):not([fab]) {
+			padding: 0;
+			height: unset;
+			width: unset;
+			background: transparent;
+			box-shadow: none !important;
+		}
+
+		&::before {
+			transition: opacity 150ms var(--bezier-curve);
+			opacity: 0.54;
+		}
+	}
+
+	&:not([disabled]):not(:disabled) {
+		&[icon]:hover::before {
+			opacity: 0.87;
+		}
+	}
+
+	--internal-gutter-todo-rename: 8px;
+	&[icon]:not(:empty) {
+		//--padding-left: 12px;
+		--padding-left: calc((var(--size, 0px) - 12px) / 2);
+
+		&:not([vertical])::before {
+			margin-right: 8px;
+		}
+		// Creates 8px space between icon and text.
+		/*
+		&:not([vertical]) {
+			text-indent: var(--internal-gutter-todo-rename);
+			&::before {
+				text-indent: 0px;
+			}
+		}
+		*/
+		&[vertical]::before {
+			margin-bottom: var(--internal-gutter-todo-rename);
+		}
+	}
+
+	&:not(:empty)[vertical] {
+		height: unset;
+		//--padding: 12px;
+		// override the [icon]:not(:empty) rule which sets left padding.
+		--padding-right: calc((var(--size) + 8px) / 2 - 12px);
+		//--padding-right: calc((var(--size) + 4px) / 3 - 2px);
+		--padding-left: var(--padding-right);
+		--padding-vertical: var(--padding-right);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+button[fab] {
+
+	// NOTE: fab doesn't inherit border-radius 50% but calculates it from
+	// --size because FABs can now contain text (collapsible) and 50% would
+	// make the fab into an oval instead of circular rectangle.
+	--icon-size: 24px;
+	//--icon-size: 24px !important;
+
+	// Extending [rounded] and not [circle] because FAB can now contain text.
+	//border-radius: 4px; // TODO: FIXME: 4px radius
+	&:extend([round]);
+
+	&::before {
+		opacity: 1 !important; // TODO: reconscider
+	}
+
+	width:  auto;
+	min-width: var(--size);
+
+	// FAB can since MDv2 contain text. It should never wrap, ellpise or overflow.
+	white-space: nowrap;
+	& > * {
+		overflow: hidden;
+	}
+
+	--padding-horizontal: calc((var(--size, 0px) - var(--icon-size, 0px)) / 2);
+	--padding-left: var(--padding-horizontal);
+
+	--size: 56px;
+	--internal-gutter-todo-rename: 12px;
+	// icon fab with text
+	&:not(:empty) {
+		&:not([big]) {
+			// Default height and padding according to spec.
+			--size: 48px;
+			--padding-left: 12px;
+			--padding-right: 20px;
+		}
+		&[small] {
+			// Non-standard but build according to Google Pay with small adjustment for the decency's sake.
+			--size: 44px;
+			--internal-gutter-todo-rename: 8px;
+			--padding-left: 12px;
+			--padding-right: 18px;
+		}
+		&[big] {
+			// Custom override. Not strictly in spec but built according to Android Messages
+			// where the fab has text and is as tall as default button because the text collapses uppon scroll.
+			--size: 56px;
+		}
+
+		// [icon]:not(:empty)::before by default has margin-right: 8px.
+		// Negate it if there's an element (not just a text node) and reimplement
+		// the space with padding. That way the text can be animated and collapsed.
+		/*& > * {
+			margin-left: -8px;
+		}*/
+	}
+	&[mini],
+	&[small] {
+		--size: 40px;
+	}
+
+
+	--seam-size: 0px;
+	z-index: 6;
+	box-shadow: var(--elevation-6);
+	&:not([disabled]):not(:disabled) {
+		&:hover {
+			z-index: 9;
+			box-shadow: var(--elevation-9);
+		}
+		&:active {
+			z-index: 12;
+			box-shadow: var(--elevation-12);
+		}
+	}
+
+}
+
+
+
+[fab] {
+
+	&[right],
+	&[left],
+	&[top],
+	&[bottom] {
+		position: absolute;
+	}
+
+	&[right]  {right:  var(--theme-sideline)}
+	&[left]   {left:   var(--theme-sideline)}
+	&[top]    {top:    calc(-0.5 * var(--size))}
+	&[bottom] {bottom: calc(-0.5 * var(--size))}
+
+	flexus-view main > &,
+	flexus-view > & {
+		&[top]    {top:    var(--theme-rem)}
+		&[bottom] {bottom: var(--theme-rem)}
+	}
+
+}
+
+
+[transparent] {
+	--bg-opacity: 0;
+}
+
+
+
+
+// pedantic
+//@button: ~'button, input[type="checkbox"][button], input[type="checkbox"][icon]';
+// simplified
+@button: ~'button, input[button], input[icon]';
+@input: ~'input:not([type="checkbox"]):not([type="radio"])';
+
+
+
+@{button} {
+	//--padding-horizontal: 16px;
+	--padding-horizontal: calc((var(--size) - 4px) / 2);
+}
+
+input,
+select {
+	//--padding-horizontal: 8px;
+	--padding-horizontal: calc(var(--size) / 3);
+}
+
+@{button},
+input,
+select {
+	.apply-colors();
+
+	--size: var(--input-height);
+	height: var(--size);
+	--icon-size: 18px;
+
+	margin: 4px;
+	outline: none;
+	vertical-align: middle;
+
+	transition-duration: 150ms;
+	transition-timing-function: var(--bezier-curve);
+	transition-property: box-shadow, border-color;
+	will-change: box-shadow, border-color;
+
+	//--seam-opacity: 0.6;
+	--seam-opacity: 0.18;
+	
+	&:not([disabled]):not(:disabled) {
+		&:hover {
+			--seam-opacity: 0.3;
+		}
+		&:active,
+		&:focus {
+			--seam-opacity: 1;
+			--seam-color: var(--tint);
+		}
+	}
+
+	&:disabled,
+	&[disabled] {
+		color: rgb(--theme-fg);
+	}
+
+	&[seamed] {
+		--seam-size: 1px;
+	}
+	[touch] &:active,
+	[touch] &:focus {
+		--seam-size: 2px;
+	}
+	&[elevated] {
+		--seam-size: 0px;
+	}
+}
+/*
+@{button},
+select {
+	padding-top:    calc(var(--padding-top,    var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-right:  calc(var(--padding-right,  var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-bottom: calc(var(--padding-bottom, var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-left:   calc(var(--padding-left,   var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
+}
+@{input} {
+	padding-top:    calc(var(--padding-top,    var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-right:  calc(var(--padding-right,  var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-bottom: calc(var(--padding-bottom, var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
+	text-indent:    calc(var(--padding-left,   var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
+	padding-left:   0;
+}
+*/
+
+@{input},
+@{button},
+select {
+	--padding-top:    calc(var(--padding-vertical,   var(--padding, 0px)) - var(--seam-size, 0px));
+	--padding-right:  calc(var(--padding-horizontal, var(--padding, 0px)) - var(--seam-size, 0px));
+	--padding-bottom: calc(var(--padding-vertical,   var(--padding, 0px)) - var(--seam-size, 0px));
+	--padding-left:   calc(var(--padding-horizontal, var(--padding, 0px)) - var(--seam-size, 0px));
+}
+@{button},
+select {
+	padding-top:    var(--padding-top);
+	padding-right:  var(--padding-right);
+	padding-bottom: var(--padding-bottom);
+	padding-left:   var(--padding-left);
+}
+@{input} {
+	padding-top:    var(--padding-top);
+	padding-right:  var(--padding-right);
+	padding-bottom: var(--padding-bottom);
+	text-indent:    var(--padding-left);
+	padding-left:   0;
+}
+
+@{button} {
+	.hover-ink();
+
+	&,
+	&:empty[icon],
+	&[fab] {
+		--hitbox-offset: 0px;
+	}
+	&[nopadding],
+	&[plain],
+	&:empty[icon]:not([elevated]):not([seamed]):not([flat]):not([fab]) {
+		--hitbox-offset: 10px;
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////// COLOR /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+@{input},
+select {
+	transition: 120ms background-color;
+	&:extend([hoverable] all);
+	&:extend([clickable] all);
+	//&:extend([focusable] all);
+	// inputs and select are transparent by default.
+	&:not([seamed]):not([flat]):not([elevated]) {
+		--bg-base-opacity: 0;
+	}
+}
+
+@{button},
+input,
+select {
+	--fg-opacity: 1;
+
+	// to be overwritten
+	--bg: var(--theme-bg);
+	--fg: var(--theme-fg);
+
+	--seam-color: var(--theme-base-fg);
+	&:not([neutral]) {
+		&:active,
+		&:focus {
+			--seam-color: var(--tint-bg);
+		}
+	}
+	&[tinted] {
+		--fg: var(--tint-bg);
+		--seam-color: var(--tint-bg);
+		// !important is here to override :hover which sets it to something like 0.3 (from 0.18) or so.
+		--seam-opacity: 1 !important;
+	}
+
+}
+
+@{button},
+input[elevated],
+select[elevated] {
+	--bg: var(--theme-sheet-bg, var(--theme-bg));
+	//--fg: var(--tint-bg, var(--theme-fg));
+	&[neutral] {
+		--bg: var(--theme-sheet-bg, var(--theme-bg));
+		--fg: var(--theme-sheet-fg, var(--theme-fg));
+	}
+}
+
+button:not([neutral]) {
+	--fg: var(--tint-bg);
+	--bg: var(--theme-sheet-bg);
+}
+
+button[tinted]:not([seamed]):not([flat]) {
+	--bg: var(--tint-bg, var(--theme-bg));
+	--fg: var(--tint-fg, var(--theme-fg));
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+/////////////////// LOOK //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+//button:not([seamed]):not([flat]),
+@{button},
+input[elevated],
+select[elevated] {
+
+	border-radius: 4px; // TODO: FIXME: 4px radius
+	--bg-base-opacity: 1;
+
+	transition-duration: 150ms;
+	transition-timing-function: var(--bezier-curve);
+	transition-property: box-shadow;
+	will-change: box-shadow;
+
+		z-index: 2;
+		box-shadow: var(--elevation-2);
+		&:not([disabled]):not(:disabled) {
+			&:focus,
+			&:hover {
+				z-index: 4;
+				box-shadow: var(--elevation-4);
+			}
+			&:active {
+				z-index: 8;
+				box-shadow: var(--elevation-8);
+			}
+		}
+
+}
+
+
+@{button},
+input,
+select {
+
+	&[seamed] {
+		--bg-base-opacity: 0;
+	}
+	&[flat] {
+		--bg-base-opacity: 0.04;
+	}
+	&[seamed],
+	&[flat] {
+		--bg: var(--fg, var(--theme-fg));
+		//border-radius: 4px;
+		box-shadow: none !important;
+	}
+
+	&[elevated],
+	&[flat],
+	&[seamed] {
+		border-radius: 4px; // TODO: FIXME: 4px radius
+		//&:extend([almost-square]);
+	}
+
+	&[plain] {
+		border: none;
+		background: transparent;
+		padding: 0;
+		margin: 0;
+		width: unset;
+		height: unset;
+		min-width: unset;
+		min-height: unset;
+		box-shadow: none !important;
+		--hitbox-offset: 10px;
+	}
+
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////  /////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+@{input} {
+
+	// CONTEXT: [round] makes the input fully circular on the sides (radius increases with height)
+	// CONTEXT: [rounded] only makes the input slightly rounded (about 8-12px)
+	// input[rounded] still has the bottom bar.
+	// input[round] does not have the bottom bar.
+	// input[seamed] disables the bottom bar altogether since the border is effectively all around.
+
+	&::placeholder {
+		color: inherit;
+		opacity: 0.4;
+	}
+
+	// plain old materila design v1 styled transparent with only bottom bar.
+	&[plain],
+	&[flat],
+	&:not([seamed]):not([flat]):not([elevated]) {
+		border-style: solid;
+		//border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+		border-color: rgba(var(--seam-color, var(--theme-base-fg)), var(--seam-opacity));
+		border-width: 0 0 var(--seam-size) 0;
+		border-style: solid;
+		// compensate for size-changing bottom bar/seam.
+		padding-top: var(--seam-size, 0px);
+		// Cancel out the changes of padding on the sided sides. (e.g. does not subtract seam from padding).
+		// Default input textfield only has the seam at the bottom. And it changes height/size on :focus.
+		// But padding on all sides subtracts the seam size (default behavior for all inputs, buttons and selects)
+		--padding-left:  var(--padding-horizontal, var(--padding, 0px));
+		--padding-right: var(--padding-horizontal, var(--padding, 0px));
+		&:active,
+		&:focus {
+			--seam-size: 2px;
+		}
+	}
+	&[plain],
+	&:not([seamed]):not([flat]):not([elevated]) {
+		padding-left: 0;
+		padding-right: 0;
+		text-indent: 0;
+		border-radius: none !important;
+	}
+
+	&[plain],
+	&[no-bar] {
+		--seam-size: 0px !important;
+	}
+	// Only [flat] and the default input with no attributes has forced
+	// (material design v1 style - transparent bg, bottom bar)
+	&:not([seamed]):not([elevated])/*:not([round])*/:not([no-bar]) {
+		// !important to override [rounded]
+		border-bottom-left-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+	}
+
+}
+
+select {
+
+	&:not([seamed]):not([elevated]):not([flat]) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	&:not([seamed]) {
+		--seam-size: 0px;
+	}
+}
+
+
+
+
