@@ -24,7 +24,9 @@
 			margin-bottom: 8px;
 		}
 		.bgsection {
-			background-image: url('./img/crosscafe.jpg');
+			background-image: url('./img/longboard/medium/IMG_20180912_184044.jpg');
+			background-position: center;
+			background-size: cover;
 			padding-top: 16px;
 			padding-bottom: 130px;
 		}
@@ -133,15 +135,13 @@
 	</flexus-view>
 
 
-	<script src="./util/demo-util.js"></script>
-
 	<script type="module">
 		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
 
-		var fab = $('[fab]')
-		var eventView = $('#event')
-		var gridItem = $('.event[transition-part="event-header"]')
-		var listView = $('#list')
+		var fab = document.querySelector('[fab]')
+		var eventView = document.querySelector('#event')
+		var gridItem = document.querySelector('.event[transition-part="event-header"]')
+		var listView = document.querySelector('#list')
 		
 		eventView.setAttribute('fit', '')
 		listView.setAttribute('fit', '')
