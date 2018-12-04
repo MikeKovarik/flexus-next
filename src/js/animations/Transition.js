@@ -1,4 +1,5 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
+import {ImageTransition} from './ImageTransition.js'
 import {cloneNode, highlight} from './util.js'
 
 
@@ -256,7 +257,27 @@ export class Transition extends AnimationOrchestrator {
 
 
 
-	async transitionTextNode(source, target) {
+	transitionNodes(source, target) {
+		if (ImageTransition.canTransition(source, target)) {
+			this.transitionImageNodes(source, target)
+		} else {
+			this.transitionTextNodes(source, target)
+		}
+	}
+
+	transitionImageNodes(source, target) {
+		// TODO: this needs to be scheduled and integrated into AnimationOrchestrator API.
+		// TODO: set adjacentNode from here to be newView. because the view can be faded as whole
+		// (do similar approach to transitionTextNode)
+		console.warn('transitionImageNodes not implemented yet')
+		return
+		let {duration} = this
+		duration = 1000
+		var transition = new ImageTransition(source, target, {duration})
+		transition.play()
+	}
+
+	async transitionTextNodes(source, target) {
 		var fromBbox = source.getBoundingClientRect()
 		var toBbox = target.getBoundingClientRect()
 

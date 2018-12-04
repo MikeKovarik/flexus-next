@@ -1,0 +1,18 @@
+[ratio] {
+	margin-top: -1rem !important;
+	margin-bottom: 1rem !important;
+}
+
+[hidden2] {
+	visibility: hidden;
+	opacity: 0;
+}
+[click-through] {
+	pointer-events: none;
+}
+flexus-view {
+	will-change: transform, opacity;
+	/*
+	background-color: rgb(var(--local-bg, var(--surface-bg, var(--theme-bg))));
+	*/
+}

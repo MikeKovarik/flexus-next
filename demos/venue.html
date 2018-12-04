@@ -64,34 +64,6 @@
 </head>
 <body theme="white" primary="blue" class="side-comp">
 
-	<flexus-view id="event" primary="purple">
-
-		<flexus-toolbar multisection>
-			<section class="bgsection">
-				<button icon="arrow-back"></button>
-				<div flex></div>
-				<button icon="info"></button>
-				<button icon="share"></button>
-			</section>
-			<section indent tinted transition-part="event-header" transition-pivot>
-				<div vertical layout flex>
-					<div h6 transition-part="event-name">Workshop name</div>
-					<div subtitle1>Subtitle</div>
-				</div>
-			</section>
-			<button small fab icon="event" elevation="3" left bottom></button>
-		</flexus-toolbar>
-
-		<main indent>
-			<p>Click the white FAB button on the left!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis vel lacus a lacinia. Vestibulum faucibus fermentum augue, non ultrices purus scelerisque sed. Aenean quis lacinia purus, a posuere nisi. Dictum commodo velit. Aenean et laoreet augue. Nulla rutrum posuere urna ut consectetur.</p>
-			<!--
-			<p>Nam faucibus, leo in feugiat accumsan, velit erat pellentesque turpis, sed ullamcorper nisi tortor eget magna. Morbi mi libero, condimentum vel sagittis vel, vehicula sed tortor. Cras sodales viverra finibus. Proin venenatis tempor odio, ac interdum risus commodo eget. Quisque ut pretium dolor. Etiam in velit sem. Proin sem diam, pellentesque nec purus et, dictum tristique dui. Nulla lobortis mattis turpis.</p>
-			-->
-		</main>
-
-	</flexus-view>
-
 
 	<flexus-view id="list">
 
@@ -126,10 +98,39 @@
 					<span transition-part="event-name">Seminar</span>
 				</div>
 				<div class="event" tinted primary="purple" transition-part="event-header">
-					<span transition-part="event-name">Workshop with a very long name</span>
+					<span transition-part="event-name">Workshop with a very long name TODO</span>
 				</div>
 			</div>
 			<div class="row"></div>
+		</main>
+
+	</flexus-view>
+
+
+	<flexus-view id="event" primary="purple">
+
+		<flexus-toolbar multisection>
+			<section class="bgsection">
+				<button icon="arrow-back"></button>
+				<div flex></div>
+				<button icon="info"></button>
+				<button icon="share"></button>
+			</section>
+			<section indent tinted transition-part="event-header" transition-pivot>
+				<div vertical layout flex>
+					<div h6 transition-part="event-name">Workshop name</div>
+					<div subtitle1>Subtitle</div>
+				</div>
+			</section>
+			<button small fab icon="event" elevation="3" left bottom></button>
+		</flexus-toolbar>
+
+		<main indent>
+			<p>Click the white FAB button on the left!</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lobortis vel lacus a lacinia. Vestibulum faucibus fermentum augue, non ultrices purus scelerisque sed. Aenean quis lacinia purus, a posuere nisi. Dictum commodo velit. Aenean et laoreet augue. Nulla rutrum posuere urna ut consectetur.</p>
+			<!--
+			<p>Nam faucibus, leo in feugiat accumsan, velit erat pellentesque turpis, sed ullamcorper nisi tortor eget magna. Morbi mi libero, condimentum vel sagittis vel, vehicula sed tortor. Cras sodales viverra finibus. Proin venenatis tempor odio, ac interdum risus commodo eget. Quisque ut pretium dolor. Etiam in velit sem. Proin sem diam, pellentesque nec purus et, dictum tristique dui. Nulla lobortis mattis turpis.</p>
+			-->
 		</main>
 
 	</flexus-view>
@@ -149,13 +150,16 @@
 		var baseView = listView
 		var newView = eventView
 
+		// This code is still experimental and wil be included into the library.
+		// The end goal is to have no client js code.
+
 		baseView.style.zIndex = 99
 		newView.style.zIndex  = 104
 
 		class PivotalCollapse extends ViewTransition {
 			setup() {
 				super.setup()
-				this.duration = 4500
+				this.duration = 600
 				this.transformFrom(newView, this.origin, this.pivot, 0, 1)
 				this.clipFrom(newView, this.pivot, 0.3, 1)
 				this.fadeIn(newView, 0.3, 0.6)

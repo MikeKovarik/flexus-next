@@ -1,7 +1,7 @@
 import './polyfill.js'
 
 
-// TODO: velka cistka
+// TODO: cleanup of old code (unused variables) once experimentation is over
 
 export class ImageDescriptor {
 

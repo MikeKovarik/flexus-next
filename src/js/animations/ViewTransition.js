@@ -1,4 +1,5 @@
 import {Transition} from './Transition.js'
+import {ImageTransition} from './ImageTransition.js'
 
 
 const ZINDEX_BASEVIEW = 99
@@ -15,27 +16,32 @@ export class ViewTransition extends Transition {
 		
 		if (!pivot)
 			pivot = newView.querySelector('[transition-pivot]') || newView
-
-		if (origin instanceof Event) {
-			let e = origin
-			origin = undefined
-			// TODO: traverse up the tree until [transition-origin] or [transition-part]
-		}
+		if (origin instanceof Event)
+			origin = this.findOrigin(origin)
 
 		this.baseView = baseView
 		this.newView  = newView
 		this.origin   = origin
 		this.pivot    = pivot
 
+		this.duration = 250
+		this.fill = 'both'
+		this.easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
 		//this.setup()
 	}
 
+	// accepts event
+	// TODO: accept node to traverse upwards from.
+	findOrigin(e) {
+		var node = e.target
+		while (node !== null) {
+			if (node.hasAttribute('transition-origin')) return node
+			node = node.parentElement
+		}
+	}
+
 	setup() {
-		console.log('ViewTransition SETUP')
-		this.duration = 250
-		console.log('ViewTransition this.duration', this.duration)
-		this.fill = 'both'
-		this.easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
 		// display all so that we can measure bboxes.
 		this.baseView.style.display = ''
@@ -43,9 +49,10 @@ export class ViewTransition extends Transition {
 
 		this.baseViewBbox   = this.baseView.getBoundingClientRect()
 		this.newViewBbox    = this.newView.getBoundingClientRect()
-		this.originBbox     = this.origin.getBoundingClientRect()
-		this.originComputed = window.getComputedStyle(this.origin)
-		this.newComputed    = window.getComputedStyle(this.newView)
+		if (this.origin) {
+			this.originBbox     = this.origin.getBoundingClientRect()
+			this.originComputed = window.getComputedStyle(this.origin)
+		}
 
 		this.originalZindexes = {
 			baseView: this.baseView && this.baseView.style.zIndex,
@@ -83,10 +90,7 @@ export class ViewTransition extends Transition {
 			let target = this.pivot.querySelector(`[transition-part="${name}"]`)
 			if (!target) continue
 			if (target === this.pivot) continue
-			console.log('part name', name)
-			console.log('source', source)
-			console.log('target', target)
-			this.transitionTextNode(source, target)
+			this.transitionNodes(source, target)
 		}
 
 

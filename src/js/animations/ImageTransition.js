@@ -10,6 +10,16 @@ var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
 export class ImageTransition {
 
+	static canTransition(source, target) {
+		return this.isTransitionable(source)
+			|| this.isTransitionable(target)
+	}
+
+	static isTransitionable(node) {
+		if (node.localName === 'img') return true
+		return window.getComputedStyle(node).backgroundImage !== 'none'
+	}
+
 	constructor(source, target, options = {duration: 200}) {
 		this.source = source
 		this.target = target

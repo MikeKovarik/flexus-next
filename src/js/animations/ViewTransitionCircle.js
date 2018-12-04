@@ -1,3 +1,6 @@
+// this is just copy paste from one of the experiments
+// WORK TO BE DONE HERE
+
 
 			//var circleAnimation = animateCircleClip(e, album.color)
 			var {animation: circleAnimation, node: circle} = animateCircleTransform(e, album.color)

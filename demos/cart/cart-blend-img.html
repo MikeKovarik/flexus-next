@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>cart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<!--
+	<link rel="stylesheet" type="text/css" href="../util/phone-only-demo.css">
+	-->
+	<link rel="stylesheet" type="text/css" href="./cart.css">
+
+</head>
+<body theme="white" primary="purple">
+
+	<flexus-view id="cart">
+		<flexus-toolbar tinted elevation="0">
+			<button icon="menu"></button>
+			<div flex>Cart</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+		<main>
+
+			<div v-on:click="openDetail($event, product.id)"
+			fx-item seamed="between"
+			transition-origin :name="`product-${product.id}`"
+			v-for="product in products">
+				<img square avatar :src="product.image" transition-part="product-image">
+				<div vertical layout flex>
+					<div>${product.name}</div>
+					<div body2 muted>${product.status}</div>
+				</div>
+				<span>$${product.price.toFixed(2)}</span>
+			</div>
+
+			<div fx-item>
+				<span flex muted>TOTAL</span>
+				<span h5>$41.24</span>
+			</div>
+
+			<p layout body2>
+				<span flex>Subtotal</span>
+				<span muted>$36.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Shipping</span>
+				<span muted>$2.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Tax</span>
+				<span muted>$3.24</span>
+			</p>
+
+		</main>
+
+		<button flat fullwidth bottom>checkout</button>
+
+	</flexus-view>
+
+
+	<flexus-view id="detail" :name="`product-${product.id}`">
+
+		<flexus-toolbar seamed>
+			<button icon="x" v-on:click="goBack"></button>
+			<div flex>Product details</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main vertical layout>
+			<div fullbleed ratio="4:3">
+				<img fit :src="product.image" transition-part="product-image">
+			</div>
+			<div layout top>
+				<div vertical layout flex>
+					<span h5>${product.name}</span>
+					<span body2 muted>${product.status}</span>
+				</div>
+				<span h5 muted>$${product.price.toFixed(2)}</span>
+			</div>
+			<p body2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla tempus massa, et mollis nisl laoreet et. Aliquam feugiat odio at luctus ultrices.</p>
+			<p body2></p>Integer elementum imperdiet risus. Mauris hendrerit massa vel nulla tempus, non semper felis semper. Nulla gravida dignissim lorem, eu volutpat nibh ornare at. Integer hendrerit dapibus tempor. Aenean at hendrerit risus. Integer vehicula porttitor nibh.</p>
+			<button seamed fullwidth bottom v-on:click="remove">remove from cart</button>
+		</main>
+
+	</flexus-view>
+
+
+
+	<script src="../util/vue.js"></script>
+
+	<script type="module">
+		// WORK IN PROGRESS CODE !!!
+		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
+		import {setTransitionClass} from './cart-vue-app.js'
+
+		class TransitionBlend extends ViewTransition {
+			setup() {
+				super.setup()
+				this.duration = 500
+				this.fadeOut(this.baseView, 0, 0.3)
+				this.fadeIn(this.newView, 0.7, 1)
+			}
+		}
+
+		setTransitionClass(TransitionBlend)
+
+	</script>
+
+</body>
+</html>
