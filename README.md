@@ -16,6 +16,8 @@ There are some great demos, though not finished yet.
 
 NOTE: these demos aren't responsive yet and they don't scale well! They exist to showcase animations or to recreate certain existing app or concept. Plus the framework is still in development.
 
+Also it's only been developed/tested in chrome for now.
+
 * [demos/app-material-music/app-material-music.html](https://flexus-next.netlify.com/demos/app-material-music/app-material-music.html) Full blown demo with transitions. Tablet mode only for now. Not responsive yet.
 * [demos/app-material-music/app-material-music-artists.html](https://flexus-next.netlify.com/demos/app-material-music/app-material-music-artists.html) Different portion of the music app. Showcases different transition animation.
 * [demos/app-google-photos-detail.html](https://flexus-next.netlify.com/demos/app-google-photos-detail.html)
