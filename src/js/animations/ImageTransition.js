@@ -2,11 +2,14 @@ import './polyfill.js'
 import {ImageDescriptor, promiseLoad, isLoaded} from './ImageDescriptor.js'
 
 
-// TODO: velka cistka
+// TODO: cleanup
 // TODO: cancellable
+// TODO: reversible animations
 
-var fill = 'both'
-var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+var defaultOptions = {
+	fill: 'both',
+	easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+}
 
 export class ImageTransition {
 
@@ -23,7 +26,7 @@ export class ImageTransition {
 	constructor(source, target, options = {duration: 200}) {
 		this.source = source
 		this.target = target
-		this.options = Object.assign({fill, easing, fill: 'both'}, options)
+		this.options = Object.assign(this, defaultOptions, options)
 		this.sd = new ImageDescriptor(source)
 		this.td = new ImageDescriptor(target)
 		this.ready = this.setup()
@@ -120,49 +123,57 @@ export class ImageTransition {
 		this.originX = 0
 		this.originY = 0
 
-		/*
-		this works great for now, when miniaturue gets animated into full size image in picture gallery scenarions.
-		Source is expected to be always smaller than target so that target can be cropped-up and scaled up from
-		source's position. Using this.sourceContainedWithinTarget.
-		TODO: make this work the other way around. When we close galley detail and animate the large image back into
-		miniature but we want to use the big image (in this case it would be to source) as the one that animates.
-		Thus the new this.targetContainedWithinSource should be included into it and also createClone() cannot only rely
-		on this.target.
-		*/
-
-		if (this.targetContainedWithinSource) {
-			console.warn('TODO: ImageTransition: source scaling down to target not implemented yet (aka reverse mode)')
-			//this.nodeToAnimate = this.source
+		if (!this.mode) {
+			/*
+			this works great for now, when miniaturue gets animated into full size image in picture gallery scenarions.
+			Source is expected to be always smaller than target so that target can be cropped-up and scaled up from
+			source's position. Using this.sourceContainedWithinTarget.
+			TODO: make this work the other way around. When we close galley detail and animate the large image back into
+			miniature but we want to use the big image (in this case it would be to source) as the one that animates.
+			Thus the new this.targetContainedWithinSource should be included into it and also createClone() cannot only rely
+			on this.target.
+			*/
+			if (this.targetContainedWithinSource) {
+				console.warn('TODO: ImageTransition: source scaling down to target not implemented yet (aka reverse mode)')
+				//this.nodeToAnimate = this.source
+				this.mode = 'crop'
+			}
+			if (this.sourceContainedWithinTarget) {
+				this.mode = 'crop'
+			} else {
+				var suitableForManipulation = this.target.children.length === 0
+											&& td.computed.maxWidth  !== 'none'
+											&& td.computed.maxHeight !== 'none'
+											&& (td.computed.left === 'auto' || td.computed.right === 'auto')
+											&& (td.computed.top === 'auto' || td.computed.bottom === 'auto')
+				this.mode = suitableForManipulation ? 'recreate' : 'clone'
+			}
 		}
 
-		if (this.sourceContainedWithinTarget) {
-			console.log('RECROP')
-			this.setupRecrop()
-			this.nodeToAnimate = this.target
-		} else {
-
-			var suitableForManipulation = this.target.children.length === 0
-										&& td.computed.maxWidth  !== 'none'
-										&& td.computed.maxHeight !== 'none'
-										&& (td.computed.left === 'auto' || td.computed.right === 'auto')
-										&& (td.computed.top === 'auto' || td.computed.bottom === 'auto')
-
-			if (suitableForManipulation) {
+		switch (this.mode) {
+			case 'crop':
+				console.log('RECROP')
+				this.setupCrop()
+				this.nodeToAnimate = this.target
+				break
+			case 'recreate':
 				console.log('RECREATE with placeholder')
 				this.createPlaceholder()
-			} else {
+				this.setupRecreate()
+				break
+			case 'clone':
 				console.log('RECREATE WITH CLONE')
 				this.createClone()
 				this.nodeToAnimate = this.clone
-			}
-			this.setupRecreate()
+				this.setupRecreate()
+				break
 		}
 
 		this.keyframes.transformOrigin = pair(`${this.originX || 0}px ${this.originY || 0}px`)
 
 	}
 
-	setupRecrop() {
+	setupCrop() {
 		var {sd, td} = this
 
 		// clip-path applies to container, not the whole image (contentWidth can be larger than container).

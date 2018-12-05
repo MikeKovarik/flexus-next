@@ -3,6 +3,9 @@ import {ImageTransition} from './ImageTransition.js'
 import {cloneNode, highlight} from './util.js'
 
 
+// TODO: merge this with ViewTransition's z-index constants
+const ZINDEX_CLONE_OVERLAY = 105
+
 function addToWillChange(node, property) {
 	if (node.style.willChange.includes(property)) return
 	if (node.style.willChange)
@@ -129,9 +132,6 @@ export class Transition extends AnimationOrchestrator {
 	calculateTransformKeyframes(node, origin, pivot) {
 		var values  = this.calculateScale(node, origin, pivot)
 		var values2 = this.calculateTranslate(node, origin, pivot)
-		console.log('tranform values')
-		console.log(values)
-		console.log(values2)
 		values.translateX += values2.translateX
 		values.translateY += values2.translateY
 		var {translateX, translateY, scaleX, scaleY} = values
@@ -167,7 +167,6 @@ export class Transition extends AnimationOrchestrator {
 
 
 	clipTo(nodeToClip, pivot, start = 0, end = 1) {
-		console.log('clipTo()')
 		var nodeToClipBbox = nodeToClip.getBoundingClientRect()
 		var pivotBbox = pivot.getBoundingClientRect()
 		var parent = nodeToClip.offsetParent
@@ -198,7 +197,6 @@ export class Transition extends AnimationOrchestrator {
 	}
 
 	clipFrom(nodeToClip, pivot, start = 0, end = 1) {
-		console.log('clipTo()')
 		var nodeToClipBbox = nodeToClip.getBoundingClientRect()
 		var pivotBbox = pivot.getBoundingClientRect()
 		var parent = nodeToClip.offsetParent
@@ -273,6 +271,7 @@ export class Transition extends AnimationOrchestrator {
 		return
 		let {duration} = this
 		duration = 1000
+		var mode = 'clone'
 		var transition = new ImageTransition(source, target, {duration})
 		transition.play()
 	}
@@ -281,42 +280,40 @@ export class Transition extends AnimationOrchestrator {
 		var fromBbox = source.getBoundingClientRect()
 		var toBbox = target.getBoundingClientRect()
 
-		var fromComputed = window.getComputedStyle(source)
-		var toComputed = window.getComputedStyle(target)
-
 		var $clone = cloneNode(source)
 		Object.assign($clone.style, {
 			position: 'absolute',
-			zIndex: 105,
+			zIndex: ZINDEX_CLONE_OVERLAY,
 			top: fromBbox.top + 'px',
 			left: fromBbox.left + 'px',
 		})
 		document.body.appendChild($clone)
+		//this.newView.appendChild($clone)
 
 		source.style.visibility = 'hidden'
 		target.style.visibility = 'hidden'
 
-		var keyframes = {
-			transformOrigin: ['top left', 'top left'],
-			transform: [
-				`translate(0, 0)`,
-				`translate(${toBbox.left - fromBbox.left}px, ${toBbox.top - fromBbox.top}px)`,
-			],
-			color: [fromComputed.color, toComputed.color],
-			fontSize: [fromComputed.fontSize, toComputed.fontSize],
-			fontWeight: [fromComputed.fontWeight, toComputed.fontWeight],
-			letterSpacing: [fromComputed.letterSpacing, toComputed.letterSpacing],
-			//opacity: [0, 1],
-		}
+		var props = ['color', 'fontSize', 'fontWeight', 'letterSpacing', 'opacity']
+		var keyframes = this.calculateDiffKeyframes(source, target, props)
+		keyframes.transformOrigin = ['top left', 'top left']
+		var translateX = toBbox.left - fromBbox.left
+		var translateY = toBbox.top - fromBbox.top
+		keyframes.transform = [
+			`translate(0, 0)`,
+			`translate(${translateX}px, ${translateY}px)`,
+		]
+
+		// TODO: use this for distance based duration calculations
+		// e.g. the more pixels to travel, the more time it should animate.
+		//var distance = getTravelDistance(translateX, translateY)
 
 		source.style.visibility = 'hidden'
 		target.style.visibility = 'hidden'
 
 		this.schedule($clone, keyframes)
 
-		// TODO: better implement this
+		// TODO: implement this 
 		await this.finished
-		console.log('remove text node')
 		source.style.visibility = ''
 		target.style.visibility = ''
 		$clone.remove()
@@ -325,4 +322,8 @@ export class Transition extends AnimationOrchestrator {
 
 
 
+}
+
+function getTravelDistance(translateX, translateY) {
+	return Math.sqrt(Math.abs(translateX) ** 2 + Math.abs(translateY) ** 2)
 }

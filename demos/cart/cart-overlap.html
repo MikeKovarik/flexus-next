@@ -103,6 +103,7 @@
 
 
 
+		// TODO: simplify the class
 		class TransitionOverlap extends ViewTransition {
 
 			setup() {
@@ -118,14 +119,7 @@
 
 				this.createBackdrop()
 				this.createSheet()
-/*
-				this.baseView.style.zIndex = ZINDEX_BASEVIEW
-				this.backdrop.style.zIndex = ZINDEX_BACKDROP
-				this.sheet.style.zIndex    = ZINDEX_SHEET
-				//this.originBg.style.zIndex = ZINDEX_ORIGINBG
-				this.origin.style.zIndex   = ZINDEX_ORIGIN
-				this.newView.style.zIndex  = ZINDEX_NEWVIEW
-*/
+
 				this.aboveMain = this.baseView.querySelector(':scope > flexus-toolbar')
 							|| this.baseView.querySelector(':scope > flexus-tabs')
 
@@ -146,11 +140,6 @@
 						],
 					}, delay, 1)
 				}
-
-				//this.schedule(this.backdrop, {opacity: [0, 0.2]}, 0, 0.4)
-				this.fade(this.backdrop, 0, 0.2, 0, 0.4)
-
-				this.elevate(this.sheet, this.originComputed.boxShadow, 8, 0, 0.2)
 
 				if (this.allowScalingOrigin) {
 					var originTransformKeyframes = {
@@ -195,12 +184,13 @@
 					}
 				}
 
+				this.fade(this.backdrop, 0, 0.3, 0, 0.4)
+				this.elevate(this.sheet, this.originComputed.boxShadow, 8, 0, 0.2)
+
 				this.scheduleSheetResize(0.1, 1)
 				this.schedule(this.origin,  originTransformKeyframes, 0.1, 1)
 				this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
 
-				//this.schedule(this.origin,  {opacity: [1, 0]}, 0, 0.5)
-				//this.schedule(this.newView, {opacity: [0, 1]}, 0.3, 1)
 				this.fadeOut(this.origin, 0, 0.5)
 				this.fadeIn(this.newView, 0.3, 1)
 

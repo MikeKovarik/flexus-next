@@ -1,5 +1,4 @@
 import {Transition} from './Transition.js'
-import {ImageTransition} from './ImageTransition.js'
 
 
 const ZINDEX_BASEVIEW = 99
@@ -52,6 +51,10 @@ export class ViewTransition extends Transition {
 		if (this.origin) {
 			this.originBbox     = this.origin.getBoundingClientRect()
 			this.originComputed = window.getComputedStyle(this.origin)
+			// views usually have position:relative, other elements are custom made with
+			// position baked in, the only thing that needs position for z-index to work is origin
+			if (this.originComputed.position === 'static')
+				this.origin.style.position = 'relative'
 		}
 
 		this.originalZindexes = {
