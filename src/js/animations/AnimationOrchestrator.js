@@ -100,21 +100,10 @@ export class AnimationOrchestrator {
 	}
 
 	cancel() {
-		console.log('CANCEL')
 		while (this.animations.length) {
 			let animation = this.animations.pop()
 			animation.cancel()
 		}
 	}
-/*
-	cancel() {
-		console.log('orchestrator cancel()')
-		while (this.animations.length) {
-			let animation = this.animations.pop()
-			if (animation.playState === 'running')
-				animation.cancel()
-		}
-	}
-*/
 
 }
