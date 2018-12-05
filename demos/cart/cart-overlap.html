@@ -108,11 +108,7 @@
 
 			setup() {
 				super.setup()
-				console.log('TransitionOverlap SETUP')
-				console.log('this.originBbox', this.originBbox)
-				this.duration = 2000
-
-				console.log('this.origin', this.origin)
+				this.duration = 700
 
 				this.origin.style.willChange = 'transform, opacity'
 				this.calculateOrigin()

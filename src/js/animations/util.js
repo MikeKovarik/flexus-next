@@ -28,3 +28,14 @@ export function highlight(arg, color = 'red') {
 	document.body.append(div)
 	return div
 }
+
+var camelToKebabCaseMem = new Map
+export function camelToKebabCase(camel) {
+	if (camelToKebabCaseMem.has(camel))
+		return camelToKebabCaseMem.get(camel)
+	var kebab = camel
+		.replace(/([a-z])([A-Z])/g, '$1-$2')
+		.toLowerCase()
+	camelToKebabCaseMem.set(camel, kebab)
+	return kebab
+}

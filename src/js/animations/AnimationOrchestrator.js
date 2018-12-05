@@ -8,6 +8,14 @@ export function reverseKeyframes(keyframes) {
 		output[key] = values.slice(0).reverse()
 	return output
 }
+
+function sanitizeKeyframes(keyframes) {
+	// Ensure the values are always in pair. If not, create pair of the same start and end value.
+	for (let [key, values] of Object.entries(keyframes))
+		if (!Array.isArray(values)) keyframes[key] = [values, values]
+	return keyframes
+}
+
 /*
 export function reverseKeyframes(keyframes) {
 	var entries = Object
@@ -56,9 +64,7 @@ export class AnimationOrchestrator {
 	}
 
 	schedule(node, keyframes, start = 0, end = 1) {
-		// Ensure the values are always in pair. If not, create pair of the same start and end value.
-		for (let [key, values] of Object.entries(keyframes))
-			if (!Array.isArray(values)) keyframes[key] = [values, values]
+		keyframes = sanitizeKeyframes(keyframes)
 		this.requests.push({node, keyframes, start, end})
 	}
 

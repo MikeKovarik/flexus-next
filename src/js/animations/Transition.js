@@ -1,18 +1,10 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
 import {ImageTransition} from './ImageTransition.js'
-import {cloneNode, highlight} from './util.js'
+import {cloneNode, camelToKebabCase} from './util.js'
 
 
 // TODO: merge this with ViewTransition's z-index constants
 const ZINDEX_CLONE_OVERLAY = 105
-
-function addToWillChange(node, property) {
-	if (node.style.willChange.includes(property)) return
-	if (node.style.willChange)
-		node.style.willChange += ', ' + property
-	else
-		node.style.willChange = property
-}
 
 export class Transition extends AnimationOrchestrator {
 
@@ -38,6 +30,24 @@ export class Transition extends AnimationOrchestrator {
 				this.originSideX = originSideX
 				this.originSideY = originSideY
 		}
+	}
+
+	finalize(...args) {
+		// Read all keyframes and collect names of propeties we'll be animating.
+		// Assign these properties to 'will-change' which is necessary for performant
+		// and GPU accelerated animations.
+		// NOTE: will-change replaces having to use translate3d() instead of translate().
+		// TODO: check for computed values of 'will-change' (but not if it compromises performance)
+		for (let {node, keyframes} of this.requests) {
+			let willChange = node.style.willChange
+			for (let camelCase of Object.keys(keyframes)) {
+				let kebabCase = camelToKebabCase(camelCase)
+				if (willChange.includes(kebabCase)) continue
+				willChange = willChange ? `${willChange}, ${kebabCase}` : kebabCase
+			}
+			node.style.willChange = willChange
+		}
+		super.finalize(...args)
 	}
 
 	// PLAYBACK
@@ -100,13 +110,11 @@ export class Transition extends AnimationOrchestrator {
 	// NOTE: In the future we will be able to use {composite:'add'} to combine multiple
 	//       transform animations.
 	transformTo(node, origin, pivot = node, start = 0, end = 1) {
-		addToWillChange(node, 'transform')
 		var keyframes = this.calculateTransformKeyframes(node, origin, pivot)
 		this.schedule(node, keyframes, start, end)
 	}
 
 	transformFrom(node, origin, pivot = node, start = 0, end = 1) {
-		addToWillChange(node, 'transform')
 		var keyframes = this.calculateTransformKeyframes(node, origin, pivot)
 		keyframes = reverseKeyframes(keyframes)
 		this.schedule(node, keyframes, start, end)
@@ -116,7 +124,6 @@ export class Transition extends AnimationOrchestrator {
 		var values = this.calculateTranslate(node, origin, pivot)
 		var keyframes = getTransformKeyframes(values)
 		keyframes.transformOrigin = [this.transformOrigin, this.transformOrigin]
-		addToWillChange(node, 'transform')
 		this.schedule(node, keyframes, start, end)
 	}
 
@@ -124,7 +131,6 @@ export class Transition extends AnimationOrchestrator {
 		var values = this.calculateScale(node, origin, pivot)
 		var keyframes = getTransformKeyframes(values)
 		keyframes.transformOrigin = [this.transformOrigin, this.transformOrigin]
-		addToWillChange(node, 'transform')
 		this.schedule(node, keyframes, start, end)
 	}
 
@@ -193,7 +199,6 @@ export class Transition extends AnimationOrchestrator {
 		}
 
 		this.schedule(nodeToClip, keyframes, start, end)
-		addToWillChange(nodeToClip, 'clip-path')
 	}
 
 	clipFrom(nodeToClip, pivot, start = 0, end = 1) {
@@ -223,7 +228,6 @@ export class Transition extends AnimationOrchestrator {
 		}
 
 		this.schedule(nodeToClip, keyframes, start, end)
-		addToWillChange(nodeToClip, 'clip-path')
 	}
 
 

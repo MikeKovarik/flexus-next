@@ -24,7 +24,7 @@
 			margin-bottom: 8px;
 		}
 		.bgsection {
-			background-image: url('./img/longboard/medium/IMG_20180912_184044.jpg');
+			background-image: url('./img/longboard/medium/IMG_20180812_191249.jpg');
 			background-position: center;
 			background-size: cover;
 			padding-top: 16px;
@@ -86,19 +86,19 @@
 			<div class="row"></div>
 			<div class="row">
 				<div class="event" tinted primary="blue" transition-part="event-header">
-					<span transition-part="event-name">Concert</span>
+					<span transition-part="event-name">Koncert</span>
 				</div>
 				<div class="event" tinted primary="pink" transition-part="event-header">
-					<span transition-part="event-name">Seminar</span>
+					<span transition-part="event-name">Seminář 1</span>
 				</div>
 			</div>
 			<div class="row"></div>
 			<div class="row">
 				<div class="event" tinted primary="pink" transition-part="event-header">
-					<span transition-part="event-name">Seminar</span>
+					<span transition-part="event-name">Seminář 2</span>
 				</div>
 				<div class="event" tinted primary="purple" transition-part="event-header">
-					<span transition-part="event-name">Workshop with a very long name TODO</span>
+					<span transition-part="event-name">Workshop 2</span>
 				</div>
 			</div>
 			<div class="row"></div>
@@ -161,9 +161,11 @@
 				super.setup()
 				this.duration = 600
 				this.transformFrom(newView, this.origin, this.pivot, 0, 1)
+				this.transformTo(this.origin, this.pivot)
 				this.clipFrom(newView, this.pivot, 0.3, 1)
 				this.fadeIn(newView, 0.3, 0.6)
-				this.transitionSheet(this.origin, this.pivot)
+				//this.transitionSheet(this.origin, this.pivot)
+				//this.schedule(this.origin, {visibility: 'hidden'})
 			}
 		}
 
