@@ -12,6 +12,9 @@ The examples are written more or less ugly, with a lot of inline styles and !imp
 
 ## Demos
 
+
+<img align="right" src="https://raw.githubusercontent.com/MikeKovarik/resume/master/flexus-animations.gif" width="300">
+
 There are some great demos, though not finished yet.
 
 NOTE: these demos aren't responsive yet and they don't scale well! They exist to showcase animations or to recreate certain existing app or concept. Plus the framework is still in development.
