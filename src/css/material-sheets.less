@@ -42,39 +42,38 @@
 	--seam-opacity: 0.12;
 }
 
-hr {
-	background-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+hr,
+[seamed] {
+	//--seam-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+	--seam-color: rgba(var(--fg), var(--seam-opacity));
+	--seam: var(--seam-size, 1px) solid var(--seam-color);
 }
 
-[seamed] {
-	--seam-temp: 1px solid rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+hr {
+	background-color: var(--seam-color);
 }
 
 [seamed=""] {
-/* [seamed] outline is gray - translucent global foreground color */
-	border-width: var(--seam-size, 1px);
-	border-style: solid;
-	border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
-
+	border: var(--seam);
 	// The !important isn't there due to poor selectors but
 	// to prevent any :hover, :active, :focused elevated shadows
 	box-shadow: none !important;
 }
 
-[seamed="right"], [seamed=""][left]   {border-right:  var(--seam-temp)}
-[seamed="left"],  [seamed=""][right]  {border-left:   var(--seam-temp)}
-[seamed="bottom"],[seamed=""][top]    {border-bottom: var(--seam-temp)}
-[seamed="top"],   [seamed=""][bottom] {border-top:    var(--seam-temp)}
+[seamed="right"], [seamed=""][left]   {border-right:  var(--seam)}
+[seamed="left"],  [seamed=""][right]  {border-left:   var(--seam)}
+[seamed="bottom"],[seamed=""][top]    {border-bottom: var(--seam)}
+[seamed="top"],   [seamed=""][bottom] {border-top:    var(--seam)}
 
 [seamed="between"] {
 	& + & {
-		border-top: var(--seam-temp);
+		border-top: var(--seam);
 	}
 }
 
 [seamed="around"] {
-	border-top: var(--seam-temp);
+	border-top: var(--seam);
 	&:last-of-type {
-		border-bottom: var(--seam-temp);
+		border-bottom: var(--seam);
 	}
 }

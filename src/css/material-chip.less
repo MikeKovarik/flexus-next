@@ -11,6 +11,22 @@
 	--chip-avatar-margin: 2px;
 }
 
+// WARNING: THIS IS A HACKY HOTFIX.
+// TODO: IMPLEMENT THE HOVER/FOCUS AND SEAMED/TRANSPARENTP/RAISED OTHER STATES PROPERLY.
+
+[chip]:not([seamed]):not([transparent]):not([raised]) {
+	//--bg: 0,0,0;
+	--bg-opacity: 0.1;
+}
+[chip][raised] {
+	box-shadow: var(--elevation-1);
+}
+[chip][seamed],
+[chip][transparent] {
+	--bg-opacity: 0;
+}
+
+
 
 [chip] {
 	--size: var(--chip-size);
@@ -39,10 +55,12 @@
 		margin-left: calc(-1 * (var(--chip-padding) - var(--chip-avatar-margin)));
 	}
 	&[icon]::before,
+	icon:first-child,
 	[icon]:first-child {
 		margin-right: calc(2 * var(--chip-avatar-margin));
 		margin-left: -4px;
 	}
+	icon:last-child:not(:only-child),
 	[icon]:last-child:not(:only-child) {
 		margin-left: calc(2 * var(--chip-avatar-margin));
 		margin-right: -4px;
@@ -72,12 +90,8 @@
 		--local-bg-base-opacity: 0.08;
 	}
 
-	&[seamed] {
-		--local-fg-opacity: 0.6;
-		--local-bg-base-opacity: 0;
-		border: 1px solid rgba(var(--fg), 0.12);
-	}
 
+	// global [seamed] is applicable here.
 
 }
 
