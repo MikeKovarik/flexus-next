@@ -31,6 +31,16 @@ i[icon],
 	//line-height: var(--size, var(--icon-size));
 }
 
+// EXPERIMENTAL
+icon,
+i[icon] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	// in place for [flat] and [seamed]
+	border-radius: 50%;
+}
+
 [icon="more"] {
 	&::before {
 		width:       calc(var(--icon-size) * 0.5);
