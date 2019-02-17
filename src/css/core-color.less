@@ -180,6 +180,7 @@ and even icon and ink pseudo elements
 .createcolor(teal,   ~'3, 218, 197',   ~'255, 255, 255');
 .createcolor(green,  ~'80, 170, 20',   ~'255, 255, 255');
 //.createcolor(green,  ~'139, 195, 74',  ~'255, 255, 255');
+.createcolor(orange,  ~'235, 160, 40',  ~'0, 0, 0'); // TOOD improve this color
 
 :root,
 [primary],
@@ -209,6 +210,7 @@ and even icon and ink pseudo elements
 		--tint-bg: @bg;
 		--tint-fg: @fg;
 		--tint: var(--tint-bg);
+		--fg: var(--tint-bg);
 	}
 }
 
