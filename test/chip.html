@@ -14,23 +14,12 @@
 		div[avatar] {
 			background-image: url('./img/coulson.jpg');
 		}
-		:root {
-			--tint-rgb: 98, 0, 238;
-			--tint-foreground-rgb: 255, 255, 255;
-		}
 	</style>
 
 </head>
 <body>
 
-	<template name="avatar" variants-col="circle rounded square">
-		<div avatar></div>
-		<img avatar src="./img/coulson.jpg"></div>
-		<div avatar small></div>
-		<img avatar small src="./img/coulson.jpg"></div>
-	</template>
-
-	<template name="chip" variants-row="seamed" variants-col="small">
+	<template name="chip" variants-row="seamed flat raised" variants-col="small">
 
 		<div chip>Default</div>
 
@@ -38,8 +27,6 @@
 			<div avatar></div>
 			Coulson
 		</div>
-
-		<div chip icon="place">Brno</div>
 
 		<br>
 
@@ -51,8 +38,24 @@
 		<div chip>
 			<div avatar></div>
 			<span>Coulson</span>
-			<i icon="remove_circle"></i>
+			<icon>remove_circle</icon>
 		</div>
+
+		<br>
+
+		<div chip>
+			<icon>place</icon>
+			Normal
+		</div>
+
+		<div chip>
+			<icon tinted>place</icon>
+			Tinted
+		</div>
+
+		<br>
+
+		<div chip icon="place">Brno</div>
 
 		<div chip>
 			<i icon="place"></i>
@@ -62,9 +65,13 @@
 
 		<br>
 
+		<div chip tinted>tinted</div>
 		<div chip primary>primary</div>
 		<div chip accent>accent</div>
-		<div chip tinted>tinted</div>
+
+		<br>
+
+		<div chip hoverable>hoverable</div>
 
 		<br>
 

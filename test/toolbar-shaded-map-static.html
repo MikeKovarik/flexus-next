@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,initial-scale=1,user-scalable=yes"/>
+	<link rel="stylesheet" href="../css/flexus-material.css">
+	<style>
+	:root {
+		--tint-bg: 0, 76, 230;
+	}
+	body {
+		background-color: #EEE;
+	}
+	.toolbar {
+		box-shadow: inset 0 50px 40px -30px rgba(0,0,0,0.2);
+		padding: 8px;
+		overflow: hidden;
+	}
+	.toolbar button {
+		--icon-size: 24px;
+	}
+	</style>
+</head>
+<body>
+
+	<flexus-view>
+
+		<div class="toolbar">
+			<button seamed neutral icon="menu"></button>
+			<button seamed neutral icon="search"></button>
+			<input seamed round type="text">
+			<button seamed neutral icon="sort"></button>
+			<button seamed neutral icon="tag"></button>
+		</div>
+
+		<br><br>
+
+		<div class="toolbar">
+			<button flat neutral icon="menu"></button>
+			<button flat neutral icon="search"></button>
+			<input flat no-bar round type="text">
+			<button flat neutral icon="sort"></button>
+			<button flat neutral icon="tag"></button>
+		</div>
+
+	</flexus-view>
+
+	<script>
+	</script>
+
+</body>
+</html>

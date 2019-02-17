@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Materials and states</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+	<style>
+		span[avatar],
+		div[avatar] {
+			background-image: url('./img/coulson.jpg');
+		}
+		:root {
+			--tint-bg: 246, 107, 130;
+			--tint-fg: 255, 255, 255;
+		}
+	</style>
+
+</head>
+<body>
+
+
+	<template name="materials" variants-row="seamed flat raised transparent" variants-col="small">
+
+		<!-- multiple ways to create plain icon -->
+		<icon>directions_bike</icon>
+		<i icon="directions_bike"></i>
+		<span icon="directions_bike"></span>
+
+		<br>
+
+		<span chip icon="directions_bike"></span>
+		<span chip icon="directions_bike">Kolo</span>
+		<span chip>Kolo</span>
+
+		<br>
+
+		<button icon="directions_bike"></button>
+		<button icon="directions_bike">Kolo</button>
+		<button>Kolo</button>
+
+	</template>
+
+
+	<template name="states" variants-row="disabled selected activated" variants-col="small">
+
+		<span chip>default</span>
+		<span chip primary>primary</span>
+		<span chip accent>accent</span>
+		<span chip tinted>tinted</span>
+
+		<br>
+
+		<div chip>default</div>
+		<div chip primary>primary</div>
+		<div chip accent>accent</div>
+		<div chip tinted>tinted</div>
+
+		<br>
+
+		<span chip red>red</span>
+		<span chip green>green</span>
+		<span chip blue>blue</span>
+
+		<br>
+
+		<div chip red>red</div>
+		<div chip green>green</div>
+		<div chip blue>blue</div>
+
+	</template>
+
+
+	<div class="testbed">
+		<div light></div>
+		<div dark></div>
+	</div>
+
+	<script src="./util/testbed.js"></script>
+
+</body>
+</html>

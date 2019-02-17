@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,initial-scale=1,user-scalable=yes"/>
+	<link rel="stylesheet" href="../css/flexus-material.css">
+	<style>
+	:root {
+		--tint-bg: 0, 76, 230;
+	}
+	body {
+		background-color: #EEE;
+	}
+
+
+	.toolbar,
+	flexus-toolbar {
+		transition-duration: 350ms;
+		transition-property: box-shadow, background;
+	}
+	.toolbar[elevation]:not([elevation="0"]),
+	flexus-toolbar[elevation]:not([elevation="0"]) {
+		background-color: rgba(255,255,255,1);
+	}
+
+	flexus-toolbar button,
+	.toolbar button {
+		--icon-size: 24px;
+		width: 36px !important;
+		height: 36px !important;
+		transition-duration: 120ms;
+		transition-property: background;
+	}
+
+	[shaded] {
+		box-shadow: var(--elevation-0), inset 0 50px 40px -30px rgba(0,0,0,0.2);
+		overflow: hidden;
+	}
+	flexus-toolbar[shaded] {
+		box-shadow: var(--elevation-0), inset 0 50px 40px -30px rgba(0,0,0,0.2) !important;
+	}
+
+	.toolbar {
+		display: flex;
+		padding: 8px;
+	}
+	</style>
+</head>
+<body>
+
+	<script>
+	var $ = document.querySelector.bind(document)
+	var $$ = selector => Array.from(document.querySelectorAll(selector))
+	</script>
+
+
+	<flexus-view>
+
+		<div class="toolbar" shaded>
+			<button flat neutral icon="menu"></button>
+			<button flat neutral icon="search"></button>
+			<input flat no-bar round type="text">
+			<button flat neutral icon="sort"></button>
+			<button flat neutral icon="tag"></button>
+			<div flex></div>
+			<button flat neutral icon="more"></button>
+		</div>
+
+		<script>
+			var $input = $('input')
+			var $button = $('[icon="search"]')
+			var otherButton1 = $('[icon="sort"]')
+			var otherButton2 = $('[icon="tag"]')
+
+			var animationOptions = {
+				duration: 60,
+				easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+			}
+
+			function showInput() {
+				$input.style.display = ''
+				$button.style.display = 'none'
+				$input.focus()
+				var keyframes = {
+					transform: ['translateX(-30px)', 'translateX(0px)']
+				}
+				otherButton1.animate(keyframes, animationOptions)
+				otherButton2.animate(keyframes, animationOptions)
+			}
+
+			function hideInput() {
+				$input.style.display = 'none'
+				$button.style.display = ''
+				$input.value = ''
+				var keyframes = {
+					transform: ['translateX(30px)', 'translateX(0px)']
+				}
+				otherButton1.animate(keyframes, animationOptions)
+				otherButton2.animate(keyframes, animationOptions)
+			}
+			$button.addEventListener('click', showInput)
+			$input.addEventListener('blur', hideInput)
+			hideInput()
+		</script>
+
+		<p>clicking ^ search button opens search input</p>
+		<br>
+		<p>interactive</p>
+		<br>
+
+		<p>flexus-toolbar (default)</p>
+		<flexus-toolbar>
+			<button flat neutral icon="menu"></button>
+			<button flat neutral icon="search"></button>
+			<input flat no-bar round type="text">
+			<button flat neutral icon="sort"></button>
+			<button flat neutral icon="tag"></button>
+			<div flex></div>
+			<button flat neutral icon="more"></button>
+		</flexus-toolbar>
+
+		<br><br>
+
+		<p>flexus-toolbar[elevation="0"][transparent][shaded] (doesnt really work)</p>
+		<flexus-toolbar elevation="0" transparent shaded>
+			<button flat neutral icon="menu"></button>
+			<button flat neutral icon="search"></button>
+			<input flat no-bar round type="text">
+			<button flat neutral icon="sort"></button>
+			<button flat neutral icon="tag"></button>
+			<div flex></div>
+			<button flat neutral icon="more"></button>
+		</flexus-toolbar>
+
+		<br><br>
+
+		<p>div (flexus-toolbar should eventually look like this)</p>
+		<div class="toolbar" shaded id="shaded-elevated">
+			<button flat neutral icon="menu"></button>
+			<button flat neutral icon="search"></button>
+			<input flat no-bar round type="text">
+			<button flat neutral icon="sort"></button>
+			<button flat neutral icon="tag"></button>
+			<div flex></div>
+			<button flat neutral icon="more"></button>
+		</div>
+
+		<br><br>
+
+		<div>
+			<button id="shaded-elevated-elevate">elevated</button>
+			<button id="shaded-elevated-shade">shaded</button>
+		</div>
+
+		<script>
+		$('#shaded-elevated-elevate').addEventListener('click', e => {
+			var toolbar = $('#shaded-elevated')
+			var toolbarButtons = $$('#shaded-elevated button')
+			toolbar.setAttribute('elevation', '2')
+			toolbar.removeAttribute('shaded', '')
+			for (let button of toolbarButtons)
+				button.removeAttribute('flat')
+
+		})
+		$('#shaded-elevated-shade').addEventListener('click', e => {
+			var toolbar = $('#shaded-elevated')
+			var toolbarButtons = $$('#shaded-elevated button')
+			toolbar.removeAttribute('elevation')
+			toolbar.setAttribute('shaded', '')
+			for (let button of toolbarButtons)
+				button.setAttribute('flat', '')
+		})
+		</script>
+
+		<br><br>
+
+		<flexus-toolbar elevation="0" transparent>
+			<button seamed neutral icon="menu"></button>
+			<button seamed neutral icon="search"></button>
+			<input seamed no-bar round type="text">
+			<button seamed neutral icon="sort"></button>
+			<button seamed neutral icon="tag"></button>
+			<div flex></div>
+			<button flat neutral icon="more"></button>
+		</flexus-toolbar>
+
+	</flexus-view>
+
+
+</body>
+</html>
