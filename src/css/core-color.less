@@ -1,7 +1,32 @@
+/*
 html, body {
 	// recalculate colors (--background-default to --background)
 	.reset-colors();
 	.apply-colors();
+}
+*/
+// Wherever [theme] is, the element and all children are to inherit the color,
+// background and base colors for all effects (hover, ripple, etc..).
+// We also apply this on :root because of dynamic theme detection @media (prefers-color-scheme).
+// We don't want to call (i.e. copy-paste the code) all the mixins within the two @media scopes.
+:root,
+[theme] {
+	.reset-colors();
+	//.apply-colors();
+	.apply-foreground();
+	.apply-backdrop();
+}
+
+// Mixin. Generates [theme="light"] and @media for dark-mode detection.
+.theme(@theme, @rules) {
+	[theme="@{theme}"] {
+		@rules();
+	}
+	@media screen and (prefers-color-scheme: @theme) {
+		:root {
+			@rules();
+		}
+	}
 }
 
 /*
@@ -34,19 +59,26 @@ and even icon and ink pseudo elements
 
 */
 
+
+
+// this will make :root inherit from all the [theme="light"] definitions throughout the source code. 
+:root {
+	&:extend([theme="light"] all);
+}
+// Makes [theme="white"] inherit from [theme="light"]
 [theme="white"] {
-	&:extend([theme]);
-	--theme-base-bg: 255, 255, 255;
-	--theme-base-fg: 0, 0, 0;
-	--theme-todobackdrop-bg: 255, 255, 255;
-	--theme-todobackdrop-fg: 0, 0, 0;
-	--theme-sheet-bg: 255, 255, 255;
-	--theme-sheet-fg: 0, 0, 0;
+	&:extend([theme="light"]);
+}
+// Makes [theme="black"] inherit from [theme="dark"]
+[theme="black"] {
+	&:extend([theme="dark"]);
 }
 
-:root,
-[theme="light"] {
-	&:extend([theme]);
+// WARNING: do not reorder. LIGHT has to be defined before WHITE, because WHITE inherits from LIGHT
+// and overrides some of the inherited colors. Same goes for DARK/BLACK.
+
+.theme(light, {
+	//&:extend([theme]);
 	--theme-base-bg: 255, 255, 255;
 	--theme-base-fg: 0, 0, 0;
 	// view background
@@ -55,40 +87,48 @@ and even icon and ink pseudo elements
 	// card
 	--theme-sheet-bg: 255, 255, 255;
 	--theme-sheet-fg: 0, 0, 0;
+});
+
+[theme="white"] {
+	//&:extend([theme]);
+	//--theme-base-bg: 255, 255, 255;
+	//--theme-base-fg: 0, 0, 0;
+	// view background
+	--theme-todobackdrop-bg: 255, 255, 255;
+	--theme-todobackdrop-fg: 0, 0, 0;
+	// card
+	--theme-sheet-bg: 255, 255, 255;
+	--theme-sheet-fg: 0, 0, 0;
 }
 
-[theme="black"] {
-	&:extend([theme]);
-	--theme-base-bg: 0, 0, 0;
-	--theme-base-fg: 255, 255, 255;
-	--theme-todobackdrop-bg: 0, 0, 0;
-	--theme-todobackdrop-fg: 255, 255, 255;
-	--theme-sheet-bg: 0, 0, 0;
-	--theme-sheet-fg: 255, 255, 255;
-}
-
-[theme="dark"] {
-	&:extend([theme]);
+.theme(dark, {
+	//&:extend([theme]);
 	// absolute black-white values used in ink ripple, reveal effects, hover states, etc... 
 	--theme-base-bg: 0, 0, 0;
 	--theme-base-fg: 255, 255, 255;
-	// actual colors of the backgrounds of the elements.
+	// view background / actual colors of the backgrounds of the elements.
 	--theme-todobackdrop-bg: 16, 16, 16;
 	--theme-todobackdrop-fg: 255, 255, 255;
-	
+	// card
 	--theme-sheet-bg: 32, 32, 32;
 	--theme-sheet-fg: 255, 255, 255;
 	//--theme-sheet-bg: 20, 20, 20; // where are these from?
 	//--theme-sheet-fg: 255, 255, 255; // where are these from?
+});
+
+[theme="black"] {
+	//&:extend([theme]);
+	//--theme-base-bg: 0, 0, 0;
+	//--theme-base-fg: 255, 255, 255;
+	// view background
+	--theme-todobackdrop-bg: 0, 0, 0;
+	--theme-todobackdrop-fg: 255, 255, 255;
+	// card
+	--theme-sheet-bg: 0, 0, 0;
+	--theme-sheet-fg: 255, 255, 255;
 }
 
 
-[theme] {
-	.reset-colors();
-	//.apply-colors();
-	.apply-foreground();
-	.apply-backdrop();
-}
 
 //.reset-theme-colors() {
 .reset-colors() {

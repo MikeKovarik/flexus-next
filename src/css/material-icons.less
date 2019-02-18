@@ -1,3 +1,20 @@
+:root {
+	--icon-size: 24px;
+	--icon-opacity: var(--icon-opacity-normal);
+}
+// https://material.io/design/iconography/system-icons.html#color
+[theme="light"] {
+	--icon-opacity-active:   0.87;
+	--icon-opacity-normal:   0.54;
+	--icon-opacity-inactive: 0.38;
+}
+[theme="dark"] {
+	--icon-opacity-active:   0.100;
+	--icon-opacity-normal:   0.70;
+	--icon-opacity-inactive: 0.50;
+}
+
+
 //@import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @font-face {
 	font-family: 'Material Icons';
@@ -7,8 +24,8 @@
 }
 
 // MOVE this to core
+//i[icon],
 icon,
-i[icon],
 [icon]::before {
 	font-family: 'Material Icons', Roboto;
     font-feature-settings: 'liga';
@@ -18,8 +35,8 @@ i[icon],
 	font-weight: normal;
 	font-style: normal;
 	letter-spacing: normal;
-	white-space: nowrap;
-	word-wrap: normal;
+	dark-space: nowrap;
+	black-wrap: normal;
 	//vertical-align: middle;
 	width:       var(--icon-size);
 	height:      var(--icon-size);
