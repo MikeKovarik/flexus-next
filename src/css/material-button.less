@@ -237,15 +237,18 @@ button[fab] {
 @input: ~'input:not([type="checkbox"]):not([type="radio"])';
 
 
+@{button},
+@{input},
+select {
+	border-radius: 4px;
+}
 
 @{button} {
-	//--padding-horizontal: 16px;
 	--padding-horizontal: calc((var(--size) - 4px) / 2);
 }
 
 input,
 select {
-	//--padding-horizontal: 8px;
 	--padding-horizontal: calc(var(--size) / 3);
 }
 
@@ -393,9 +396,6 @@ button[tinted]:not([seamed]):not([flat]) {
 input[elevated],
 select[elevated] {
 
-	border-radius: 4px; // TODO: FIXME: 4px radius
-	//--bg-base-opacity: 1; // TODO: delete, moved to materials file
-
 	transition-duration: 150ms;
 	transition-timing-function: var(--bezier-curve);
 	transition-property: box-shadow;
@@ -444,12 +444,6 @@ select[elevated] {
 
 @{input} {
 
-	// CONTEXT: [round] makes the input fully circular on the sides (radius increases with height)
-	// CONTEXT: [rounded] only makes the input slightly rounded (about 8-12px)
-	// input[rounded] still has the bottom bar.
-	// input[round] does not have the bottom bar.
-	// input[seamed] disables the bottom bar altogether since the border is effectively all around.
-
 	&::placeholder {
 		color: inherit;
 		opacity: 0.4;
@@ -457,7 +451,6 @@ select[elevated] {
 
 	// plain old materila design v1 styled transparent with only bottom bar.
 	&[plain],
-	&[flat],
 	&:not([seamed]):not([flat]):not([elevated]) {
 		border-style: solid;
 		//border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
@@ -475,25 +468,17 @@ select[elevated] {
 		&:focus {
 			--seam-size: 2px;
 		}
-	}
-	&[plain],
-	&:not([seamed]):not([flat]):not([elevated]) {
+
 		padding-left: 0;
 		padding-right: 0;
 		text-indent: 0;
-		border-radius: none !important;
+		border-radius: 0 !important;
+		--radius: 0;
 	}
 
 	&[plain],
 	&[no-bar] {
 		--seam-size: 0px !important;
-	}
-	// Only [flat] and the default input with no attributes has forced
-	// (material design v1 style - transparent bg, bottom bar)
-	&:not([seamed]):not([elevated])/*:not([round])*/:not([no-bar]) {
-		// !important to override [rounded]
-		border-bottom-left-radius: 0 !important;
-		border-bottom-right-radius: 0 !important;
 	}
 
 }
