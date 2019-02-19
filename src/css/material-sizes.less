@@ -1,0 +1,51 @@
+// TODO: resolve the --size, --core-size, --input-height, --icon-size mess
+// and standardize the sizing into all components
+
+:root {
+	--icon-size: 24px;
+}
+[dense],
+[mouse][optimized] {
+	// https://material.io/design/iconography/system-icons.html#grid-keyline-shapes
+	--icon-size: 20px;
+}
+
+// presets
+[micro]	{--core-size: 18px;}
+[mini]	{--core-size: 26px;} // small size of chips
+[small]	{--core-size: 32px;} // default size of chips, good fit for small buttons
+:root	{--core-size: 36px;} // default size of buttons
+[tall]	{--core-size: 40px;}
+[big]	{--core-size: 48px;}
+[giant]	{--core-size: 56px;}
+
+[size="18"]:not([icon]) {--core-size: 18px;}
+[size="20"]:not([icon]) {--core-size: 20px;}
+[size="24"]:not([icon]) {--core-size: 24px;}
+[size="28"]:not([icon]) {--core-size: 28px;}
+[size="32"]:not([icon]) {--core-size: 32px;}
+[size="36"]:not([icon]) {--core-size: 36px;}
+[size="40"]:not([icon]) {--core-size: 40px;}
+[size="44"]:not([icon]) {--core-size: 44px;}
+[size="48"]:not([icon]) {--core-size: 48px;}
+
+// global sizing for inputs
+[condensed]	{--input-height: 26px;}
+[dense]		{--input-height: 32px;}
+
+// apply global sizing to inputs
+[micro],
+[mini],
+[small],
+[tall],
+[big],
+[giant] {
+	--input-height: var(--core-size);
+}
+
+[size]:not([icon]) {
+	--size: var(--core-size);
+}
+[size][icon] {
+	--icon-size: var(--core-size);
+}

@@ -19,20 +19,23 @@
 </head>
 <body>
 
-	<template name="chip" variants-row="seamed flat raised" variants-col="small">
+	<template name="chip" variants-row="seamed flat elevated" variants-col="mini">
 
 		<div chip>Default</div>
 
 		<div chip>
-			<div avatar></div>
-			Coulson
+			<span>Default</span>
+			<i icon="remove_circle"></i>
 		</div>
+
+		<span chip icon="place"></span>
+		<icon chip>place</icon>
 
 		<br>
 
 		<div chip>
-			<span>Default</span>
-			<i icon="remove_circle"></i>
+			<div avatar></div>
+			Coulson
 		</div>
 
 		<div chip>
@@ -45,12 +48,12 @@
 
 		<div chip>
 			<icon>place</icon>
-			Normal
+			Normal icon
 		</div>
 
 		<div chip>
 			<icon tinted>place</icon>
-			Tinted
+			Tinted icon
 		</div>
 
 		<br>
@@ -65,14 +68,12 @@
 
 		<br>
 
-		<div chip tinted>tinted</div>
-		<div chip primary>primary</div>
-		<div chip accent>accent</div>
+		<div chip icon="add">Chip</div>
+		<button small round icon="add">Button</button>
 
-		<br>
-
+<!--
 		<div chip hoverable>hoverable</div>
-
+-->
 		<br>
 
 		<div chip disabled>disabled</div>
@@ -81,6 +82,7 @@
 
 		<br>
 
+		<div chip tinted>tinted</div>
 		<div chip red>red</div>
 		<div chip green>green</div>
 		<div chip blue>blue</div>
