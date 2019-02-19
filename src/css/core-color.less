@@ -173,6 +173,11 @@ and even icon and ink pseudo elements
 	.apply-foreground();
 }
 
+[tinted] {
+	--fg-opacity: 1;
+	--fg: var(--tint-bg);
+	--seam-color: var(--tint-bg);
+}
 
 
 [scope-theme-colors] {
@@ -250,7 +255,9 @@ and even icon and ink pseudo elements
 		--tint-bg: @bg;
 		--tint-fg: @fg;
 		--tint: var(--tint-bg);
-		--fg: var(--tint-bg);
+		//--fg: var(--tint-bg);
+		//--icon-opacity: 1;
+		&:extend([apply-tinted-foreground]);
 	}
 }
 
@@ -292,12 +299,19 @@ and even icon and ink pseudo elements
 [apply-tinted-foreground] {
 	--fg: var(--tint-bg, var(--theme-tint-bg));
 	color: rgb(var(--fg));
+	--icon-opacity: 1;
 }
 
 [apply-tinted-background] {
 	--bg: var(--tint-bg, var(--theme-tint-bg));
 	background-color: rgb(var(--bg));
 }
+
+/*
+[foreground] {
+	--icon-opacity: 1;
+}
+*/
 
 
 [card],

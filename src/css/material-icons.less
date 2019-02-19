@@ -35,13 +35,20 @@ icon,
 	font-weight: normal;
 	font-style: normal;
 	letter-spacing: normal;
-	dark-space: nowrap;
-	black-wrap: normal;
 	//vertical-align: middle;
 	width:       var(--icon-size);
 	height:      var(--icon-size);
-	font-size:   var(--icon-size);
 	line-height: var(--icon-size);
+	font-size:   var(--icon-size) !important;
+
+	color: rgba(var(--fg), var(--icon-opacity)) !important;
+	&:not([disabled]):not(:disabled) {
+		&:hover {
+			--icon-opacity: var(--icon-opacity-active);
+		}
+	}
+
+	//--icon-opacity: var(--icon-opacity-normal);
 	//width:       var(--size, var(--icon-size));
 	//height:      var(--size, var(--icon-size));
 	//font-size:   var(--size, var(--icon-size));
@@ -50,7 +57,7 @@ icon,
 
 // EXPERIMENTAL
 icon,
-i[icon] {
+[icon]:empty {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
