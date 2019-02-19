@@ -41,56 +41,6 @@
 }
 
 
-
-:root {
-	--icon-size: 24px;
-}
-[dense],
-[mouse][optimized] {
-	// https://material.io/design/iconography/system-icons.html#grid-keyline-shapes
-	--icon-size: 20px;
-}
-
-[mini],
-[size="24"] {--input-height: 24px;}
-[condensed],
-[size="28"] {--input-height: 28px;}
-[dense],
-[small],
-[size="32"] {--input-height: 32px;}
-:root,
-[size="36"] {--input-height: 36px;}
-[tall],
-[size="40"] {--input-height: 40px;}
-[big],
-[size="48"] {--input-height: 48px;}
-[giant],
-[size="56"] {--input-height: 56px;}
-
-
-
-
-[size="18"]:not([icon]) {--size: 18px;}
-[size="20"]:not([icon]) {--size: 20px;}
-[size="24"]:not([icon]) {--size: 24px;}
-[size="28"]:not([icon]) {--size: 28px;}
-[size="32"]:not([icon]) {--size: 32px;}
-[size="36"]:not([icon]) {--size: 36px;}
-[size="40"]:not([icon]) {--size: 40px;}
-[size="44"]:not([icon]) {--size: 44px;}
-[size="48"]:not([icon]) {--size: 48px;}
-
-[size="18"][icon] {--icon-size: 18px;}
-[size="20"][icon] {--icon-size: 20px;}
-[size="24"][icon] {--icon-size: 24px;}
-[size="28"][icon] {--icon-size: 28px;}
-[size="32"][icon] {--icon-size: 32px;}
-[size="36"][icon] {--icon-size: 36px;}
-[size="40"][icon] {--icon-size: 40px;}
-[size="44"][icon] {--icon-size: 44px;}
-[size="48"][icon] {--icon-size: 48px;}
-
-
 /*
 button {
 	outline: 1px solid red !important;
@@ -122,17 +72,21 @@ button {
 			box-shadow: none !important;
 		}
 
+/*
 		&::before {
 			transition: opacity 150ms var(--bezier-curve);
 			opacity: 0.54;
 		}
+*/
 	}
 
+/*
 	&:not([disabled]):not(:disabled) {
 		&[icon]:hover::before {
 			opacity: 0.87;
 		}
 	}
+*/
 
 	--internal-gutter-todo-rename: 8px;
 	&[icon]:not(:empty) {
@@ -140,17 +94,8 @@ button {
 		--padding-left: calc((var(--size, 0px) - 12px) / 2);
 
 		&:not([vertical])::before {
-			margin-right: 8px;
+			margin-right: var(--internal-gutter-todo-rename);
 		}
-		// Creates 8px space between icon and text.
-		/*
-		&:not([vertical]) {
-			text-indent: var(--internal-gutter-todo-rename);
-			&::before {
-				text-indent: 0px;
-			}
-		}
-		*/
 		&[vertical]::before {
 			margin-bottom: var(--internal-gutter-todo-rename);
 		}
@@ -283,11 +228,6 @@ button[fab] {
 }
 
 
-[transparent] {
-	--bg-opacity: 0;
-}
-
-
 
 
 // pedantic
@@ -346,33 +286,12 @@ select {
 		color: rgb(--theme-fg);
 	}
 
-	&[seamed] {
-		--seam-size: 1px;
-	}
 	[touch] &:active,
 	[touch] &:focus {
 		--seam-size: 2px;
 	}
-	&[elevated] {
-		--seam-size: 0px;
-	}
+
 }
-/*
-@{button},
-select {
-	padding-top:    calc(var(--padding-top,    var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-right:  calc(var(--padding-right,  var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-bottom: calc(var(--padding-bottom, var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-left:   calc(var(--padding-left,   var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
-}
-@{input} {
-	padding-top:    calc(var(--padding-top,    var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-right:  calc(var(--padding-right,  var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-bottom: calc(var(--padding-bottom, var(--padding-vertical,   var(--padding, 0px))) - var(--seam-size, 0px));
-	text-indent:    calc(var(--padding-left,   var(--padding-horizontal, var(--padding, 0px))) - var(--seam-size, 0px));
-	padding-left:   0;
-}
-*/
 
 @{input},
 @{button},
@@ -433,11 +352,11 @@ select {
 input,
 select {
 	--fg-opacity: 1;
-
+/*
 	// to be overwritten
 	--bg: var(--theme-bg);
 	--fg: var(--theme-fg);
-
+*/
 	--seam-color: var(--theme-base-fg);
 	&:not([neutral]) {
 		&:active,
@@ -445,27 +364,14 @@ select {
 			--seam-color: var(--tint-bg);
 		}
 	}
-	&[tinted] {
-		--fg: var(--tint-bg);
-		--seam-color: var(--tint-bg);
-		// !important is here to override :hover which sets it to something like 0.3 (from 0.18) or so.
-		--seam-opacity: 1 !important;
-	}
 
 }
 
-@{button},
-input[elevated],
-select[elevated] {
-	--bg: var(--theme-sheet-bg, var(--theme-bg));
-	//--fg: var(--tint-bg, var(--theme-fg));
-	&[neutral] {
-		--bg: var(--theme-sheet-bg, var(--theme-bg));
-		--fg: var(--theme-sheet-fg, var(--theme-fg));
-	}
+button:not([neutral]):not([elevated]) {
+	--fg: var(--tint-bg);
 }
 
-button:not([neutral]) {
+button:not([neutral]):not([seamed]):not([flat]) {
 	--fg: var(--tint-bg);
 	--bg: var(--theme-sheet-bg);
 }
@@ -488,69 +394,43 @@ input[elevated],
 select[elevated] {
 
 	border-radius: 4px; // TODO: FIXME: 4px radius
-	--bg-base-opacity: 1;
+	//--bg-base-opacity: 1; // TODO: delete, moved to materials file
 
 	transition-duration: 150ms;
 	transition-timing-function: var(--bezier-curve);
 	transition-property: box-shadow;
 	will-change: box-shadow;
 
-		z-index: 2;
-		box-shadow: var(--elevation-2);
-		&:not([disabled]):not(:disabled) {
-			&:focus,
-			&:hover {
-				z-index: 4;
-				box-shadow: var(--elevation-4);
-			}
-			&:active {
-				z-index: 8;
-				box-shadow: var(--elevation-8);
-			}
+	z-index: 2;
+	box-shadow: var(--elevation-2);
+	&:not([disabled]):not(:disabled) {
+		&:focus,
+		&:hover {
+			z-index: 4;
+			box-shadow: var(--elevation-4);
 		}
-
-}
-
-
-@{button},
-input,
-select {
-
-	&[seamed] {
-		--bg-base-opacity: 0;
-	}
-	&[flat] {
-		--bg-base-opacity: 0.04;
-	}
-	&[seamed],
-	&[flat] {
-		--bg: var(--fg, var(--theme-fg));
-		//border-radius: 4px;
-		box-shadow: none !important;
-	}
-
-	&[elevated],
-	&[flat],
-	&[seamed] {
-		border-radius: 4px; // TODO: FIXME: 4px radius
-		//&:extend([almost-square]);
-	}
-
-	&[plain] {
-		border: none;
-		background: transparent;
-		padding: 0;
-		margin: 0;
-		width: unset;
-		height: unset;
-		min-width: unset;
-		min-height: unset;
-		box-shadow: none !important;
-		--hitbox-offset: 10px;
+		&:active {
+			z-index: 8;
+			box-shadow: var(--elevation-8);
+		}
 	}
 
 }
 
+
+
+[plain] {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	padding: 0;
+	margin: 0;
+	width: unset;
+	height: unset;
+	min-width: unset;
+	min-height: unset;
+	--hitbox-offset: 10px !important;
+}
 
 
 
@@ -619,14 +499,12 @@ select {
 }
 
 select {
+	--seam-size: 0px;
+	border-radius: 4px;
 
 	&:not([seamed]):not([elevated]):not([flat]) {
 		padding-left: 0;
 		padding-right: 0;
-	}
-
-	&:not([seamed]) {
-		--seam-size: 0px;
 	}
 }
 

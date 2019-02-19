@@ -1,13 +1,29 @@
-.responsive-screensize(flat, {
-//[flat] {
+:root {
+	--seam-size: 1px;
+	// MD spec varies between 0.12 for chips and 0.18 for buttons
+	--seam-opacity: 0.12;
+	//--seam-opacity: 0.18;
+}
+
+.responsive-screensize(seamed, {
+	--bg: var(--fg, var(--theme-fg));
+	--bg-base-opacity: 0;
+	--seam-size: 1px;
 	box-shadow: var(--elevation-0);
+});
+
+.responsive-screensize(flat, {
+	--bg: var(--fg, var(--theme-fg));
+	--bg-base-opacity: 0.04;
+	--seam-size: 0px;
+	box-shadow: var(--elevation-0);
+	
 	&[hoverable] {
 		box-shadow: var(--elevation-1);
 	}
 	&[clickable] {
 		box-shadow: var(--elevation-2);
 	}
-//}
 });
 
 [elevation="1"] {
@@ -20,7 +36,6 @@
 	}
 }
 
-[elevated],
 [elevation="2"] {
 	box-shadow: var(--elevation-2);
 	&[hoverable] {
@@ -32,21 +47,41 @@
 }
 
 [elevated] {
-	border: none !important;
+	&:extend([elevation="2"]);
+	--bg-base-opacity: 1;
+	--bg: var(--theme-sheet-bg, var(--theme-bg));
+	border: none;
+	--seam-size: 0px;
+}
+
+[transparent] {
+	box-shadow: var(--elevation-0);
+	--bg-opacity: 0;
+	--seam-size: 0px;
+}
+
+/*
+commented because it breaks [flat] buttons and inputs
+[neutral] {
+	--bg: var(--theme-sheet-bg, var(--theme-bg));
+	--fg: var(--theme-sheet-fg, var(--theme-fg));
+}
+*/
+
+[flat],
+[seamed],
+[elevated] {
+	.apply-colors();
 }
 
 
-
-:root {
-	--seam-size: 1px;
-	--seam-opacity: 0.12;
-}
 
 hr,
 [seamed] {
 	//--seam-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
-	--seam-color: rgba(var(--fg), var(--seam-opacity));
-	--seam: var(--seam-size, 1px) solid var(--seam-color);
+	--seam-color: var(--fg);
+	//--seam-color: rgba(var(--fg), var(--seam-opacity));
+	--seam: var(--seam-size, 1px) solid rgba(var(--seam-color), var(--seam-opacity));
 }
 
 hr {
