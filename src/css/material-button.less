@@ -335,6 +335,60 @@ select {
 }
 
 
+
+@{input} {
+
+	&::placeholder {
+		color: inherit;
+		opacity: 0.4;
+	}
+
+	// plain old Material design v1 styled transparent with only bottom bar.
+	&[plain],
+	&:not([seamed]):not([flat]):not([elevated]) {
+		border-style: solid;
+		//border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
+		border-color: rgba(var(--seam-color, var(--theme-base-fg)), var(--seam-opacity));
+		border-width: 0 0 var(--seam-size) 0;
+		border-style: solid;
+		// compensate for size-changing bottom bar/seam.
+		padding-top: var(--seam-size, 0px);
+		// Cancel out the changes of padding on the sided sides. (e.g. does not subtract seam from padding).
+		// Default input textfield only has the seam at the bottom. And it changes height/size on :focus.
+		// But padding on all sides subtracts the seam size (default behavior for all inputs, buttons and selects)
+		--padding-left:  var(--padding-horizontal, var(--padding, 0px));
+		--padding-right: var(--padding-horizontal, var(--padding, 0px));
+		&:active,
+		&:focus {
+			--seam-size: 2px;
+		}
+
+		padding-left: 0;
+		padding-right: 0;
+		text-indent: 0;
+		border-radius: 0 !important;
+		--radius: 0;
+	}
+
+	&[plain],
+	&[no-bar] {
+		--seam-size: 0px !important;
+	}
+
+}
+
+select {
+	--seam-size: 0px;
+	border-radius: 4px;
+
+	&:not([seamed]):not([elevated]):not([flat]) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////// COLOR /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -355,11 +409,7 @@ select {
 input,
 select {
 	--fg-opacity: 1;
-/*
-	// to be overwritten
-	--bg: var(--theme-bg);
-	--fg: var(--theme-fg);
-*/
+
 	--seam-color: var(--theme-base-fg);
 	&:not([neutral]) {
 		&:active,
@@ -417,8 +467,6 @@ select[elevated] {
 
 }
 
-
-
 [plain] {
 	border: none !important;
 	background: transparent !important;
@@ -431,68 +479,3 @@ select[elevated] {
 	min-height: unset;
 	--hitbox-offset: 10px !important;
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////  /////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-@{input} {
-
-	&::placeholder {
-		color: inherit;
-		opacity: 0.4;
-	}
-
-	// plain old materila design v1 styled transparent with only bottom bar.
-	&[plain],
-	&:not([seamed]):not([flat]):not([elevated]) {
-		border-style: solid;
-		//border-color: rgba(var(--seam-color, var(--fg)), var(--seam-opacity));
-		border-color: rgba(var(--seam-color, var(--theme-base-fg)), var(--seam-opacity));
-		border-width: 0 0 var(--seam-size) 0;
-		border-style: solid;
-		// compensate for size-changing bottom bar/seam.
-		padding-top: var(--seam-size, 0px);
-		// Cancel out the changes of padding on the sided sides. (e.g. does not subtract seam from padding).
-		// Default input textfield only has the seam at the bottom. And it changes height/size on :focus.
-		// But padding on all sides subtracts the seam size (default behavior for all inputs, buttons and selects)
-		--padding-left:  var(--padding-horizontal, var(--padding, 0px));
-		--padding-right: var(--padding-horizontal, var(--padding, 0px));
-		&:active,
-		&:focus {
-			--seam-size: 2px;
-		}
-
-		padding-left: 0;
-		padding-right: 0;
-		text-indent: 0;
-		border-radius: 0 !important;
-		--radius: 0;
-	}
-
-	&[plain],
-	&[no-bar] {
-		--seam-size: 0px !important;
-	}
-
-}
-
-select {
-	--seam-size: 0px;
-	border-radius: 4px;
-
-	&:not([seamed]):not([elevated]):not([flat]) {
-		padding-left: 0;
-		padding-right: 0;
-	}
-}
-
-
-
-
