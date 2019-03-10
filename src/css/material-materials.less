@@ -85,7 +85,8 @@ hr,
 }
 
 hr {
-	background-color: var(--seam-color);
+	//background-color: var(--seam-color);
+	background-color: rgba(var(--seam-color), var(--seam-opacity));
 }
 
 [seamed=""] {
@@ -108,7 +109,17 @@ hr {
 
 [seamed="around"] {
 	border-top: var(--seam);
+	border-bottom: var(--seam);
+	& + & {
+		border-top: none;
+	}
+	// WARNING: I tried using :last-of-type. It would be cleaner solution without border:none
+	//          but :last-of-type does not account for attributes with value. is [fx-item][seamed="around"]
+	//          was next to anothet [fx-item] without seam. the seams would break.
+	/*
+	border-top: var(--seam);
 	&:last-of-type {
 		border-bottom: var(--seam);
 	}
+	*/
 }

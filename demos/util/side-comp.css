@@ -8,3 +8,8 @@ body.side-comp > img {
 	min-width: 360px;
 	align-self: flex-start
 }
+
+body.side-comp:not(.custom-size) flexus-view {
+	max-width: 360px;
+	max-height: 640px;
+}

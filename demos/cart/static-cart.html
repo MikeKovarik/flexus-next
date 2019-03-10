@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>cart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./../util/side-comp.css">
+
+</head>
+<body theme="white" primary="purple" class="side-comp">
+
+	<flexus-view id="cart">
+
+		<flexus-toolbar tinted elevation="0">
+			<button icon="menu"></button>
+			<div flex>Cart</div>
+			<button icon="search"></button>
+			<button icon="more"></button>
+		</flexus-toolbar>
+
+		<main>
+
+			<p bold body2 uppercase>4 items in your cart</p>
+
+			<div fx-item spacious seamed="around">
+				<img square avatar src="../img/products/pencil.jpg">
+				<div vertical layout flex>
+					<div>Pencil</div>
+					<div body2 muted>in stock</div>
+				</div>
+				<span>$1.50</span>
+			</div>
+
+			<div fx-item spacious seamed="around">
+				<img square avatar src="../img/products/rubberbands.jpg">
+				<div vertical layout flex>
+					<div>Rubberbands</div>
+					<div body2 muted>in stock</div>
+				</div>
+				<span>$4.50</span>
+			</div>
+
+			<div fx-item spacious seamed="around">
+				<img square avatar src="../img/products/rulers.jpg">
+				<div vertical layout flex>
+					<div>Pencil</div>
+					<div body2 muted>only 1 left in stock</div>
+				</div>
+				<span>$8.00</span>
+			</div>
+
+			<div fx-item spacious seamed="around">
+				<img square avatar src="../img/products/clock.jpg">
+				<div vertical layout flex>
+					<div>Clock</div>
+					<div body2 muted>in stock</div>
+				</div>
+				<span>$22.00</span>
+			</div>
+
+			<div fx-item spacious>
+				<span flex muted uppercase>Total</span>
+				<span h5>$41.24</span>
+			</div>
+
+			<p layout body2>
+				<span flex>Subtotal</span>
+				<span muted>$36.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Shipping</span>
+				<span muted>$2.00</span>
+			</p>
+			<p layout body2>
+				<span flex>Tax</span>
+				<span muted>$3.24</span>
+			</p>
+
+		</main>
+
+		<button flat tinted fullwidth bottom>checkout</button>
+
+	</flexus-view>
+
+
+	<img src="../img/screenshots/app-eshop-cart2.png" width="180">
+
+</body>
+</html>
