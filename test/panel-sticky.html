@@ -1,0 +1,250 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		body {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+			padding: 16px;
+		}
+		flexus-view {
+			display: block;
+			outline: 1px solid #aaa;
+		}
+		[indent] {
+			padding-left: calc(1rem + var(--keyline, 56px)) !important;
+		}
+
+		#one flexus-toolbar {
+			position: sticky;
+			top: 0px;
+			z-index: 99;
+		}
+
+		#two flexus-toolbar > :first-child {
+			position: sticky;
+			top: 0px;
+		}
+
+		#three flexus-toolbar {
+			position: sticky;
+			top: -56px;
+			z-index: 99;
+		}
+
+		#four flexus-toolbar {
+			position: sticky;
+			top: -56px;
+			z-index: 99;
+		}
+		#four flexus-toolbar > :first-child {
+			position: sticky;
+			top: 0px;
+		}
+
+
+		@media only screen and (max-width: 600px) {
+			body {
+				padding: 0;
+				display: block;
+			}
+			body > flexus-view:not(:last-of-type) {
+				display: none;
+			}
+		}
+
+
+		.foo {
+			padding-top: 50vh;
+			pointer-events: none;
+		}
+		.foo > * {
+			pointer-events: all;
+		}
+	</style>
+
+</head>
+<body>
+
+	<flexus-view id="one">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex></div>
+			<button icon="favorite" title="Add to Favorites"></button>
+			<button icon="plus" title="Add to List"></button>
+		</flexus-toolbar>
+		<main>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+		</main>
+	</flexus-view>
+	<div class="foo">
+		<flexus-view id="one" theme="white">
+			<flexus-toolbar sticky>
+				<button icon="arrow-back"></button>
+				<div flex>Name</div>
+			</flexus-toolbar>
+			<main>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+				<div fx-item icon="edit">Item</div>
+			</main>
+		</flexus-view>
+	</div>
+
+
+
+
+	<script>
+
+	Promise.timeout = millis => new Promise(resolve => setTimeout(resolve, millis))
+	
+	var views = Array.from(document.querySelectorAll('flexus-view'))
+
+	views.forEach(async view => {
+		//var view = document.querySelector('flexus-view')
+		var toolbar = view.querySelector('flexus-toolbar')
+		var main = view.querySelector('main')
+
+		//view.style.position = 'absolute'
+		view.style.overflow = 'auto'
+		main.style.overflow = 'unset'
+
+		view.style.setProperty('--toolbar-height-expanded', toolbar.offsetHeight + 'px')
+
+		var collapsible = toolbar.querySelector('[collapse]')
+		var [topSection, bottomSection] = toolbar.querySelectorAll('section')
+		var collapsibleHeight = 0
+		var collapsePercentable = 0
+		var scalable = toolbar.querySelector('[scale]')
+		var fadeable = toolbar.querySelector('[fade]')
+
+		var onExpanded = () => {}
+		var onCollapsed = () => {}
+		var onCollapsing = () => {}
+
+		if (toolbar.hasAttribute('waterfall')) {
+			toolbar.style.willChange = 'box-shadow, border'
+			toolbar.style.transition = 'box-shadow 200ms'
+			var seamed = toolbar.hasAttribute('seamed')
+			onExpanded = () => {
+				if (seamed) toolbar.setAttribute('seamed', '')
+				toolbar.setAttribute('elevation', '0')
+			}
+			onCollapsed = () => {
+				toolbar.setAttribute('elevation', '4')
+				if (seamed) toolbar.removeAttribute('seamed')
+			}
+		}
+
+		if (collapsible) {
+			
+			toolbar.style.position = 'sticky'
+			toolbar.style.top = 'calc(-1 * var(--collapsible-height, 0px))'
+			toolbar.style.zIndex = 99
+
+			collapsible.style.willChange = 'opacity, transform'
+			if (scalable) scalable.style.willChange = 'opacity, transform'
+			if (fadeable) fadeable.style.willChange = 'opacity, transform'
+
+			var ro = new ResizeObserver(entries => calculateCollapsibleHeight(entries[0]))
+			ro.observe(collapsible)
+			onExpanded()
+			view.addEventListener('scroll', onScroll, {passive: true})
+
+			if (scalable) {
+				var renderScale = (percentage = 1, maxScale = 1.5) => {
+					maxScale--
+					var temp = 1 - percentage
+					var scale = 1 + (maxScale * temp)
+					var translate = 56 * percentage
+					scalable.style.transform = `translate(${translate}px) scale(${scale})`
+				}
+				renderScale(0)
+				scalable.style.transformOrigin = scalable.style.transformOrigin || 'left bottom'
+			}
+
+			onCollapsing = percentage => {
+				if (fadeable) fadeable.style.opacity = 1 - percentage
+				if (scalable) renderScale(percentage)
+			}
+			//toolbar.style.overflow = 'hidden'
+
+		}
+
+		function onScroll(e) {
+			var newPercentage = Math.min(e.target.scrollTop, collapsibleHeight) / collapsibleHeight
+			if (newPercentage !== collapsePercentable) {
+				if (collapsePercentable === 1) onExpanded()
+				else if (newPercentage === 1) onCollapsed()
+				collapsePercentable = newPercentage
+				onCollapsing(collapsePercentable)
+			}
+		}
+
+		function calculateCollapsibleHeight(bbox) {
+			collapsibleHeight = collapsible.offsetHeight
+
+			if (topSection) {
+				if (topSection.hasAttribute('overlay')) {
+					topSection.style.marginBottom = -topSection.offsetHeight + 'px'
+					topSection.style.zIndex = 99
+				}
+				if (topSection.hasAttribute('sticky')) {
+					collapsibleHeight -= topSection.offsetHeight
+				}
+			}
+
+			if (bottomSection) {
+				if (bottomSection.hasAttribute('overlay')) {
+					bottomSection.style.marginTop = -bottomSection.offsetHeight + 'px'
+					bottomSection.style.zIndex = 99
+				}
+				if (bottomSection.hasAttribute('sticky')) {
+					collapsibleHeight -= bottomSection.offsetHeight
+				} else {
+					//collapsibleHeight += bottomSection.offsetHeight
+				}
+			}
+
+			toolbar.style.setProperty('--collapsible-height', collapsibleHeight + 'px')
+		}
+
+	})
+
+	</script>
+
+	<script src="/platform-detect/index.js"></script>
+
+</body>
+</html>

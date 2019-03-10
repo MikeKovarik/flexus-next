@@ -11,22 +11,11 @@
 
 	<style>
 
-		[fullbleed] {
-			margin: 0 -16px;
+		flexus-view {
+			max-width: 360px;
+			max-height: 640px;
 		}
 
-		[fit] {
-			width: 100%;
-			height: 100%;
-		}
-
-		[medium] {
-			font-weight: 500;
-		}
-
-		main {
-			padding-top: 0 !important;
-		}
 	</style>
 
 </head>
@@ -41,7 +30,7 @@
 		</flexus-toolbar>
 		<main>
 			<div fullbleed ratio="3:2">
-				<img fit src="./img/toothbrush.jpg">
+				<img fit src="./img/products/toothbrush.jpg">
 			</div>
 			<p layout>
 				<span h4 flex>Toothbrush</span>
@@ -50,7 +39,7 @@
 			<p muted>Our blouses are available in 8 colors. You can custom order a built-in arch support for any of the models.</p>
 			<hr>
 			<p medium>Select type</p>
-			<div spaced nowrap scrollable layout style="width: 400px; overflow: auto">
+			<div scrollable layout fullbleed>
 				<span chip>Extra Soft</span>
 				<span chip>Soft</span>
 				<span chip selected>Medium</span>
