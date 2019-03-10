@@ -121,6 +121,18 @@ table {
 	border-spacing: var(--gutter);
 }
 
+// adhering to materials 8px grid
+[spaced="0"]    {--gutter: 0px;}
+[spaced="0.25"] {--gutter: 2px;}
+[spaced="0.5"]  {--gutter: 4px;}
+[spaced="0.75"] {--gutter: 6px;}
+[spaced="1"]    {--gutter: 8px;}
+[spaced="2"]    {--gutter: 16px;}
+[spaced="3"]    {--gutter: 24px;}
+[spaced="4"]    {--gutter: 32px;}
+[spaced="5"]    {--gutter: 40px;}
+[spaced="6"]    {--gutter: 48px;}
+// additional precision
 [spaced="0px"] {--gutter: 0px;}
 [spaced="1px"] {--gutter: 1px;}
 [spaced="2px"] {--gutter: 2px;}
@@ -130,9 +142,3 @@ table {
 [spaced="6px"] {--gutter: 6px;}
 [spaced="7px"] {--gutter: 7px;}
 [spaced="8px"] {--gutter: 8px;}
-
-[spaced="0"] {--gutter: 0px;}
-[spaced="1"] {--gutter: calc(1 * var(--theme-gutter, 16px));}
-[spaced="2"] {--gutter: calc(2 * var(--theme-gutter, 16px));}
-[spaced="3"] {--gutter: calc(3 * var(--theme-gutter, 16px));}
-[spaced="4"] {--gutter: calc(4 * var(--theme-gutter, 16px));}
