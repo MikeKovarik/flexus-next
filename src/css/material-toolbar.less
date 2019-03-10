@@ -169,6 +169,7 @@ flexus-toolbar {
 			padding-top: calc(8px + 48px + 16px);
 		}
 	}
+
 	&[absolute][top] {
 		// kinda like floating except it doesn't compensate padding below.
 		& + main,
@@ -176,6 +177,16 @@ flexus-toolbar {
 			// TODO: this needs more polish and integration with [card] and [multisection]
 			padding-top: 0;
 		}
+	}
+
+	// [overlay] is mixin of [transparent] and absolutely positioned fixed toolbar.
+	&[overlay] {
+		// the transparent look
+		&:extend(&[transparent] all);
+		// general absolute positioning
+		&:extend([absolute="top"] all);
+		// nuanced effects absolute positioed toolbar has on view positioning
+		&:extend(flexus-toolbar[absolute][top] all);
 	}
 
 }
