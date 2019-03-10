@@ -5,6 +5,7 @@
   "scripts": {
     "watch-js": "rollup -c -w",
     "watch-css": "gulp watch",
+    "dev": "gulp watch",
     "build-js": "rollup -c",
     "build-css": "gulp build",
     "build": "rollup -c & gulp build"
