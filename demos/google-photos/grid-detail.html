@@ -1,3 +1,6 @@
+<!--
+Demo of image transition from Google Photos gallery grid into photo's fullscreen detail
+-->
 <!doctype html>
 <html>
 <head>
@@ -6,8 +9,8 @@
 	<title>gphotos detail transition</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
-	<link rel="stylesheet" type="text/css" href="../util/phone-only-demo.css">
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../../util/phone-only-demo.css">
 
 	<style>
 
@@ -50,7 +53,7 @@
 
 
 	<flexus-view fit id="view-gallery">
-		<flexus-toolbar flat>
+		<flexus-toolbar elevation="0">
 			<button icon="arrow-back"></button>
 			<div flex>Longboarding</div>
 			<button icon="edit"></button>
@@ -85,7 +88,7 @@
 		<main>
 
 			<div fullbleed style="margin-top: -40%">
-				<img src="./img/longboard/medium/IMG_20180908_190443.jpg">
+				<img src="../img/longboard/medium/IMG_20180908_190443.jpg">
 			</div>
 
 			<input type="text" placeholder="Add a description">
@@ -128,10 +131,10 @@
 
 
 	<script type="module">
-		import {Transition} from '../src/js/animations/Transition.js'
-		import {ViewTransition} from '../src/js/animations/ViewTransition.js'
-		import {ImageDescriptor, parseBgUrl} from '../src/js/animations/ImageDescriptor.js'
-		import {ImageTransition} from '../src/js/animations/ImageTransition.js'
+		import {Transition} from '../../src/js/animations/Transition.js'
+		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
+		import {ImageDescriptor, parseBgUrl} from '../../src/js/animations/ImageDescriptor.js'
+		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
 
 		var galleryNames = [
 			'IMG_20180725_163337.jpg',
@@ -162,7 +165,7 @@
 		var detailViewBackButton = detailView.querySelector('[icon="arrow-back"]')
 
 		function getLink(name, size = 'medium') {
-			return `./img/longboard/${size}/${name}`
+			return `../img/longboard/${size}/${name}`
 		}
 
 		galleryGrid.innerHTML = galleryNames
