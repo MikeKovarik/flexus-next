@@ -1,0 +1,152 @@
+<!--
+Unifinished prototype of google travel search website
+https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ82YXDbMEVAEet6gJFxwVHAGioKGxGodiXW8sNRwBmMQ2KLPy1FQAnqXdDJDKraQBoGCJAHEPkGJZqZUUEwAlqgAQoFCNg2EAAiA0NaSyoWCgcI4g8QCxgZEgcI4g8QCxgaGAEoAIoBVAoSCdigHD6UJUVAETK4wLBTyFHAEhIJmJbvIQQ0RUARHjWKi06-UcAaKgobEah2JR5Rw1HAGbgbBjDMLEVACbRzxKpuqupAGgYIkAcQ-QYlmplRQZoBCBIGQm9zdG9uogESCggvbS8wMWN4XxIGQm9zdG9ukgECIAE&g2lb=4181926%2C4208110%2C4208993%2C4207631%2C4219394%2C4220469&hl=en&gl=cz&un=0&q=google%20hotels%20in%20boston&rp=OAJAAA&ictx=1&ved=0ahUKEwj23cv86eXeAhUSy6QKHdXeBEYQjGoIdQ&hrf=CgUI2DYQACIDQ1pLKhYKBwjiDxALGBkSBwjiDxALGBoYASgAigFUChIJCVFjpqMpRUARZXLKGnTGUcASEgkPNmFw2zBFQBHreoCRccFRwBoqChsRqHYl1vLDUcAZjENiiz8tRUAJ6l3QyQyq2kAaBgiQBxD5BiWamVFBmgEIEgZCb3N0b26iARIKCC9tLzAxY3hfEgZCb3N0b26SAQIgAQ&tcfs=EiwKCC9tLzAxY3hfEgZCb3N0b24aGAoKMjAxOC0xMS0yNRIKMjAxOC0xMS0yNlIA
+-->
+
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Google Translate</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		layout {
+			display: flex;
+		}
+		.gray-thing {
+			height: 150px;
+			background-color: rgba(var(--fg), 0.02);
+			z-index: -1;
+			margin: -1px !important;
+		}
+	</style>
+
+</head>
+<body google theme="white" primary="blue" class="side-comp custom-size">
+
+	<flexus-view>
+
+		<flexus-toolbar seamed>
+			<button icon="menu"></button>
+			<div>Google Translate</div>
+			<span body2 secondary>incomplete demo, work in progress</span>
+		</flexus-toolbar>
+
+		<main>
+
+			<div seamed absolute top class="gray-thing"></div>
+
+			<layout spaced>
+				<button seamed selected icon="edit">Text</button>
+				<button seamed icon="edit">Documents</button>
+			</layout>
+
+			<br>
+
+			<card rounded elevation="3">
+				<div>TODO</div>
+				<div>TODO</div>
+				<div>TODO</div>
+				<div>TODO</div>
+				<div>TODO</div>
+			</card>
+
+			<br>
+
+			<layout horizontal spaced>
+
+				<layout flex vertical spaced>
+
+					<card rounded seamed>
+						<p><span muted>Definitions of</span> round</p>
+						<strong tinted>Adjective</strong>
+						<div fx-item>
+							<icon></icon>
+							<layout vertical>
+								<div>having a smooth, curved surface.</div>
+								<div body2 muted>"rounded gray hills"</div>
+							</layout>
+						</div>
+						<div fx-item>
+							<icon></icon>
+							<layout vertical>
+								<div>well developed in all aspects; complete and balanced.</div>
+								<div body2 muted>"we should educate children to become rounded human beings"</div>
+							</layout>
+						</div>
+						<strong tinted>Verb</strong>
+						<div fx-item>
+							<icon></icon>
+							<layout vertical>
+								<div>pass and go around (something) so as to move on in a changed direction.</div>
+								<div body2 muted>"the ship rounded the cape and sailed north"</div>
+							</layout>
+						</div>
+						<div indent>
+							<p body2 muted>Synonyms:</p>
+							<span mini chip seamed muted>go around</span>
+							<span mini chip seamed muted>travel around</span>
+							<span mini chip seamed muted>circumnavigate</span>
+							<span mini chip seamed muted>orbit</span>
+						</div>
+						<hr fullbleed>
+						<div fx-item icon="keyboard_arrow_down">2 more definitions</div>
+					</card>
+
+					<card rounded seamed>
+						<p muted>See also</p>
+						<span mini chip seamed><span tinted>round</span></span>
+					</card>
+
+				</layout>
+
+				<layout flex vertical spaced>
+
+					<card rounded seamed>
+						<p><span muted>Translations of</span> rounded</p>
+						TODO
+					</card>
+
+					<card rounded seamed>
+						<p><span muted>Examples of</span> rounded</p>
+						<div fx-item icon="format_quote">
+							<span>The <strong>rounded</strong> corners and the smooth outline create an effect of completeness.</span>
+						</div>
+						<hr fullbleed>
+						<div fx-item icon="keyboard_arrow_down">29 more examples</div>
+					</card>
+
+					<card rounded seamed>
+						<p><span muted>Synonyms of</span> round</p>
+						<br>
+						<p bold tinted>Verb</p>
+						<span mini chip seamed muted>go around</span>
+						<span mini chip seamed muted>round out</span>
+						<span mini chip seamed muted>round off</span>
+						<span mini chip seamed muted>attack</span>
+						<span mini chip seamed muted>fill out</span>
+						<span mini chip seamed muted>labialize</span>
+						<br>
+						<br>
+						<hr fullbleed>
+						<div fx-item icon="keyboard_arrow_down">15 more definitions</div>
+					</card>
+
+				</layout>
+
+			</layout>
+
+		</main>
+
+	</flexus-view>
+
+
+	<img src="./img/screenshots/google-translate-without-panel.png" width="800">
+
+</body>
+</html>
