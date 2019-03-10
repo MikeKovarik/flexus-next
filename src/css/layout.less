@@ -15,19 +15,19 @@
 :root,
 [vertical-axis] {
 	& > * {
-	--is-parent-horizontal-int: 0;
-	--is-parent-vertical-int:   1;
-	--is-parent-horizontal-px:  0;
-	--is-parent-vertical-px:    1px;
+		--is-parent-horizontal-int: 0;
+		--is-parent-vertical-int:   1;
+		--is-parent-horizontal-px:  0;
+		--is-parent-vertical-px:    1px;
 	}
 	//--side: 0px;
 }
 [horizontal-axis] {
 	& > * {
-	--is-parent-horizontal-int: 1;
-	--is-parent-vertical-int:   0;
-	--is-parent-horizontal-px:  1px;
-	--is-parent-vertical-px:    0;
+		--is-parent-horizontal-int: 1;
+		--is-parent-vertical-int:   0;
+		--is-parent-horizontal-px:  1px;
+		--is-parent-vertical-px:    0;
 	}
 	//--side: 0px;
 }
@@ -137,7 +137,9 @@ flexus-view > flexus-pages > * > * {
 
 // REAL WORLD APPLICATION
 
+layout:not([vertical]),
 [layout]:not([vertical]),
+horizontal,
 [horizontal=""] {
 	&:extend([horizontal-flexbox] all);
 
@@ -149,6 +151,7 @@ flexus-view > flexus-pages > * > * {
 // NOTE: It's not jut [layout][vertical] but simple [vertical] because it should be
 //       reusable for all flexboxes (even button is flexbox and can be vertical with icon on top
 //       and the text at the bottom)
+vertical,
 [vertical=""] {
 	&:extend([vertical-flexbox] all);
 

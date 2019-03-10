@@ -1,13 +1,14 @@
 
 
 // FLEXBOX
+layout,
+horizontal,
+vertical,
 [layout] {
 	display: flex;
 }
 
-[flex] {
-    flex: 1;
-}
+[flex]  {flex: 1;}
 [flex-1] {flex: 1}
 [flex-2] {flex: 2}
 [flex-3] {flex: 3}
@@ -15,10 +16,14 @@
 [flex-5] {flex: 5}
 
 
+// MODIFIERS
+
+[noshrink] {
+	flex-shrink: 0;
+}
 
 
-
-
+// POSITIONING
 
 [center] {
 	align-items: center;
@@ -41,9 +46,4 @@
 }
 [layout]:not([vertical])[bottom] {
 	align-items: flex-end;
-}
-
-
-[noshrink] {
-	flex-shrink: 0;
 }

@@ -15,9 +15,6 @@ https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ
 	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
 
 	<style>
-		layout {
-			display: flex;
-		}
 		.gray-thing {
 			height: 150px;
 			background-color: rgba(var(--fg), 0.02);
@@ -58,9 +55,9 @@ https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ
 
 			<br>
 
-			<layout horizontal spaced>
+			<horizontal spaced>
 
-				<layout flex vertical spaced>
+				<vertical flex spaced="1">
 
 					<card rounded seamed>
 						<p><span muted>Definitions of</span> round</p>
@@ -103,9 +100,9 @@ https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ
 						<span mini chip seamed><span tinted>round</span></span>
 					</card>
 
-				</layout>
+				</vertical>
 
-				<layout flex vertical spaced>
+				<vertical flex spaced="1">
 
 					<card rounded seamed>
 						<p><span muted>Translations of</span> rounded</p>
@@ -137,9 +134,9 @@ https://www.google.cz/travel/hotels/Boston?ap=KlQKEgkJUWOmoylFQBFlcsoadMZRwBISCQ
 						<div fx-item icon="keyboard_arrow_down">15 more definitions</div>
 					</card>
 
-				</layout>
+				</vertical>
 
-			</layout>
+			</horizontal>
 
 		</main>
 

@@ -1,5 +1,5 @@
 // TODO: properly resolve [fullbleed] and [inset] inside [nopadding]
-
+// TODO: fix [padded] and make it accept grid increments like [spaced]
 
 
 [nomargin] {
@@ -48,6 +48,7 @@
 	padding-top:    var(--gutter);
 	padding-bottom: var(--gutter);
 }
+//todo padding-top="1", padding-bottom="2", etc
 
 
 [apply-offset] {
@@ -90,12 +91,14 @@ main[nopadding] > [inset] {
 	// NOTE: It's not prefferable to have !important, but it's necessary because
 	// elements with more complex selects (mainly buttons) override the spacing easily.
 
-	&:not([vertical]) {
+	//horizontal,
+	&:not([vertical]):not(vertical) {
 		> *:not(:last-child) {
 			margin-right: var(--gutter) !important;
 		}
 	}
 
+	vertical,
 	&[vertical] {
 		> *:not(:last-child) {
 			margin-bottom: var(--gutter) !important;
@@ -121,6 +124,12 @@ table {
 	border-spacing: var(--gutter);
 }
 
+
+
+
+
+
+
 // adhering to materials 8px grid
 [spaced="0"]    {--gutter: 0px;}
 [spaced="0.25"] {--gutter: 2px;}
@@ -142,3 +151,25 @@ table {
 [spaced="6px"] {--gutter: 6px;}
 [spaced="7px"] {--gutter: 7px;}
 [spaced="8px"] {--gutter: 8px;}
+
+// adhering to materials 8px grid
+[padded="0"]    {--gutter: 0px;}
+[padded="0.25"] {--gutter: 2px;}
+[padded="0.5"]  {--gutter: 4px;}
+[padded="0.75"] {--gutter: 6px;}
+[padded="1"]    {--gutter: 8px;}
+[padded="2"]    {--gutter: 16px;}
+[padded="3"]    {--gutter: 24px;}
+[padded="4"]    {--gutter: 32px;}
+[padded="5"]    {--gutter: 40px;}
+[padded="6"]    {--gutter: 48px;}
+// additional precision
+[padded="0px"] {--gutter: 0px;}
+[padded="1px"] {--gutter: 1px;}
+[padded="2px"] {--gutter: 2px;}
+[padded="3px"] {--gutter: 3px;}
+[padded="4px"] {--gutter: 4px;}
+[padded="5px"] {--gutter: 5px;}
+[padded="6px"] {--gutter: 6px;}
+[padded="7px"] {--gutter: 7px;}
+[padded="8px"] {--gutter: 8px;}

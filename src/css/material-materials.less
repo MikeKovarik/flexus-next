@@ -61,6 +61,10 @@
 	--seam-size: 0px;
 }
 
+[opaque] {
+	--bg-opacity: 1;
+}
+
 /*
 commented because it breaks [flat] buttons and inputs
 [neutral] {
@@ -90,7 +94,7 @@ hr {
 	background-color: rgba(var(--seam-color), var(--seam-opacity));
 }
 
-[seamed=""] {
+[seamed=""]:not([top]):not([right]):not([bottom]):not([left]) {
 	border: var(--seam);
 	// The !important isn't there due to poor selectors but
 	// to prevent any :hover, :active, :focused elevated shadows

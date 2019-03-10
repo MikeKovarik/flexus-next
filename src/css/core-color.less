@@ -159,10 +159,14 @@ and even icon and ink pseudo elements
 
 
 .apply-foreground() {
-	color:            rgba(var(--fg, var(--fg)), var(--fg-opacity, var(--fg-base-opacity, 1)));
+	color:            rgba(var(--fg), var(--fg-opacity, var(--fg-base-opacity, 1)));
+	// TODO: enable this is the fallback to base-color doesn't break anything
+	//color:            rgba(var(--fg, var(--theme-base-fg)), var(--fg-opacity, var(--fg-base-opacity, 1)));
 }
 .apply-background() {
-	background-color: rgba(var(--bg, var(--bg)), var(--bg-opacity, var(--bg-base-opacity, 1)));
+	background-color: rgba(var(--bg), var(--bg-opacity, var(--bg-base-opacity, 1)));
+	// TODO: enable this is the fallback to base-color doesn't break anything
+	//background-color: rgba(var(--bg, var(--theme-base-bg)), var(--bg-opacity, var(--bg-base-opacity, 1)));
 }
 .apply-surface() {
 	background-color: rgb(var(--sheet-bg, var(--theme-sheet-bg, var(--theme-base-bg))))
