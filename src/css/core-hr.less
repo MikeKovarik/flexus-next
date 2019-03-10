@@ -32,9 +32,16 @@ hr {
 	&:extend([fullbleed]);
 	//&:extend([offset]);
 
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// TODO: FIX THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// Also go see layout-modifiers.less [indent]
 	&[indent] {
 		padding-left: 0;
-		margin-left: var(--keyline);
+		//margin-left: var(--keyline);
+		// this is just a temporary fix. this needs to resolve the layout axis
+		margin-left: calc(var(--keyline) - var(--side, 0px));
 	}
 
 }

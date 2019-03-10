@@ -19,8 +19,12 @@
 	//--side: 0px;
 }
 [padded] {
+	// TODO: rework to support grid values, like [spaced]
 	padding: var(--rem);
+	padding-top:    var(--gutter);
+	padding-bottom: var(--gutter);
 }
+//todo padding-top="1", padding-bottom="2", etc
 
 
 [fullwidth] {
@@ -44,11 +48,6 @@
 	//padding-right: var(--offset);
 }
 
-[padded] {
-	padding-top:    var(--gutter);
-	padding-bottom: var(--gutter);
-}
-//todo padding-top="1", padding-bottom="2", etc
 
 
 [apply-offset] {
@@ -81,38 +80,20 @@ main[nopadding] > [inset] {
 }
 */
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO: FIX THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Also go see core-hr.less
 [indent] {
-	padding-left: var(--keyline);
+	//padding-left: var(--keyline);
+	// this is just a temporary fix. this needs to resolve the layout axis
+	padding-left: calc(var(--keyline) - var(--side, 0px));
 }
 
 
-[spaced]:not([grid]):not(grid):not(table) {
-
-	// NOTE: It's not prefferable to have !important, but it's necessary because
-	// elements with more complex selects (mainly buttons) override the spacing easily.
-
-	//horizontal,
-	&:not([vertical]):not(vertical) {
-		> *:not(:last-child) {
-			margin-right: var(--gutter) !important;
-		}
-	}
-
-	vertical,
-	&[vertical] {
-		> *:not(:last-child) {
-			margin-bottom: var(--gutter) !important;
-		}
-	}
-
-}
-
-// reset table
-table { 
-	border-collapse: separate;
-}
 
 // Reset default theme gutter if no other value is specified.
+// By feault use 16px which is like [spaced="2"]
 [spaced=""] {
 	--gutter: var(--theme-gutter, 16px);
 }
@@ -124,11 +105,33 @@ table {
 	border-spacing: var(--gutter);
 }
 
+// NOTE: It's not prefferable to have !important, but it's necessary because
+// elements with more complex selects (mainly buttons) override the spacing easily.
+[spaced]:not([grid]):not(grid):not(table) {
+	//horizontal,
+	&:not([vertical]):not(vertical) {
+		> *:not(:last-child) {
+			margin-right: var(--gutter) !important;
+		}
+	}
+	vertical,
+	&[vertical] {
+		> *:not(:last-child) {
+			margin-bottom: var(--gutter) !important;
+		}
+	}
+}
+
+// reset table
+table { 
+	border-collapse: separate;
+}
 
 
 
 
 
+// TODO: reimplemented separate gutter for [spaced], [padded] and the yet untitled [spaced-around]
 
 // adhering to materials 8px grid
 [spaced="0"]    {--gutter: 0px;}

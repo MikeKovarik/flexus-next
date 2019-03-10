@@ -1,0 +1,19 @@
+// NOTE: with it's size 24 it effectively implementes 
+step,
+[step] {
+	width: 24px;
+	height: 24px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-size: 12px;
+	color: rgb(var(--theme-base-bg));
+	background-color: rgba(var(--theme-base-fg), 0.38);
+	position: relative;
+	flex-shrink: 0;
+}
+
+flexus-stepper > *:not(hr) {
+	&:extend([step]);
+}

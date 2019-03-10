@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>chip</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/testbed.css">
+
+	<style>
+		flexus-view {
+			max-width: 360px;
+		}
+	</style>
+
+</head>
+<body>
+
+	<flexus-view theme="white">
+
+		<flexus-toolbar seamed click.trigger="animateToLine()">
+			<span flex tinted>Cyklostezka Bečva</span>
+			<div>36.3 km</div>
+		</flexus-toolbar>
+
+		<main>
+
+			<div fx-item>
+				<div step tinted>1</div>
+				<vertical flex>
+					<div>Vedlejší silnice</div>
+					<div body2 muted>Hrubý asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<div step green>2</div>
+				<vertical flex>
+					<div>Cyklostezka</div>
+					<div body2 muted>Asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<div step tinted="orange">3</div>
+				<vertical flex>
+					<div>Silnice</div>
+					<div body2 muted>Asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<span step tinted primary="orange">4</span>
+				<vertical flex>
+					<div>Silnice</div>
+					<div body2 muted>Asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<span step tinted>5</span>
+				<vertical flex>
+					<div>Silnice</div>
+					<div body2 muted>Hrubý asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<step tinted>6</step>
+				<vertical flex>
+					<div>Cyklostezka</div>
+					<div body2 muted>Asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<step red>7</step>
+				<vertical flex>
+					<div>Hlavní silnice</div>
+					<div body2 muted>Asfalt</div>
+				</vertical>
+				<div>10 km</div>
+			</div>
+
+			<div fx-item>
+				<icon tinted>flag</icon>
+				Finish
+			</div>
+
+			<hr indent>
+
+			<div fx-item icon="straighten">
+				<span>
+					<div body2 muted>Celkem</div>
+					<span>34.4</span>
+				</span>
+				<div>
+					<div body2 muted>Asfalt</div>
+					<div>20 <span muted>km</span></div>
+				</div>
+				<div>
+					<div body2 muted>Šterk</div>
+					<div>14.4 <span muted>km</span></div>
+				</div>
+			</div>
+
+			<hr indent>
+
+			<div indent>Nějaký doplňující text o trase a její složitosti</div>
+
+			<hr indent>
+
+			<div fx-item>
+				<div step>D</div> Default
+			</div>
+			<div fx-item>
+				<div step seamed>S</div> Seamed
+			</div>
+			<div fx-item>
+				<div step flat>F</div> Flat
+			</div>
+
+		</main>
+	</flexus-view>
+
+</body>
+</html>
