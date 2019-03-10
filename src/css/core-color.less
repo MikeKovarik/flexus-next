@@ -128,11 +128,17 @@ and even icon and ink pseudo elements
 	--theme-sheet-fg: 255, 255, 255;
 }
 
+:root {
+	// default purple color
+	--theme-primary-bg: 98, 0, 238;
+	--theme-primary-fg: 255, 255, 255;
+	--tint-bg: var(--theme-tint-bg);
+	--tint-fg: var(--theme-tint-fg);
+}
 
 
 //.reset-theme-colors() {
 .reset-colors() {
-
 	--todobackdrop-bg: var(--theme-todobackdrop-bg, var(--theme-base-bg));
 	--todobackdrop-fg: var(--theme-todobackdrop-fg, var(--theme-base-fg));
 
@@ -165,20 +171,6 @@ and even icon and ink pseudo elements
 	background-color: rgb(var(--todobackdrop-bg, var(--theme-todobackdrop-bg, var(--theme-base-bg))))
 }
 
-// Elements with opacity variables built in set the color automatically and change int based on
-// the hover/focus/click state. But we also apply the color ourselves so that [muted] can be applied
-// to any random element, like <span> and <p>
-[muted] {
-	--fg-opacity: 0.6;
-	.apply-foreground();
-}
-
-[tinted] {
-	--fg-opacity: 1;
-	--fg: var(--tint-bg);
-	--seam-color: var(--tint-bg);
-}
-
 
 [scope-theme-colors] {
 	--primary-bg:   var(--theme-primary-bg);
@@ -198,20 +190,15 @@ and even icon and ink pseudo elements
 	--tint:      var(--tint-bg,      var(--theme-tint-bg));
 }
 
-:root {
-	// TODO: delete
-	// Global (or view's) theme
-	//--theme-primary-bg: 98, 0, 238;
-	//--theme-primary-fg: 255, 255, 255;
-	//--theme-secondary-bg: 98, 0, 238;
-	//--theme-secondary-fg: 255, 255, 255;
-	// Local scope inehrits --theme-tint into local --tint that can be overriden by inline attributes like [red]
-	--tint-bg: var(--theme-tint-bg);
-	--tint-fg: var(--theme-tint-fg);
-	//--theme-tint-bg: 98, 0, 238;
-	//--theme-tint-fg: 255, 255, 255;
-	--theme-primary-bg: 98, 0, 238;
-	--theme-primary-fg: 255, 255, 255;
+:root,
+[primary],
+[secondary] {
+	// translate primary and secondary colors into tint
+	&:extend([calculate-tint]);
+	// apply theme colors to local scope (--primary-bg: --theme-primary-bg).
+	&:extend([scope-theme-colors]);
+	// apply easy to use shortcuts (--primary: --theme-primary-bg).
+	&:extend([scope-color-shortcuts]);
 }
 
 .createcolor(white,  ~'255, 255, 255', ~'0, 0, 0');
@@ -226,17 +213,6 @@ and even icon and ink pseudo elements
 .createcolor(green,  ~'80, 170, 20',   ~'255, 255, 255');
 //.createcolor(green,  ~'139, 195, 74',  ~'255, 255, 255');
 .createcolor(orange,  ~'235, 160, 40',  ~'0, 0, 0'); // TOOD improve this color
-
-:root,
-[primary],
-[secondary] {
-	// translate primary and secondary colors into tint
-	&:extend([calculate-tint]);
-	// apply theme colors to local scope (--primary-bg: --theme-primary-bg).
-	&:extend([scope-theme-colors]);
-	// apply easy to use shortcuts (--primary: --theme-primary-bg).
-	&:extend([scope-color-shortcuts]);
-}
 
 .createcolor(@name, @bg, @fg) {
 	[primary="@{name}"] {
@@ -254,37 +230,28 @@ and even icon and ink pseudo elements
 	[@{name}] {
 		--tint-bg: @bg;
 		--tint-fg: @fg;
-		--tint: var(--tint-bg);
+
 		//--fg: var(--tint-bg);
-		//--icon-opacity: 1;
+		--tint: var(--tint-bg);
+		//&:extend([scope-color-shortcuts]);
+
+		//--icon-opacity: 1; // moved to apply-tinted-foreground
+		//--seam-opacity: 0.4;
+		--seam-opacity: 1;
 		&:extend([apply-tinted-foreground]);
 	}
-}
-
-/*
-.responsive-screensize(transparent, {
-	--background: transparent;
-});
-.responsive-screensize(translucent, {
-	--background: ~'rgba(var(--background-rgb), var(--translucent-opacity))';
-});
-// TODO: MOVE, FLUENT EXCLUSIVE
-.responsive-screensize(acrylic, {
-	backdrop-filter: blur(var(--acrylic-blur));
-	--background: ~'rgba(var(--background-rgb), var(--acrylic-opacity, var(--translucent-opacity)))';
-});
-
-.theme-inherited(@light, @dark) {
-	// TODO: deprecate
-	[dark] & {
-		@dark();
-	}
-	[light] & {
-		@light();
+	div[@{name}] {
+		&:extend([apply-tinted-block]);
 	}
 }
 
-*/
+// Elements with opacity variables built in set the color automatically and change int based on
+// the hover/focus/click state. But we also apply the color ourselves so that [muted] can be applied
+// to any random element, like <span> and <p>
+[muted] {
+	--fg-opacity: 0.6;
+	.apply-foreground();
+}
 
 
 
@@ -294,12 +261,19 @@ and even icon and ink pseudo elements
 	--fg: var(--tint-fg, var(--theme-tint-fg));
 	background-color: rgb(var(--bg));
 	color:            rgb(var(--fg));
+	--seam-color: var(--tint-bg);
+	--icon-opacity: 1;
+	--seam-opacity: 1;
+	--fg-opacity: 1;
 }
 
 [apply-tinted-foreground] {
 	--fg: var(--tint-bg, var(--theme-tint-bg));
 	color: rgb(var(--fg));
+	--seam-color: var(--tint-bg);
 	--icon-opacity: 1;
+	--seam-opacity: 1;
+	--fg-opacity: 1;
 }
 
 [apply-tinted-background] {
@@ -308,11 +282,10 @@ and even icon and ink pseudo elements
 }
 
 /*
-[foreground] {
-	--icon-opacity: 1;
+[tinted] {
+	--fg: var(--tint-bg);
 }
 */
-
 
 [card],
 card,
@@ -339,15 +312,37 @@ h5,
 h6,
 span,
 code,
-strong,
-[foreground="tinted"] {
+strong {
 	&[tinted] {
 		&:extend([apply-tinted-foreground]);
 	}
 }
 
-[background="tinted"] {
-	&[tinted] {
-		&:extend([apply-tinted-background]);
-	}
+[foreground="tinted"] {
+	&:extend([apply-tinted-foreground]);
 }
+
+[background="tinted"] {
+	&:extend([apply-tinted-background]);
+}
+
+
+/*
+[foreground] {
+	--icon-opacity: 1;
+}
+*/
+/*
+.responsive-screensize(transparent, {
+	--background: transparent;
+});
+.responsive-screensize(translucent, {
+	--background: ~'rgba(var(--background-rgb), var(--translucent-opacity))';
+});
+// TODO: MOVE, FLUENT EXCLUSIVE
+.responsive-screensize(acrylic, {
+	backdrop-filter: blur(var(--acrylic-blur));
+	--background: ~'rgba(var(--background-rgb), var(--acrylic-opacity, var(--translucent-opacity)))';
+});
+
+*/
