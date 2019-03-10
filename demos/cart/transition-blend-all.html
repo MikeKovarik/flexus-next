@@ -7,9 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
 	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
-	<!--
 	<link rel="stylesheet" type="text/css" href="../util/phone-only-demo.css">
-	-->
 	<link rel="stylesheet" type="text/css" href="./cart.css">
 
 </head>
@@ -30,10 +28,10 @@
 			v-for="product in products">
 				<img square avatar :src="product.image" transition-part="product-image">
 				<div vertical layout flex>
-					<div>${product.name}</div>
-					<div body2 muted>${product.status}</div>
+					<div transition-part="product-name">${product.name}</div>
+					<div transition-part="product-status" body2 muted>${product.status}</div>
 				</div>
-				<span>$${product.price.toFixed(2)}</span>
+				<span transition-part="product-price">$${product.price.toFixed(2)}</span>
 			</div>
 
 			<div fx-item>
@@ -76,13 +74,13 @@
 			</div>
 			<div layout top>
 				<div vertical layout flex>
-					<span h5>${product.name}</span>
-					<span body2 muted>${product.status}</span>
+					<span transition-part="product-name" h5>${product.name}</span>
+					<span transition-part="product-status" body2 muted>${product.status}</span>
 				</div>
-				<span h5 muted>$${product.price.toFixed(2)}</span>
+				<span h5 muted transition-part="product-price">$${product.price.toFixed(2)}</span>
 			</div>
 			<p body2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fringilla tempus massa, et mollis nisl laoreet et. Aliquam feugiat odio at luctus ultrices.</p>
-			<p body2></p>Integer elementum imperdiet risus. Mauris hendrerit massa vel nulla tempus, non semper felis semper. Nulla gravida dignissim lorem, eu volutpat nibh ornare at. Integer hendrerit dapibus tempor. Aenean at hendrerit risus. Integer vehicula porttitor nibh.</p>
+			<p body2>Integer elementum imperdiet risus. Mauris hendrerit massa vel nulla tempus, non semper felis semper. Nulla gravida dignissim lorem, eu volutpat nibh ornare at. Integer hendrerit dapibus tempor. Aenean at hendrerit risus. Integer vehicula porttitor nibh.</p>
 			<button seamed fullwidth bottom v-on:click="remove">remove from cart</button>
 		</main>
 

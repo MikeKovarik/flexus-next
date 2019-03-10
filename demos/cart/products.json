@@ -2,24 +2,24 @@
 	"id": 0,
 	"name": "Pencil",
 	"status": "in stock",
-	"image": "./img/products/pencil.jpg",
+	"image": "../img/products/pencil.jpg",
 	"price": 1.5
 }, {
 	"id": 1,
 	"name": "Rubberbands",
 	"status": "in stock",
-	"image": "./img/products/rubberbands.jpg",
+	"image": "../img/products/rubberbands.jpg",
 	"price": 4.5
 }, {
 	"id": 2,
 	"name": "Rulers",
 	"status": "only 1 left in stock",
-	"image": "./img/products/rulers.jpg",
+	"image": "../img/products/rulers.jpg",
 	"price": 8
 }, {
 	"id": 3,
 	"name": "Clock",
 	"status": "in stock",
-	"image": "./img/products/clock.jpg",
+	"image": "../img/products/clock.jpg",
 	"price": 22
 }]
