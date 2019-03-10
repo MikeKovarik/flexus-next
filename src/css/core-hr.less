@@ -19,6 +19,9 @@ hr {
 	height: auto;
 	width:  calc(var(--is-horizontal-px) + 0px);
 	height: calc(var(--is-vertical-px)   + 0px);
+	// TODO: fix the height/width
+	width: auto;
+	height: 1px;
 	// Here we use solely unitless numbers (the -int ones) because of the same calc() breaking reasons. Except here we don't
 	// want to break it. We always have unitful number in --offset variable and only other numbers that can multiply it
 	// must have no unit.
