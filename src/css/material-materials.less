@@ -94,29 +94,36 @@ hr {
 	background-color: rgba(var(--seam-color), var(--seam-opacity));
 }
 
-[seamed=""]:not([top]):not([right]):not([bottom]):not([left]) {
-	border: var(--seam);
+[seamed=""] {
+	//border: var(--seam);
+	border-width: var(--seam-size, 1px);
+	border-color: rgba(var(--seam-color), var(--seam-opacity));
+    border-style: solid;
 	// The !important isn't there due to poor selectors but
 	// to prevent any :hover, :active, :focused elevated shadows
 	box-shadow: none !important;
 }
 
-[seamed="right"], [seamed=""][left]   {border-right:  var(--seam)}
-[seamed="left"],  [seamed=""][right]  {border-left:   var(--seam)}
-[seamed="bottom"],[seamed=""][top]    {border-bottom: var(--seam)}
-[seamed="top"],   [seamed=""][bottom] {border-top:    var(--seam)}
+[seamed="top"],   [seamed=""][bottom] {border-width: 1px 0px 0px 0px}
+[seamed="right"], [seamed=""][left]   {border-width: 0px 1px 0px 0px}
+[seamed="bottom"],[seamed=""][top]    {border-width: 0px 0px 1px 0px}
+[seamed="left"],  [seamed=""][right]  {border-width: 0px 0px 0px 1px}
 
+[seamed=""][between],
 [seamed="between"] {
+    border-width: 0;
 	& + & {
-		border-top: var(--seam);
+	    border-top-width: 1px;
 	}
 }
 
+[seamed=""][around],
 [seamed="around"] {
-	border-top: var(--seam);
-	border-bottom: var(--seam);
+    border-width: 0;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
 	& + & {
-		border-top: none;
+    	border-top-width: 0;
 	}
 	// WARNING: I tried using :last-of-type. It would be cleaner solution without border:none
 	//          but :last-of-type does not account for attributes with value. is [fx-item][seamed="around"]

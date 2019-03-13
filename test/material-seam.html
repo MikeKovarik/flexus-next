@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>layout</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../css/flexus-wireframe.css">
+
+    <style>
+        /* demo setup */
+        flexus-view[absolute] {
+            width: 260px;
+        }
+        flexus-view:not([absolute]) {
+            margin: 0 260px;
+        }
+    </style>
+
+</head>
+<body>
+
+	<flexus-view theme="white" seamed absolute left>
+		<flexus-toolbar seamed>[absolute][left][seamed]</flexus-toolbar>
+		<main>
+
+			<div fx-item seamed>[fx-item][seamed]</div>
+			<div fx-item seamed>[fx-item][seamed]</div>
+			<div fx-item seamed>[fx-item][seamed]</div>
+
+            <br>
+
+			<div fx-item seamed between>[fx-item][seamed][between]</div>
+			<div fx-item seamed between>[fx-item][seamed][between]</div>
+			<div fx-item seamed between>[fx-item][seamed][between]</div>
+
+            <br>
+
+			<div fx-item seamed around>[fx-item][seamed][around]</div>
+			<div fx-item seamed around>[fx-item][seamed][around]</div>
+			<div fx-item seamed around>[fx-item][seamed][around]</div>
+
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar seamed>Normal items</flexus-toolbar>
+		<main>
+			<button seamed>button[seamed]</button>
+			<div chip seamed>[chip][seamed]</div>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white" seamed absolute right>
+		<flexus-toolbar seamed>[absolute][right][seamed]</flexus-toolbar>
+		<main>
+
+			<div fx-item seamed>single [seamed]</div>
+
+            <br>
+
+			<div fx-item seamed between>single [seamed][between]</div>
+
+            <br>
+
+			<div fx-item seamed around>single [seamed][around]</div>
+
+		</main>
+	</flexus-view>
+
+</body>
+</html>
