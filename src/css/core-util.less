@@ -1,10 +1,11 @@
 .responsive-screensize(@name, @rules: {}) {
 	&[@{name}=""],
+	&[@{name}="true"],
 	//[fluent] &[@{name}*="fluent"],
 	//[material] &[@{name}*="material"],
-	[screensize*="s"] &[@{name}*="s"],
+	[screensize*="s"] &[@{name}*="s"]:not([@{name}="false"]),
 	[screensize*="m"] &[@{name}*="m"],
-	[screensize*="l"] &[@{name}*="l"] {
+	[screensize*="l"] &[@{name}*="l"]:not([@{name}="false"]) {
 		@rules();
 	}
 }

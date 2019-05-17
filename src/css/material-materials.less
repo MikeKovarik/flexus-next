@@ -65,6 +65,12 @@
 	--bg-opacity: 1;
 }
 
+[opaque],
+[transparent] {
+	/* todo might be reimplemented. this is copied straight from app */
+	background-color: rgba(var(--bg), var(--bg-opacity));
+}
+
 /*
 commented because it breaks [flat] buttons and inputs
 [neutral] {

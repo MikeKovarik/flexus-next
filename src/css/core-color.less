@@ -252,7 +252,8 @@ and even icon and ink pseudo elements
 // Elements with opacity variables built in set the color automatically and change int based on
 // the hover/focus/click state. But we also apply the color ourselves so that [muted] can be applied
 // to any random element, like <span> and <p>
-[muted] {
+[muted="true"],
+[muted=""] {
 	--fg-opacity: 0.6;
 	.apply-foreground();
 }
