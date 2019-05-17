@@ -1,0 +1,334 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		:root {
+			--side: 24px;
+		}
+
+		flexus-expansion-core {
+			display: block;
+		}
+
+		flexus-expansion {
+			box-shadow: var(--elevation-2);
+			background-color: #FFF;
+			display: flex;
+			flex-direction: column;
+		}
+		flexus-expansion:first-of-type {
+			border-top-right-radius: 4px;
+			border-top-left-radius: 4px;
+		}
+		flexus-expansion:last-of-type {
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px;
+		}
+
+		flexus-expansion > * {
+			padding: 8px var(--side);
+		}
+		flexus-expansion > *:first-child {
+			min-height: 48px;
+			display: flex;
+			align-items: center;
+		}
+		flexus-expansion > *:first-child[seamed] {
+			border-bottom: var(--seam);
+			border: none;
+			border-bottom: 1px solid #EEE;
+		}
+		flexus-expansion > *:first-child[seamed] + * {
+			padding: 16px var(--side) 16px;
+		}
+		flexus-expansion > *:first-child:not([seamed]) + * {
+			padding: 0 var(--side) 16px;
+		}
+		flexus-expansion > *:last-child {
+			/*
+			height: 0px;
+			visibility: hidden;
+			*/
+		}
+
+		flexus-list {
+			display: block;
+			background-color: #FFF;
+			padding: 8px 16px;
+			margin: 0 -16px !important;
+		}
+		[seamed="between"] + [seamed="between"] {
+			border-top: 1px solid #EEE;
+		}
+	</style>
+
+</head>
+<body>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			flexus-expansion component
+		</flexus-toolbar>
+		<main>
+
+			<flexus-expansion>
+				<div seamed>
+					<span flex>header</span>
+					<i icon="chevron_right"></i>
+				</div>
+				<div>content</div>
+			</flexus-expansion>
+
+			<flexus-expansion>
+				<div>
+					<span flex>header</span>
+					<icon>chevron_right</icon>
+				</div>
+				<div>content</div>
+			</flexus-expansion>
+
+			<br>
+			
+			<flexus-expansion>
+				<div>
+					<span flex>header</span>
+					<i icon="chevron_right"></i>
+				</div>
+				<div>content</div>
+			</flexus-expansion>
+
+			<flexus-expansion>
+				<div>
+					<span flex>header</span>
+					<i icon="chevron_right"></i>
+				</div>
+				<div>content</div>
+			</flexus-expansion>
+
+			<flexus-expansion>
+				<div>
+					<span flex>header</span>
+					<i icon="chevron_right"></i>
+				</div>
+				<div>content</div>
+			</flexus-expansion>
+
+			<br>
+
+			<flexus-list>
+				<flexus-expansion-core seamed="between">
+					<div fx-item icon="edit">flexus item</div>
+					<div fx-item body2 muted>
+						<span flex>this is some boring gray text with a</span>
+						<button seamed>button</button>
+					</div>
+				</flexus-expansion-core>
+				<flexus-expansion-core seamed="between">
+					<div fx-item icon="edit">flexus item</div>
+					<div fx-item body2 muted>
+						<span flex>this is some boring gray text with a</span>
+						<button seamed>button</button>
+					</div>
+				</flexus-expansion-core>
+				<flexus-expansion-core seamed="between">
+					<div fx-item icon="edit">flexus item</div>
+					<div fx-item body2 muted>
+						<span flex>this is some boring gray text with a</span>
+						<button seamed>button</button>
+					</div>
+				</flexus-expansion-core>
+			</flexus-list>
+
+
+		</main>
+	</flexus-view>
+
+	<script>
+		// todo watch children tree, adding second node open the panel, removing node closes it
+		// todo. watch attributes. hidden on second element triggers hide animation
+
+		function isAnimationOptions(object) {
+			return object.duration
+				|| object.delay
+				|| object.easing
+		}
+
+		function getAnimationObjects(args) {
+			if (args.length === 1) {
+				var from = {}
+				var to = {}
+				for (let [key, val] of Object.entries(args[0])) {
+					from[key] = val[0]
+					to[key] = val[1]
+				}
+			} else {
+				var [to, from] = args
+			}
+			return {to, from}
+		}
+
+		const EASING = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+		const DURATION = 200
+
+		function animate(node, ...args) {
+			var options = {}
+			if (typeof args[args.length - 1] === 'number')
+				options = {duration: args.pop()}
+			if (isAnimationOptions(args[args.length - 1]))
+				options = args.pop()
+			var {to, from} = getAnimationObjects(args.reverse())
+			Object.assign(node.style, from)
+			options.easing = EASING
+			options.fill = 'both'
+			options.duration = options.duration || DURATION
+			var animation = node.animate([from, to], options)
+			animation.done = new Promise(resolve => {
+				animation.onfinish = e => {
+					Object.assign(node.style, to)
+					animation.cancel()
+					resolve()
+				}
+				animation.oncancel = resolve
+			})
+			return animation
+		}
+
+		class CustomComponent extends HTMLElement {
+
+			constructor() {
+				super()
+				let Class = this.constructor
+				if (Class.template) {
+					if (!Class.templateNode) {
+						let code = Class.template
+						if (Class.style)
+							code += `<style>${Class.style}</style>`
+						Class.templateNode = document.createElement('template')
+						Class.templateNode.innerHTML = code
+					}
+					this.attachShadow({mode: 'open'})
+					this.shadowRoot.appendChild(Class.templateNode.content.cloneNode(true))
+				}
+			}
+
+			async _animate(...args) {
+				if (this.animation)
+					this.animation.cancel()
+				this.animation = animate(...args)
+				await this.animation.done
+				this.animation = undefined
+			}
+
+		}
+
+		class FlexusExpansionCore extends CustomComponent {
+
+			static template = `
+				<div id="header-wrapper">
+					<slot name="header"></slot>
+				</div>
+				<div id="content-wrapper">
+					<slot name="content"></slot>
+				</div>
+			`
+
+			static style = `
+				#content-wrapper {
+					will-change: height, visibility;
+				}
+			`
+
+			constructor() {
+				super()
+				this._header  = this.children[0]
+				this._content = this.children[1]
+				this._header.setAttribute('slot', 'header')
+				this._content.setAttribute('slot', 'content')
+				this.header  = this.shadowRoot.querySelector('#header-wrapper')
+				this.content = this.shadowRoot.querySelector('#content-wrapper')
+				this.content.style.overflow = 'hidden'
+				this.hide(false)
+			}
+
+			connectedCallback() {
+				this.header.addEventListener('click', this.toggle)
+			}
+
+			disconnectedCallback() {
+				this.header.removeEventListener('click', this.toggle)
+			}
+
+			toggle = () => {
+				if (this.collapsed)
+					this.show()
+				else
+					this.hide()
+			}
+
+			async show(transition = true) {
+				if (!this.collapsed) return
+				this.collapsed = false
+				this.content.removeAttribute('hidden')
+				if (transition) {
+					let height = this.content.offsetHeight
+					await this._animate(this.content, {
+						height: ['0px', `${height}px`]
+					})
+				}
+			}
+
+			async hide(transition = true) {
+				if (this.collapsed) return
+				this.collapsed = true
+				if (transition) {
+					let height = this.content.offsetHeight
+					await this._animate(this.content, {
+						height: [`${height}px`, '0px']
+					})
+					this.content.style.height = ''
+				}
+				this.content.setAttribute('hidden', '')
+			}
+
+		}
+
+		class FlexusExpansion extends FlexusExpansionCore {
+
+			constructor() {
+				super()
+				this.chevron = this.querySelector('[icon*="chevron"], icon')
+				this.chevron.style.transition = `${DURATION}ms transform ${EASING}`
+				this.rotateChevron(90)
+			}
+
+			rotateChevron(deg) {
+				if (!this.chevron) return
+				this.chevron.style.transform = `rotate(${deg}deg)`
+			}
+
+			show(...args) {
+				this.rotateChevron(-90)
+				super.show(...args)
+			}
+
+			hide(...args) {
+				this.rotateChevron(90)
+				super.hide(...args)
+			}
+
+		}
+
+		customElements.define('flexus-expansion-core', FlexusExpansionCore)
+		customElements.define('flexus-expansion', FlexusExpansion)
+
+	</script>
+
+
+</body>
+</html>
