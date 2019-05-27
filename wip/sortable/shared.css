@@ -1,0 +1,53 @@
+html,
+body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+body {
+	font-family: Roboto, 'Segoe UI', sans-serif;
+}
+
+#container {
+	background-color: #EEE;
+}
+.card {
+	background-color: #FFF;
+	border-radius: 3px;
+	box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+}
+
+.dragging {
+	background-color: cyan;
+}
+.candidate {
+	background-color: orange;
+}
+
+
+body.dev .card * {
+	background-color: rgba(0,0,0,0.1);
+}
+body.dev .card {
+	position: relative;
+	opacity: 0.6;
+}
+body.dev .card::before,
+body.dev .card::after {
+	position: absolute;
+	content: '';
+	display: block;
+	background-color: rgba(255,0,0,0.6);
+}
+body.dev .card::before {
+	height: 1px;
+	top: 50%;
+	left: -5%;
+	right: -5%;
+}
+body.dev .card::after {
+	width: 1px;
+	left: 50%;
+	top: -5%;
+	bottom: -5%;
+}

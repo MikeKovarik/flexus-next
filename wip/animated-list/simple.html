@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="/flexus-next/css/flexus-material.css">
+
+</head>
+<body>
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<button icon="delete"></button>
+			<button icon="delete"></button>
+			<button icon="add"></button>
+			<button icon="add"></button>
+			<button icon="add"></button>
+			<button id="special">delete and add</button>
+			<button id="move">move</button>
+		</flexus-toolbar>
+
+		<main>
+
+			<div subtitle>Dynamic list</div>
+
+			<fx-list>
+				<div fx-item>
+					<!--input type="checkbox"-->
+					First
+				</div>
+				<div fx-item>
+					<!--input type="checkbox" checked-->
+					Second
+				</div>
+				<div fx-item>
+					<!--input type="checkbox"-->
+					Third
+				</div>
+				<div fx-item>
+					<!--input type="checkbox"-->
+					Fourth
+				</div>
+				<div fx-item>
+					<!--input type="checkbox"-->
+					Fifth
+				</div>
+				<div fx-item>
+					<!--input type="checkbox"-->
+					Sixth
+				</div>
+			</fx-list>
+
+		</main>
+
+	</flexus-view>
+
+
+	<script src="./list.js"></script>
+
+	<script>
+		var $ = document.querySelector.bind(document)
+		var $$ = selector => Array.from(document.querySelectorAll(selector))
+
+		var list = $('fx-list')
+
+		list.animationTimeModifier = 10
+
+		var deleteButton1 = $$('button[icon="delete"]')[0]
+		var deleteButton2 = $$('button[icon="delete"]')[1]
+		var addButton1 = $$('button[icon="add"]')[0]
+		var addButton2 = $$('button[icon="add"]')[1]
+		var addButton3 = $$('button[icon="add"]')[2]
+
+		function getCheckedItems() {
+			return [list.children[1]]
+			var items = $$('input[type="checkbox"]')
+				.filter(checkbox => checkbox.checked)
+				.map(checkbox => checkbox.parentElement)
+			if (items.length === 0 && list.children.length > 1)
+				items.push(list.children[1])
+			return items
+		}
+
+		deleteButton1.addEventListener('click', e => {
+			getCheckedItems()
+				.forEach(item => {
+					item.remove()
+				})
+		})
+		deleteButton2.addEventListener('click', e => {
+			var items = $$('[fx-item]')
+			items[3].remove()
+			items[1].remove()
+		})
+		addButton1.addEventListener('click', e => {
+			var node1 = createItem()
+			$$('[fx-item]')[2].after(node1)
+		})
+		addButton2.addEventListener('click', e => {
+			var node1 = createItem('new 1')
+			var node2 = createItem('new 2')
+			var items = $$('[fx-item]')
+			items[0].after(node1)
+			items[2].after(node2)
+		})
+		addButton3.addEventListener('click', e => {
+			var node1 = createItem('new 1')
+			var node2 = createItem('new 2')
+			var node3 = createItem('new 3')
+			var node4 = createItem('new 4')
+			var items = $$('[fx-item]')
+			items[0].after(node1)
+			items[1].after(node2)
+			items[2].after(node3)
+			items[3].after(node4)
+		})
+
+		function createItem(name = 'new') {
+			var div = document.createElement('div')
+			div.innerHTML = `<div fx-item>${name}</div>`
+			//div.innerHTML = `<div fx-item><input type="checkbox">${name}</div>`
+			return div.firstElementChild
+		}
+
+		$('#special').addEventListener('click', e => {
+			var removedItem = $$('[fx-item]')[2]
+			var createdItem = createItem()
+			removedItem.nextElementSibling.after(createdItem)
+			// WARNING - this is the safe way and dusledky se projevi az po animaci
+			// TODO - musi se to apliovat hned a objeit se tak mutationobserver timeout
+			//list.removeItem(removedItem)
+			removedItem.remove()
+		})
+
+		$('#move').addEventListener('click', e => {
+			var item = $$('[fx-item]')[2]
+			list.firstElementChild.before(item)
+		})
+
+	</script>
+
+</body>
+</html>

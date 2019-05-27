@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="./shared.css">
+	<style>
+		#container {
+			padding: 16px;
+			gap: 16px;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			justify-items: center;
+		}
+		.card {
+			width: 120px;
+			height: 180px;
+			display: inline-block;
+			padding: 16px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="container">
+		<div class="card">Card 1</div>
+		<div class="card">Card 2</div>
+		<div class="card">Card 3</div>
+		<div class="card">Card 4</div>
+	</div>
+
+	<div id="app" fit clickthrough></div>
+
+	<script type="module">
+		import {SortableContainer} from './index.js'
+		let container = document.querySelector('#container')
+		let sortable = new SortableContainer(container)
+	</script>
+
+</body>
+</html>
