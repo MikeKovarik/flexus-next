@@ -88,6 +88,17 @@ button {
 	}
 */
 
+	& > [icon],
+	& > icon,
+	&[icon]:not(:empty):not([vertical])::before {
+		margin-left:  calc(var(--size, 0px) / 9 * -1);
+		margin-right: calc(var(--size, 0px) / 5);
+	}
+	&[icon]:not(:empty)[vertical]::before {
+		// margin-top ???
+		margin-bottom: calc(var(--size, 0px) / 5);
+	}
+/*
 	--internal-gutter-todo-rename: 8px;
 	&[icon]:not(:empty) {
 		//--padding-left: 12px;
@@ -100,7 +111,7 @@ button {
 			margin-bottom: var(--internal-gutter-todo-rename);
 		}
 	}
-
+*/
 	&:not(:empty)[vertical] {
 		height: unset;
 		//--padding: 12px;

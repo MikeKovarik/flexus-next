@@ -149,7 +149,7 @@
 				<div flex></div>
 				<button icon="favorite" title="Add to Favorites"></button>
 			</section>
-			<div collapse style="height: 160px"></div>
+			<div collapsible style="height: 160px"></div>
 			<section overlay layout>
 				<span scale>Scale</span>
 				<span flex></span>
@@ -170,13 +170,13 @@
 				<div flex></div>
 				<button icon="favorite" title="Add to Favorites"></button>
 			</section>
-			<div collapse fade ratio="1:1" cover style="background-image: url('../demos/img/albums/mike-shinoda-post-traumatic.jpg')"></div>
+			<div collapsible fade ratio="1:1" cover style="background-image: url('../demos/img/albums/mike-shinoda-post-traumatic.jpg')"></div>
 			<section indent>Post Traumatic</section>
 			<button fab bottom right icon="pause"></button>
 		</flexus-toolbar>
 		<main>
 			<p>TODO: come up with more granular API that would allow the bottom section to collapse fade into the main toolbar.</p>
-			<p>[collapse] comes to mind but it was meant for the large elements like images. And the code to distinguish between them img[collapse] and section[collapse] could get messy.</p>
+			<p>[collapsible] comes to mind but it was meant for the large elements like images. And the code to distinguish between them img[collapsible] and section[collapsible] could get messy.</p>
 			<p>This is an experimental reimplementation of scrollable/collapsible toolbars with the shiny new position:sticky standard.</p>
 			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -191,7 +191,7 @@
 				<div flex></div>
 				<button icon="favorite" title="Add to Favorites"></button>
 			</section>
-			<div collapse fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
+			<div collapsible fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
 			<section overlay sticky>A Thousand Suns</section>
 		</flexus-toolbar>
 		<main>
@@ -209,7 +209,7 @@
 				<div flex></div>
 				<button icon="favorite" title="Add to Favorites"></button>
 			</section>
-			<div collapse fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
+			<div collapsible fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
 			<section overlay indent>A Thousand Suns</section>
 		</flexus-toolbar>
 		<main>
@@ -227,7 +227,7 @@
 				<div flex></div>
 				<button icon="favorite" title="Add to Favorites"></button>
 			</section>
-			<div collapse fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
+			<div collapsible fade ratio="1:1" cover style="background-image: url('../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
 			<section overlay>
 				<span scale>A Thousand Suns</span>
 			</section>
@@ -260,7 +260,7 @@
 
 		view.style.setProperty('--toolbar-height-expanded', toolbar.offsetHeight + 'px')
 
-		var collapsible = toolbar.querySelector('[collapse]')
+		var collapsible = toolbar.querySelector('[collapsible]')
 		var [topSection, bottomSection] = toolbar.querySelectorAll('section')
 		var collapsibleHeight = 0
 		var collapsePercentable = 0

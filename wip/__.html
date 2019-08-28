@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		body {
+			align-items: center;
+			justify-content: center;
+		}
+		flexus-view {
+			flex: initial;
+			width: 300px;
+			height: 500px;
+			border: 2px solid #DDD;
+			overflow: hidden;
+		}
+	</style>
+
+</head>
+<body>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+		</flexus-toolbar>
+		<main>
+			<fx-list></fx-list>
+		</main>
+	</flexus-view>
+
+
+	<script type="module">
+		import FxComponent from './FxComponentV1.js'
+/*
+		class FxList extends FxComponent {
+
+			constructor() {
+				super()
+			}
+
+			show(...args) {
+			}
+
+			hide(...args) {
+			}
+
+		}
+
+		customElements.define('fx-list', FxList)
+*/
+
+		// NOTE: chrome seems to be doing this out of the box
+
+		let main = document.querySelector('main')
+		let list = document.querySelector('fx-list')
+
+		for (let i = 1; i < 30; i++) {
+			let node = fragmentFromString(itemTemplate(i))
+			list.append(node)
+		}
+
+		main.scrollTop = 200
+
+		setTimeout(() => {
+			let node = fragmentFromString(itemTemplate(0))
+			list.prepend(node)
+		}, 500)
+
+		function itemTemplate(num) {
+			return `
+			<div fx-item>
+				<div avatar></div>
+				<span flex>Item ${num}</span>
+			</div>
+			`
+		}
+
+		function fragmentFromString(string) {
+			return document.createRange().createContextualFragment(string)
+		}
+
+	</script>
+
+
+</body>
+</html>

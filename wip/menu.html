@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+</head>
+<body>
+
+
+	<flexus-view>
+
+		<flexus-toolbar>
+			<div flex>fx-menu component</div>
+			<button icon="more" name="more"></button>
+		</flexus-toolbar>
+		<main>
+
+			<fx-menu for="more">
+				<div>option 1</div>
+				<div>option 2</div>
+			</fx-menu>
+
+		</main>
+	</flexus-view>
+
+
+	<script type="module">
+		import FxComponent from './FxComponentV1.js'
+
+		class FxMenu extends FxComponent {
+
+			constructor() {
+				super()
+			}
+
+			show(...args) {
+			}
+
+			hide(...args) {
+			}
+
+		}
+
+		customElements.define('fx-menu', FxMenu)
+
+	</script>
+
+
+</body>
+</html>

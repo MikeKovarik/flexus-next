@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" defer href="../css/flexus-material.css">
+	<style>
+		body {
+			display: block;
+		}
+		size-transition {
+			display: inline-flex;
+			align-items: center;
+			margin: 16px;
+		}
+	</style>
+</head>
+<body>
+
+	<size-transition card elevation="8">
+		<div>something inside</div>
+		<button id="add" seamed>add</button>
+		<button id="del" seamed>del</button>
+	</size-transition>
+
+	<script type="module">
+		import FxComponent from './FxComponentV1.js'
+
+		//const duration = 120
+		const duration = 480
+		const easing = 'cubic-bezier(0.1, 0.9, 0.2, 1)'
+
+		class SizeTransition extends FxComponent {
+
+			static template = `
+				<div id="container">
+					<slot></slot>
+				</div>
+			`
+
+			static style = `
+				:host {
+					overflow: hidden;
+				}
+				#container {
+					display: inherit;
+					align-items: inherit;
+					justify-content: inherit;
+				}
+			`
+
+			constructor() {
+				super()
+				this.observer = new ResizeObserver(entries => this.onResize(entries[0]))
+				console.log(this.getAttribute('elevation'))
+			}
+
+			attributeChangedCallback(...args) {
+				console.log(...args)
+			}
+
+			connectedCallback() {
+				this.container = this.shadowRoot.querySelector('#container')
+				this._start()
+			}
+
+			disconnectedCallback() {
+				this._stop()
+			}
+
+			_start() {
+				this.observer.observe(this)
+			}
+
+			_stop() {
+				this.observer.unobserve(this)
+			}
+
+			onResize(entry) {
+				let {width, height} = entry.contentRect
+				let computed = window.getComputedStyle(this)
+				console.log('onResize', width, height)
+
+				width += parseInt(computed.paddingLeft) + parseInt(computed.paddingRight)
+				height += parseInt(computed.paddingTop) + parseInt(computed.paddingBottom)
+
+				if (this.lastWidth !== width && this.lastWidth !== undefined) {
+					this._stop()
+					var keyframes = {}
+					if (this.lastWidth !== width) {
+						keyframes.width  = [this.lastWidth + 'px',  width + 'px']
+						this.container.style.minWidth = `${Math.max(this.lastWidth, width)}px`
+					}
+					if (this.lastHeight !== height) {
+						keyframes.height = [this.lastHeight + 'px', height + 'px']
+						this.container.style.minHeight = `${Math.max(this.lastHeight, height)}px`
+					}
+					let animation = this.animate(keyframes, {easing, duration})
+					animation.onfinish = e => {
+						this.container.style.minWidth = ''
+						this.container.style.minHeight = ''
+						this._start()
+					}
+				}
+
+				this.lastWidth = width
+				this.lastHeight = height
+			}
+
+		}
+
+		customElements.define('size-transition', SizeTransition)
+
+		let container = document.querySelector('size-transition')
+		document.querySelector('#add').addEventListener('click', e => {
+			let node = document.createElement('div')
+			container.appendChild(node)
+			node.innerText = 'new thing'
+		})
+		document.querySelector('#del').addEventListener('click', e => {
+			container.lastElementChild.remove()
+		})
+
+	</script>
+
+</body>
+</html>

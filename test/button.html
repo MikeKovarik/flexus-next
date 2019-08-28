@@ -84,21 +84,6 @@
 </head>
 <body>
 
-	<template>
-
-		<button>edit</button>
-		<button icon="edit">edit</button>
-		<button><i icon="edit"></i>edit</button>
-		<button icon="edit"></button>
-		<button icon="favorite" rounded flat>Faves</button>
-		<button icon="favorite" rounded tinted>Faves</button>
-		<button text>Text</button>
-		<button text icon="car">Text & Icon</button>
-
-		<br><hr><br>
-
-	</template>
-
 	<template variants-row="plain elevated flat seamed transparent" variants-col="tinted muted">
 
 		<button>default</button>
@@ -186,40 +171,50 @@
 		<button fab big icon="plus"></button>
 		<button fab big icon="plus">Payment method</button>
 
-		<p muted body2>Collapsible ala Andoid Messages</p>
+		<p muted body2>Collapsible (preview ala Andoid Messages):</p>
 		<div spaced center left layout>
 			<button fab big icon="message">Start chat</button>
 			<i icon="arrow-forward"></i>
 			<button fab big icon="message"></button>
 		</div>
-		<div spaced center left layout>
-			<button fab big icon="message">
-				<span collapse>[icon]</span>
-			</button>
-			<i icon="arrow-forward"></i>
-			<button fab big icon="message">
-				<span collapse collapsed style="width: 0px">[icon]</span>
-			</button>
-		</div>
-		<div spaced center left layout>
-			<button fab big>
-				<i icon="message"></i>
-				<span collapse>&lt;icon&gt;</span>
-			</button>
-			<i icon="arrow-forward"></i>
-			<button fab big>
-				<i icon="message"></i>
-				<span collapse collapsed style="width: 0px">&lt;icon&gt;</span>
-			</button>
-		</div>
 
+		<p muted body2>Implementations:</p>
+
+		<p muted body2>[fab][icon][collapsible] with raw text inside</p>
+		<div spaced center left layout>
+			<button fab big icon="message" collapsible>Start chat</button>
+			<i icon="arrow-forward"></i>
+			<button fab big icon="message" collapsible collapsed>Start chat</button>
+		</div>
+		<p muted body2>[fab][icon] + &lt;span&gt;[collapsible]</p>
+		<div spaced center left layout>
+			<button fab big icon="message">
+				<span collapsible>Start chat</span>
+			</button>
+			<i icon="arrow-forward"></i>
+			<button fab big icon="message">
+				<span collapsible collapsed style="width: 0px">Start chat</span>
+			</button>
+		</div>
+		<p muted body2>[fab] > &lt;icon&gt; + &lt;span&gt;[collapsible]</p>
+		<div spaced center left layout>
+			<button fab big>
+				<i icon="message"></i>
+				<span collapsible>&lt;icon&gt;</span>
+			</button>
+			<i icon="arrow-forward"></i>
+			<button fab big>
+				<i icon="message"></i>
+				<span collapsible collapsed style="width: 0px">&lt;icon&gt;</span>
+			</button>
+		</div>
 		<div tinted fullbleed padded>
 			<p body2 muted>FAB inside tinted container should fall back to themes white/black background.</p>
 			<p body2 muted>text pristine and wrapped in span</p>
 			<button fab big icon="message">Start chat</button>
 			<br>
 			<button big fab icon="message">
-				<span collapse>Start chat</span>
+				<span collapsible>Start chat</span>
 			</button>
 		</div>
 	
@@ -261,6 +256,39 @@
 
 
 	<script src="./util/testbed.js"></script>
+
+	<style>
+		[fab][collapsible] {
+			overflow: hidden;
+			transition: all 200ms var(--easing);
+			max-width: 200px;
+			justify-content: start;
+			text-indent: calc(2 * var(--internal-gutter-todo-rename));
+			padding-right: 4px; /* compensation for text-indent */
+		}
+		[fab][collapsible][icon]::before,
+		[fab][collapsible] > [icon]::before,
+		[fab][collapsible] > icon {
+			text-indent: 0;
+			margin-right: 0 !important;
+		}
+		[fab][collapsed] {
+			max-width: var(--size);
+			padding-left: var(--padding-horizontal); /* apply the same padding as in no-text fab */
+			color: rgba(var(--fg), 0); /* ::before has its own color definition that's immune to this */
+		}
+	</style>
+	<script>
+		Array.from(document.querySelectorAll('[collapsible]'))
+		.forEach(node => {
+			node.addEventListener('click', e => {
+				if (node.hasAttribute('collapsed'))
+					node.removeAttribute('collapsed')
+				else
+					node.setAttribute('collapsed', '')
+			})
+		})
+	</script>
 
 </body>
 </html>

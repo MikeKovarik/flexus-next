@@ -9,6 +9,15 @@ function removeFromArray(array, item) {
 
 var curve = 'cubic-bezier(0.1, 0.9, 0.2, 1)'
 
+function promiseAnimation(animation) {
+	if (animation.finished) return animation.finished
+	let promise = new Promise((resolve, reject) => {
+		animation.onfinish = resolve
+		animation.oncancel = reject
+	})
+	animation.finished = promise
+	return promise
+}
 
 function createAnimation(node, styles, options) {
 	// Keeps nodes in their initial animation state despite possible delay
@@ -17,7 +26,8 @@ function createAnimation(node, styles, options) {
 	//options.fill = 'both'
 	var animation = node.animate(styles, options)
 	// the promise would keep throwing errors on cancelation
-	animation.finished.catch(noop)
+	let finished = promiseAnimation(animation)
+	finished.catch(noop)
 	// Set starting (inline) style and keep it until animation starts.
 	// two reasons: animation could be delayed, or it's not but quick flash may appear
 	// (when changing position to absolute, removing element, etc...)
@@ -117,7 +127,7 @@ class FxList extends HTMLElement {
 		var removed = this.postponedRemovals  || []
 		var moved   = this.postponedMoves     || []
 
-		mutations.forEach(mutation => {
+		for (let mutation of mutations) {
 			if (mutation.removedNodes.length) {
 				var node = mutation.removedNodes[0]
 				// note: graceful removal is not differentiated at this point because we need
@@ -146,15 +156,14 @@ class FxList extends HTMLElement {
 					added.push(node)
 				}
 			}
-		})
+		}
 
 		var postponeAnimations = false
 
 		// Now that nodes that only mode (were removed and then added again) are out of the way
 		// we can handle removals and especially those that are ungraceful (directly removed from DOM)
 		removed.forEach(node => {
-			if (node.isBeingRemovedGracefuly)
-				return
+			if (node.isBeingRemovedGracefuly) return
 			postponeAnimations = true
 			var lastIndex = this.items.indexOf(node)
 			if (lastIndex > 0) {
@@ -197,8 +206,7 @@ class FxList extends HTMLElement {
 	}
 
 	executeAnimations(removed, moved, added) {
-		if (added.length === 0 && removed.length === 0 && moved.length === 0)
-			return
+		if (added.length === 0 && removed.length === 0 && moved.length === 0) return
 
 		console.log('-------------------------------------------------------')
 		console.log('- removed', removed)

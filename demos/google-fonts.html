@@ -1,0 +1,90 @@
+<!--
+Unifinished prototype of Google Translate site
+Not responsible yet.
+It is modeled after website, not the android app, but we can still make it responsive and look like native app
+-->
+
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Google Translate</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+</head>
+<body google theme="white" primary="red" class="side-comp custom-size">
+
+	<flexus-view>
+
+		<flexus-toolbar seamed>
+			<div>Google Fonts</div>
+			<span flex body2 muted>incomplete demo, work in progress</span>
+			<button>Directory</button>
+			<button muted>featured</button>
+			<button muted>articles</button>
+			<button muted>about</button>
+		</flexus-toolbar>
+
+		<main>
+
+			<div round seamed spaced padded="1" layout>
+				<input type="text" plain placeholder="Search Fonts">
+				<hr>
+				<select plain>
+					<option>Sentence</option>
+				</select>
+				<hr>
+				<input type="text" placeholder="type something">
+				<hr>
+				TODO
+				<hr>
+				<button icon="edit"></button>
+				<hr>
+				<button icon="edit"></button>
+				<hr>
+				<button icon="edit"></button>
+			</div>
+
+			<br>
+
+			<div spaced="1" layout>
+				<select round seamed>
+					<option>Categories</option>
+				</select>
+				<select round seamed>
+					<option>Language</option>
+				</select>
+				<select round seamed>
+					<option>Font Properties</option>
+				</select>
+			</div>
+
+			<div layout>
+				<div flex body2 muted>Viewing <span tinted>922</span> of 922 font families</div>
+				<select>
+					<option>Sorty by: trending now</option>
+				</select>
+			</div>
+
+			<grid columns="3" spaced>
+				<div seamed>TODO</div>
+				<div seamed>TODO</div>
+				<div seamed>TODO</div>
+				<div seamed>TODO</div>
+				<div seamed>TODO</div>
+				<div seamed>TODO</div>
+			</grid>
+
+		</main>
+
+	</flexus-view>
+
+
+	<img src="./img/screenshots/google-fonts.png" width="800">
+
+</body>
+</html>

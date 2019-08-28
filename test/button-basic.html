@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>button</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+
+	<style>
+		vertical {
+			display: inline-flex;
+			align-items: flex-start;
+		}
+	</style>
+</head>
+<body>
+
+	<div>
+
+		<button>default</button>
+		<button round>[round]</button>
+		<button rounded>[rounded]</button>
+
+		<br>
+
+		<button>default</button>
+		<button flat>[flat]</button>
+		<button plain>[plain]</button>
+		<button plain>[plain]</button>
+
+		<br>
+
+		<vertical>
+			<button icon="edit">button[icon]</button>
+			<button><i icon="edit"></i>button i[icon]</button>
+			<button><icon>edit</icon>button &lt;icon&gt;</button>
+		</vertical>
+
+		<vertical>
+			<button><span>button i[icon]</span><i icon="edit"></i></button>
+			<button><span>button &lt;icon&gt;</span><icon>edit</icon></button>
+		</vertical>
+<!--
+		<vertical>
+			<button icon="edit"></button>
+			<button><i icon="edit"></i></button>
+			<button><icon>edit</icon></button>
+		</vertical>
+-->
+		<br>
+
+		<button icon="favorite" rounded flat>Rounded</button>
+		<button icon="favorite" round flat>Round</button>
+		<br>
+		<button icon="favorite" rounded tinted>Rounded</button>
+		<button icon="favorite" round tinted>Round</button>
+		<br>
+		<button text>[text]</button>
+		<button text icon="edit">[text][icon]</button>
+
+		<br><br>
+
+		TODO: another class like [plain] but with padding on sides.
+		[plain] has no padding which is good for aligning with edges and keylines (like inside card), material spec says there should be 8px.
+
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!--
+Unifinished prototype of Google Translate site
+Not responsible yet.
+It is modeled after website, not the android app, but we can still make it responsive and look like native app
+-->
+
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Google Translate</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./util/side-comp.css">
+
+	<style>
+		:root {
+			--circle-button-size: 34px;
+			--circle-size: 40px;
+			--cutout-size: -23px;
+			--cutin-size: -8px;
+		}
+		:root {
+			--seam-color: #dadce0;
+			--seam-size: 1px;
+		}
+		[selected] {
+			--seam-color: #1a73e8;
+			--seam-size: 2px;
+		}
+		.bigseamed {
+			/*border: 1px solid var(--seam-color);*/
+			height: 56px;
+			padding: 0 12px;
+			border-radius: 4px;
+			align-items: center;
+			overflow: hidden;
+			display: flex;
+			position: relative;
+		}
+		.bigseamed::before {
+			border: var(--seam-size) solid var(--seam-color);
+			border-radius: inherit;
+			bottom: 0;
+			content: '';
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+		.bigseamed::after {
+			content: '';
+			background-color: white;
+			border: var(--seam-size) solid var(--seam-color);
+			border-radius: 100%;
+			box-sizing: border-box;
+			position: absolute;
+			top: calc(50% - (0.5 * var(--circle-size)));
+			height: var(--circle-size);
+			width: var(--circle-size);
+		}
+		.bigseamed.cutout.right {
+			padding-right: 28px;
+		}
+		.bigseamed.cutout.left {
+			padding-left: 28px;
+		}
+		.bigseamed.cutout.right::after {
+			right: var(--cutout-size);
+		}
+		.bigseamed.cutout.left::after {
+			left: var(--cutout-size);
+		}
+		.circularbutton {
+			align-self: center;
+			--icon-size: 24px;
+			--hitbox-offset: calc((var(--icon-size) - var(--circle-button-size)) * -0.5) !important; /* 34x34px */
+			margin-left: var(--cutin-size);
+			margin-right: var(--cutin-size);
+		}
+	</style>
+
+</head>
+<body google theme="white" primary="blue" class="side-comp custom-size">
+
+	<flexus-view>
+
+		<flexus-toolbar seamed>
+			<button icon="menu"></button>
+			<span body2 muted>incomplete demo, work in progress</span>
+		</flexus-toolbar>
+
+		<main>
+
+			<horizontal>
+				<div flex class="bigseamed cutout right" selected>
+					Pragues
+				</div>
+				<button icon="swap_horiz" class="circularbutton"></button>
+				<div flex class="bigseamed cutout left">
+					Pragues
+				</div>
+			</horizontal>
+
+		</main>
+
+	</flexus-view>
+
+
+	<img src="./img/screenshots/google-flights-new.png" width="600">
+
+</body>
+</html>

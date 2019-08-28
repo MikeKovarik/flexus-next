@@ -219,21 +219,31 @@ and even icon and ink pseudo elements
 .createcolor(orange,  ~'235, 160, 40',  ~'0, 0, 0'); // TOOD improve this color
 
 .createcolor(@name, @bg, @fg) {
+	:root {
+		--@{name}: @bg;
+		--@{name}-fg: @fg;
+	}
 	[primary="@{name}"] {
-		--theme-primary-bg: @bg;
-		--theme-primary-fg: @fg;
+		//--theme-primary-bg: @bg;
+		//--theme-primary-fg: @fg;
+		--theme-primary-bg: ~"var(--@{name})";
+		--theme-primary-fg: ~"var(--@{name}-fg)";
 	}
 	[secondary="@{name}"] {
-		--theme-secondary-bg: @bg;
-		--theme-secondary-fg: @fg;
+		//--theme-secondary-bg: @bg;
+		//--theme-secondary-fg: @fg;
+		--theme-secondary-bg: ~"var(--@{name})";
+		--theme-secondary-fg: ~"var(--@{name}-fg)";
 	}
 	// Overrides local tint and bypasses any color inheritance and recalcutaion.
 	// Local --tint is used for reskinning of for example <button> or certain other element
 	// while we could always tap into app's original global theme color if needed (even from
 	// within the locally styled element)
 	[@{name}] {
-		--tint-bg: @bg;
-		--tint-fg: @fg;
+		//--tint-bg: @bg;
+		//--tint-fg: @fg;
+		--tint-bg: ~"var(--@{name})";
+		--tint-fg: ~"var(--@{name}-fg)";
 
 		//--fg: var(--tint-bg);
 		--tint: var(--tint-bg);

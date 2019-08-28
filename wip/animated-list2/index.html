@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" defer href="/flexus-next/css/flexus-material.css">
+	<style>
+		body {
+			display: block;
+			padding: 16px;
+		}
+		size-transition {
+			display: inline-flex;
+			align-items: center;
+			margin: 16px;
+		}
+		fx-list {
+			display: flex;
+		}
+
+		.toolbar > * + * {
+			margin-left: 16px;
+		}
+	</style>
+</head>
+<body>
+
+	<div spaced padded="4px" layout style="align-items: center">
+		<span>add</span>
+		<button seamed mini id="add1">to end</button>
+		<button seamed mini id="add2">to start</button>
+		<button seamed mini id="add3">to middle</button>
+	</div>
+	<div spaced padded="4px" layout style="align-items: center">
+		<span>remove</span>
+		<button seamed mini id="remove1">last item</button>
+		<button seamed mini id="remove2">first item</button>
+		<button seamed mini id="remove3">from middle</button>
+	</div>
+	<div spaced padded="4px" layout style="align-items: center">
+		<span>shuffle</span>
+		<button seamed mini id="shuffle1">last to start</button>
+		<button seamed mini id="shuffle2">first to end</button>
+		<button seamed mini id="shuffle3">-2 to 1</button>
+		<button seamed mini id="shuffle4">1 to -2</button>
+	</div>
+<!--
+
+	<h1 subtitle>horizontal</h1>
+
+	<fx-list>
+		<button icon="add">plus</button>
+		<button icon="edit">edit</button>
+		<button icon="map">map</button>
+		<button icon="internet">internet</button>
+		<button icon="delete">delete</button>
+	</fx-list>
+
+	<br>
+
+	<fx-list>
+		<button icon="add"></button>
+		<button icon="edit"></button>
+		<button icon="map"></button>
+		<button icon="internet"></button>
+		<button icon="delete"></button>
+		<button icon="bookmarks"></button>
+	</fx-list>
+
+	<br>
+
+	<fx-list class="toolbar" round card>
+		<button plain round icon="edit">edit</button>
+		<button plain round icon="timeline">timeline</button>
+		<button plain round icon="delete">delete</button>
+		<button plain round icon="map">map</button>
+		<button plain round icon="internet">internet</button>
+	</fx-list>
+
+	<br>
+
+	<fx-list class="toolbar" round card style="display: inline-flex">
+		<button plain round icon="edit">edit</button>
+		<button plain round icon="timeline">timeline</button>
+		<button plain round icon="delete">delete</button>
+		<button plain round icon="map">map</button>
+		<button plain round icon="internet">internet</button>
+	</fx-list>
+
+	<h1 subtitle>vertical</h1>
+
+	<fx-list style="display: inline-flex; flex-direction: column; width: 160px">
+		<button icon="add">plus</button>
+		<button icon="edit">edit</button>
+		<button icon="map">map</button>
+		<button icon="internet">internet</button>
+		<button icon="delete">delete</button>
+	</fx-list>
+
+	<fx-list style="display: inline-flex; flex-direction: column;">
+		<button icon="add"></button>
+		<button icon="edit"></button>
+		<button icon="map"></button>
+		<button icon="internet"></button>
+		<button icon="delete"></button>
+		<button icon="bookmarks"></button>
+	</fx-list>
+-->
+	<fx-list style="display: inline-flex; flex-direction: column; width: 280px">
+		<div fx-item>
+			<div avatar></div>
+			<div flex>Item number 1</div>
+			<button icon="delete"></button>
+		</div>
+		<div fx-item>
+			<div avatar></div>
+			<div flex>Item number 2</div>
+			<button icon="delete"></button>
+		</div>
+		<div fx-item>
+			<div avatar></div>
+			<div flex>Item number 3</div>
+			<button icon="delete"></button>
+		</div>
+		<div fx-item>
+			<div avatar></div>
+			<div flex>Item number 4</div>
+			<button icon="delete"></button>
+		</div>
+	</fx-list>
+
+	<script type="module">
+		import './FxList.js'
+
+		let list = document.querySelector('fx-list')
+		action('#add1', e => {
+			list.append(list.lastElementChild.cloneNode(true))
+		})
+		action('#add2', e => {
+			list.prepend(list.firstElementChild.cloneNode(true))
+		})
+		action('#add3', e => {
+			let node = list.children[Math.floor(list.children.length / 2)]
+			node.after(node.cloneNode(true))
+		})
+
+		action('#remove1', e => {
+			list.lastElementChild.remove()
+		})
+		action('#remove2', e => {
+			list.firstElementChild.remove()
+		})
+		action('#remove3', e => {
+			let node = list.children[Math.floor(list.children.length / 2)]
+			node.remove()
+		})
+
+		action('#shuffle1', e => {
+			// move last to be first
+			list.lastElementChild.before(list.children[1])
+		})
+		action('#shuffle2', e => {
+			// move first after last
+			list.firstElementChild.after(list.lastElementChild)
+		})
+		action('#shuffle3', e => {
+			// move second to last to second
+			list.children[0].after(list.lastElementChild.previousElementSibling)
+		})
+		action('#shuffle4', e => {
+			// move second before last
+			list.children[0].before(list.lastElementChild)
+		})
+/*
+		action('#shuffle1', e => {
+			// move last before first
+			list.children[0].before(list.lastElementChild)
+		})
+		action('#shuffle2', e => {
+			// move first after last
+			list.lastElementChild.after(list.children[0])
+		})
+		action('#shuffle3', e => {
+			// move second to last to second
+			list.children[0].after(list.lastElementChild.previousElementSibling)
+		})
+		action('#shuffle4', e => {
+			// move second before last
+			list.lastElementChild.before(list.children[1])
+		})
+*/
+		function action(selector, callback) {
+			document.querySelector(selector).addEventListener('click', callback)
+		}
+
+	</script>
+
+</body>
+</html>
