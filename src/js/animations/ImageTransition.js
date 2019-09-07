@@ -59,13 +59,13 @@ export class ImageTransition {
 			this.sdVirtualWidth  = sd.contentWidth
 			this.sdVirtualHeight = sd.contentHeight
 		} else if (sd.naturalAspectRatio >= 1 && td.naturalAspectRatio >= 1) {
-			// 1) Both images are landscape, or 2) one is landscape and the other is at leas square
+			// 1) Both images are landscape, or 2) one is landscape and the other is at least square
 			// Use their height as scale basis.
 			this.scale = sd.contentHeight / td.contentHeight
 			this.sdVirtualWidth  = sd.contentWidth * td.naturalAspectRatio
 			this.sdVirtualHeight = sd.contentHeight
 		} else if (sd.naturalAspectRatio <= 1 && td.naturalAspectRatio <= 1) {
-			// 1) Both images are portrait, or 2) one is portrait and the other is at leas square
+			// 1) Both images are portrait, or 2) one is portrait and the other is at least square
 			// Use their width as scale basis.
 			this.scale = sd.contentWidth / td.contentWidth
 			this.sdVirtualWidth  = sd.contentWidth
@@ -124,6 +124,12 @@ export class ImageTransition {
 */
 		this.originX = 0
 		this.originY = 0
+
+		console.log('this.target', this.target)
+		console.log('this.source', this.source)
+
+		console.log('this.targetContainedWithinSource', this.targetContainedWithinSource)
+		console.log('this.sourceContainedWithinTarget', this.sourceContainedWithinTarget)
 
 		if (!this.mode) {
 			/*
@@ -256,9 +262,11 @@ export class ImageTransition {
 			backgroundColor: td.computed.backgroundColor,
 			zIndex: td.computed.zIndex,
 		})
+		this.clone.style.visibility = 'hidden'
 		adjacentNode.after(this.clone)
 		// give the clone some time to load and render the image to prevent unstyled flash
 		await timeout(20)
+		this.clone.style.visibility = ''
 		this.target.style.visibility = 'hidden'
 	}
 
