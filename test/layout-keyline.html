@@ -6,13 +6,8 @@
 	<title>keyline</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<link rel="stylesheet" href="../dist/wireframe.css">
-<!--
-	<link rel="stylesheet" href="../dist/core.css">
-	<link rel="stylesheet" href="../dist/material.css">
--->
-	<link rel="stylesheet" href="/flexus/css/flexus-material.css">
-	<link rel="stylesheet" href="/flexus/css/flexus-material-icons.css">
+	<link rel="stylesheet" href="../css/flexus-wireframe.css">
+	<link rel="stylesheet" href="../css/flexus-material.css">
 
 </head>
 <body wireframe light>
@@ -28,12 +23,11 @@
 			</section>
 			<section>default position</section>
 			<div>default position</div>
-			<h1>default position</h1>
-			<section indent>Keyline aligned</section>
-			<div indent>Keyline aligned</div>
-			<h1 indent>Keyline aligned</h1>
-			<h2 indent>Keyline aligned</h2>
-			<section><span indent>Keyline aligned</span></section>
+			<h6>default position</h6>
+			<div indent>&lt;div&gt;[indented]</div>
+			<h6 indent>&lt;h6&gt;[indented]</h6>
+			<section indent>&lt;section&gt;[indented]</section>
+			<section><span indent>&lt;section&gt; &lt;span&gt;[indented]</span></section>
 			<section><i icon="info"></i>Keyline aligned</section>
 			<section icon="info">Keyline aligned</section>
 		</flexus-toolbar>
@@ -41,12 +35,13 @@
 		<main>
 			<div indent display1 style="margin-top: 1rem">Keyline aligned</div>
 			<div indent subhead style="height: 48px;">Jun 12, 2013</div>
-			<div fx-item>Non-indent</div>
 			<div fx-item icon="info">Non-indent with icon</div>
 			<div fx-item><i icon="info"></i>Non-indent with icon</div>
-			<div fx-item indent>indent</div>
+			<div indent fx-item>indented fx-item</div>
+			<div indent>indented div</div>
+			<p indent>indented paragraph</p>
+			<div fx-item>Non-indent</div>
 
-			<div fx-item>hr</div>
 			<hr>
 
 			<div fx-item>hr[fullbleed]</div>
@@ -77,7 +72,7 @@
 				<button icon="menu"></button>
 				<span>Keyline aligned</span>
 			</section>
-			<h1 indent>Keyline aligned</h1>
+			<h6 indent>Keyline aligned</h6>
 		</flexus-toolbar>
 
 		<main>

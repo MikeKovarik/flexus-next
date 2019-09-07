@@ -18,8 +18,8 @@
 }
 
 :root {
-	--pink: rgba(255,0,150,0.7);
-	--cyan: rgba(0,255,200,0.2);
+	--wireframe-pink: rgba(255,0,150,0.7);
+	--wireframe-cyan: rgba(0,255,200,0.2);
 }
 
 
@@ -37,12 +37,12 @@
 	&::before {
 		left: 0;
 		right: 0;
-		border-left:  var(--wireframe-offset, var(--side, var(--theme-sideline, 1rem))) solid var(--cyan);
-		border-right: var(--wireframe-offset, var(--side, var(--theme-sideline, 1rem))) solid var(--cyan);
+		border-left:  var(--wireframe-offset, var(--side, var(--theme-sideline, 1rem))) solid var(--wireframe-cyan);
+		border-right: var(--wireframe-offset, var(--side, var(--theme-sideline, 1rem))) solid var(--wireframe-cyan);
 	}
 	&::after {
 		width: var(--keyline, var(--theme-keyline, 56px));
 		left: var(--wireframe-offset, var(--side, var(--theme-sideline, 1rem)));
-		outline: 1px solid var(--pink);
+		outline: 1px solid var(--wireframe-pink);
 	}
 }

@@ -71,15 +71,15 @@
 	}
 
 	//& > [icon]:first-child,
-	& > :first-child,
+	& > :first-child:not([indent]),
 	&[icon]::before {
 		// TODO: update this.
 		// --size now means elements height or height and with (for things like fab)
 		// and there is default --icon-size and --avatar-size but nothing yet for
 		// checkboxes and radios. these need to be groupped into new variable
 		// which we would use here.
-		margin-right: calc(var(--keyline) - var(--icon-size) - var(--offset, 0px));
-		//margin-right: calc(var(--keyline) - var(--icon-size));
+		//margin-right: calc(var(--keyline) - var(--icon-size) - var(--offset, 0px));
+		margin-right: calc(var(--keyline) - var(--icon-size));
 	}
 
 	[vertical=""] > * + * {

@@ -1,0 +1,258 @@
+<!--
+Demo of image transition from Google Photos gallery grid into photo's fullscreen detail
+-->
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>gphotos detail transition</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="../../util/phone-only-demo.css">
+
+	<style>
+
+		/* TODO, implement appbar into the framework */
+		#bottom-bar {
+			justify-content: space-around;
+		}
+		#bottom-bar > *:not(:last-child) {
+			margin: 0;
+		}
+		flexus-view[hidden] {
+			display: flex;
+			visibility: hidden;
+			pointer-events: none;
+		}
+
+		/* app code */
+		body {
+			animation: 300ms fade-in;
+		}
+		@keyframes fade-in {
+			from {opacity: 0}
+			to   {opacity: 1}
+		}
+		flexus-toolbar [fab] {
+			background-color: #FFF;
+			color: #000;
+		}
+
+		img, [cover], [ratio] {
+			will-change: transform, clip-path, opacity;
+		}
+		flexus-view {
+			will-change: backgound, opacity, visibility, display;
+			background: transparent;
+		}
+	</style>
+
+</head>
+<body google theme="white">
+
+
+	<flexus-view fit id="view-grid-dense">
+		<flexus-toolbar elevation="0">
+			<button icon="arrow-back"></button>
+			<div flex>Longboarding</div>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main nopadding="s">
+			<div grid columns="5" spaced="4px">
+			</div>
+		</main>
+	</flexus-view>
+
+
+	<flexus-view fit hidden id="view-grid-large">
+		<flexus-toolbar elevation="0">
+			<button icon="arrow-back"></button>
+			<div flex>Longboarding</div>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main nopadding="s">
+			<div grid columns="4" spaced="4px">
+			</div>
+		</main>
+	</flexus-view>
+
+
+	<script type="module">
+		import {Transition} from '../../src/js/animations/Transition.js'
+		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
+		import {ImageDescriptor, parseBgUrl} from '../../src/js/animations/ImageDescriptor.js'
+		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+
+		var galleryNames = [
+			'IMG_20180725_163337.jpg',
+			'IMG_20180812_183819.jpg',
+			'IMG_20180812_191249.jpg',
+			'IMG_20180908_181634.jpg',
+			'IMG_20180908_182759.jpg',
+			'IMG_20180908_183039.jpg',
+			'IMG_20180908_183159.jpg',
+			'IMG_20180908_190443.jpg',
+			'IMG_20180908_190716.jpg',
+			'IMG_20180908_191647.jpg',
+			'IMG_20180908_193226.jpg',
+			'IMG_20180908_194719.jpg',
+			'IMG_20180912_163950.jpg',
+			'IMG_20180912_184044.jpg',
+			'IMG_20180912_184217.jpg',
+			'IMG_20180930_171024.jpg',
+			'IMG_20181007_112052.jpg',
+			'IMG_20181110_144054.jpg',
+		]
+
+		var denseGrid = document.querySelector('#view-grid-dense')
+		var largeGrid = document.querySelector('#view-grid-large')
+		var denseGridGrid = document.querySelector('#view-grid-dense [grid]')
+		var largeGridGrid = document.querySelector('#view-grid-large [grid]')
+		var detailImg = document.querySelector('#view-grid-large img')
+
+		function getLink(name, size = 'medium') {
+			return `../img/longboard/${size}/${name}`
+		}
+
+		denseGridGrid.innerHTML = galleryNames
+			.map(name => `
+				<div
+					ratio="1:1" cover name="${name}"
+					style="background-image: url(${getLink(name, 'small')})"
+				></div>
+			`)
+			.join('')
+
+		largeGridGrid.innerHTML = galleryNames
+			.map(name => `
+				<div
+					ratio="1:1" cover name="${name}"
+					style="background-image: url(${getLink(name, 'small')})"
+				></div>
+			`)
+			.join('')
+
+		largeGridGrid.children[0].removeAttribute('ratio')
+		Object.assign(largeGridGrid.children[0].style, {
+			gridColumn: 'auto / span 3',
+			gridRow: 'auto / span 2',
+		})
+
+		Object.assign(largeGridGrid.children[3].style, {
+			gridColumn: 'auto / span 2',
+			gridRow: 'auto / span 2',
+		})
+
+		largeGridGrid.children[6].removeAttribute('ratio')
+		Object.assign(largeGridGrid.children[6].style, {
+			gridColumn: 'auto / span 2',
+			gridRow: 'auto / span 3',
+		})
+
+		Object.assign(largeGridGrid.children[7].style, {
+			gridColumn: 'auto / span 2',
+			gridRow: 'auto / span 2',
+		})
+
+
+		let denseGridGridImgs = Array.from(denseGridGrid.children)
+		let largeGridGridImgs = Array.from(largeGridGrid.children)
+
+		setTimeout(() => {
+		}, 100)
+
+		function detectInViewport(imgs) {
+			let {top} = largeGridGrid.getBoundingClientRect()
+			let bottom = document.body.offsetHeight
+			for (let img of imgs) {
+				let bbox = img.getBoundingClientRect()
+				let outsideViewport = bbox.bottom < top || bbox.top > bottom
+				let inViewport = !outsideViewport
+				img.inViewport = inViewport
+			}
+		}
+
+		var duration = 500
+		var duration = 800
+		var fill = 'both'
+		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+		var options = {duration, easing}
+
+		var timeout = millis => new Promise(resolve => setTimeout(resolve, millis))
+
+		async function openLargeGrid() {
+
+			largeGrid.style.opacity = 0
+			largeGrid.removeAttribute('hidden')
+
+			await timeout(500)
+
+			detectInViewport(largeGridGridImgs)
+
+			let transitions = largeGridGridImgs
+				.filter(img => img.inViewport)
+				.map(imgInLarge => {
+					let name = imgInLarge.getAttribute('name')
+					let imgInDense = denseGridGrid.querySelector(`[name="${name}"]`)
+
+					var transition = new ImageTransition(imgInDense, imgInLarge, {duration})
+					return transition
+				})
+
+			largeGridGridImgs
+				.filter(img => !img.inViewport)
+				.forEach(async imgInLarge => {
+					let name = imgInLarge.getAttribute('name')
+					let imgInDense = denseGridGrid.querySelector(`[name="${name}"]`)
+					let opts = Object.assign(options, {fill})
+					imgInDense.animate({
+						opacity: [1, 0]
+					}, opts)
+				})
+
+			await Promise.all(transitions.map(transition => transition.ready))
+			largeGrid.style.opacity = 1
+			await Promise.all(transitions.map(transition => transition.play()))
+			denseGrid.setAttribute('hidden', '')
+		}
+
+		async function openDenseGrid() {
+			largeGrid.setAttribute('hidden', '')
+			return
+			// TODO, implement reverse mode in ImageTransition (so that source could be scaled down)
+			var name = detailImg.getAttribute('name')
+			var gridImg = denseGridGrid.querySelector(`[name="${name}"]`)
+			var transition = new ImageTransition(detailImg, gridImg, {duration})
+			await transition.ready
+			largeGrid.removeAttribute('hidden')
+			largeGrid.animate({
+				backgroundColor: ['black', 'transparent']
+			}, options)
+			await transition.play()
+		}
+
+		setTimeout(() => {
+			openLargeGrid()
+		}, 300)
+
+
+		denseGridGrid.addEventListener('click', e => {
+			openLargeGrid()
+		})
+
+		function getImgOrBgUrl(node) {
+			if (node.localStorage === 'img') {
+				return node.src
+			} else {
+				var {backgroundImage} = window.getComputedStyle(node)
+				if (backgroundImage)
+					return parseBgUrl(backgroundImage)
+			}
+		}
+
+	</script>
+
+</body>
+</html>

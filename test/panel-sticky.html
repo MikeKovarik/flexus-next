@@ -9,65 +9,34 @@
 	<link rel="stylesheet" type="text/css" href="../css/flexus-material.css">
 
 	<style>
-		body {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 16px;
-			padding: 16px;
+		flexus-toolbar {
+			z-index: 9;
 		}
-		flexus-view {
-			display: block;
-			outline: 1px solid #aaa;
-		}
-		[indent] {
-			padding-left: calc(1rem + var(--keyline, 56px)) !important;
+		#one,
+		#foo {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
 		}
 
-		#one flexus-toolbar {
-			position: sticky;
-			top: 0px;
-			z-index: 99;
-		}
-
-		#two flexus-toolbar > :first-child {
-			position: sticky;
-			top: 0px;
-		}
-
-		#three flexus-toolbar {
-			position: sticky;
-			top: -56px;
-			z-index: 99;
-		}
-
-		#four flexus-toolbar {
-			position: sticky;
-			top: -56px;
-			z-index: 99;
-		}
-		#four flexus-toolbar > :first-child {
-			position: sticky;
-			top: 0px;
-		}
-
-
-		@media only screen and (max-width: 600px) {
-			body {
-				padding: 0;
-				display: block;
-			}
-			body > flexus-view:not(:last-of-type) {
-				display: none;
-			}
-		}
-
-
-		.foo {
-			padding-top: 50vh;
+		#foo {
+			--void-size: 50vh;
+			padding-top: var(--void-size);
 			pointer-events: none;
+			overflow: auto;
+			z-index: 999;
 		}
-		.foo > * {
+		#foo > flexus-toolbar {
+			position: sticky;
+			top: calc(-1 * var(--void-size));
+		}
+		#foo > * {
 			pointer-events: all;
+		}
+		#container {
+			background: white;
 		}
 	</style>
 
@@ -75,9 +44,9 @@
 <body>
 
 	<flexus-view id="one">
-		<flexus-toolbar>
+		<flexus-toolbar sticky>
 			<button icon="menu"></button>
-			<div flex></div>
+			<div flex>First view</div>
 			<button icon="favorite" title="Add to Favorites"></button>
 			<button icon="plus" title="Add to List"></button>
 		</flexus-toolbar>
@@ -97,10 +66,55 @@
 			<div fx-item icon="edit">Item</div>
 			<div fx-item icon="edit">Item</div>
 			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
 		</main>
 	</flexus-view>
-	<div class="foo">
-		<flexus-view id="one" theme="white">
+	<div id="foo">
+		<flexus-toolbar>
+			<button icon="menu"></button>
+			<div flex>Second view</div>
+		</flexus-toolbar>
+		<main id="container">
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+			<div fx-item icon="edit">Item</div>
+		</main>
+		<!--
+		<flexus-view id="two" theme="white">
 			<flexus-toolbar sticky>
 				<button icon="arrow-back"></button>
 				<div flex>Name</div>
@@ -120,6 +134,7 @@
 				<div fx-item icon="edit">Item</div>
 			</main>
 		</flexus-view>
+		-->
 	</div>
 
 

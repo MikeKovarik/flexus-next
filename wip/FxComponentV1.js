@@ -21,7 +21,7 @@ function getAnimationObjects(args) {
 	return {to, from}
 }
 
-function animate(node, ...args) {
+export function animate(node, ...args) {
 	var options = {}
 	if (typeof args[args.length - 1] === 'number')
 		options = {duration: args.pop()}
@@ -47,6 +47,24 @@ function animate(node, ...args) {
 
 let animations = new WeakMap
 
+export function createTemplate(string) {
+	var template = document.createElement('template')
+	template.innerHTML = string
+	return template
+}
+
+export function createStyle(string) {
+	let styleSheet = new CSSStyleSheet
+	styleSheet.replaceSync(string)
+	return styleSheet
+}
+
+export function createGlobalStyle(string) {
+	let styleSheet = createStyle(string)
+	document.adoptedStyleSheets = [...document.adoptedStyleSheets, styleSheet]
+	return styleSheet
+}
+
 export default class CustomComponent extends HTMLElement {
 
 	constructor() {
@@ -57,16 +75,20 @@ export default class CustomComponent extends HTMLElement {
 				Class.templateNode = document.createElement('template')
 				Class.templateNode.innerHTML = Class.template
 			}
-			let root = this.attachShadow({mode: 'open'})
-			root.appendChild(Class.templateNode.content.cloneNode(true))
+			this._createShadowFromTemplate(Class.templateNode)
 			if (Class.style !== undefined) {
 				if (Class.styleSheet === undefined) {
 					Class.styleSheet = new CSSStyleSheet
 					Class.styleSheet.replaceSync(Class.style)
 				}
-				root.adoptedStyleSheets = [...root.adoptedStyleSheets, Class.styleSheet]
+				this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, Class.styleSheet]
 			}
 		}
+	}
+
+	_createShadowFromTemplate(templateNode) {
+		this.attachShadow({mode: 'open'})
+		this.shadowRoot.appendChild(templateNode.content.cloneNode(true))
 	}
 
 	async _animate(node, ...args) {
