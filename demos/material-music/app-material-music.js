@@ -1,4 +1,4 @@
-import {promiseLoad, isLoaded, parseBgUrl} from '../../src/js/animations/ImageDescriptor.js'
+import {promiseLoad, isLoaded, parseBgUrl} from 'image-transition'
 //import {hexToRgb/*, accentAverage*/} from '../../node_modules/iridescent/index.mjs'
 function hexToRgb(hex) {
 	var bigint = parseInt(hex, 16)

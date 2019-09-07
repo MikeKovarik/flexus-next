@@ -79,11 +79,16 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 	</flexus-view>
 
 
+	<script type="importmap">
+	{
+		"imports": {
+			"image-transition": "/image-transition/src/ImageTransition.js"
+		}
+	}
+	</script>
+
 	<script type="module">
-		import {Transition} from '../../src/js/animations/Transition.js'
-		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
-		import {ImageDescriptor, parseBgUrl} from '../../src/js/animations/ImageDescriptor.js'
-		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+		import {ImageTransition} from 'image-transition'
 
 		var galleryNames = [
 			'IMG_20180725_163337.jpg',
@@ -129,7 +134,7 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			.map(name => `
 				<div
 					ratio="1:1" cover name="${name}"
-					style="background-image: url(${getLink(name, 'small')})"
+					style="background-image: url(${getLink(name, 'medium')})"
 				></div>
 			`)
 			.join('')
@@ -152,6 +157,11 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		})
 
 		Object.assign(largeGridGrid.children[7].style, {
+			gridColumn: 'auto / span 2',
+			gridRow: 'auto / span 2',
+		})
+
+		Object.assign(largeGridGrid.children[13].style, {
 			gridColumn: 'auto / span 2',
 			gridRow: 'auto / span 2',
 		})
@@ -241,17 +251,6 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		denseGridGrid.addEventListener('click', e => {
 			openLargeGrid()
 		})
-
-		function getImgOrBgUrl(node) {
-			if (node.localStorage === 'img') {
-				return node.src
-			} else {
-				var {backgroundImage} = window.getComputedStyle(node)
-				if (backgroundImage)
-					return parseBgUrl(backgroundImage)
-			}
-		}
-
 	</script>
 
 </body>

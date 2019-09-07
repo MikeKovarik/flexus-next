@@ -1,5 +1,5 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
-import {ImageTransition} from './ImageTransition.js'
+//import {ImageTransition} from './ImageTransition.js'
 import {cloneNode, camelToKebabCase} from './util.js'
 
 

@@ -130,11 +130,16 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 	</flexus-view>
 
 
+	<script type="importmap">
+	{
+		"imports": {
+			"image-transition": "/image-transition/src/ImageTransition.js"
+		}
+	}
+	</script>
+
 	<script type="module">
-		import {Transition} from '../../src/js/animations/Transition.js'
-		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
-		import {ImageDescriptor, parseBgUrl} from '../../src/js/animations/ImageDescriptor.js'
-		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+		import {ImageTransition, extractUrl} from 'image-transition'
 
 		var galleryNames = [
 			'IMG_20180725_163337.jpg',
@@ -187,7 +192,7 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			var name = gridImg.getAttribute('name')
 			detailImg.setAttribute('name', name)
 
-			var urlSmall = getImgOrBgUrl(gridImg)
+			var urlSmall = extractUrl(gridImg)
 			var urlMedium = urlSmall.replace('/small', '/medium')
 			detailImg.src = urlMedium
 
@@ -247,16 +252,6 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		detailViewBackButton.addEventListener('click', e => {
 			closeDetail()
 		})
-
-		function getImgOrBgUrl(node) {
-			if (node.localStorage === 'img') {
-				return node.src
-			} else {
-				var {backgroundImage} = window.getComputedStyle(node)
-				if (backgroundImage)
-					return parseBgUrl(backgroundImage)
-			}
-		}
 
 	</script>
 

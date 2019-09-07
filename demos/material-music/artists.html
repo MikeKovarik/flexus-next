@@ -79,11 +79,19 @@ Unfinished PC only (not very well responsive yet) demo of transitions
 
 
 
+	<script type="importmap">
+	{
+		"imports": {
+			"image-transition": "/image-transition/src/ImageTransition.js"
+		}
+	}
+	</script>
+
 	<script type="module">
 		import {renderGrid, renderDetail, getUrl, promiseImageLoaded} from './app-material-music.js'
 		import {albums, artists} from './app-material-music.js'
 		import {listView, detailView} from './app-material-music.js'
-		import {ImageTransition} from '../../src/js/animations/ImageTransition.js'
+		import {ImageTransition} from 'image-transition'
 		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
 
 
