@@ -1,5 +1,5 @@
 import './polyfill.js'
-import {ImageDescriptor, promiseLoad, isLoaded} from './ImageDescriptor.js'
+import {ImageDescriptor, promiseUrlLoad, parseBgUrl, promiseLoad, isLoaded} from './ImageDescriptor.js'
 
 
 // TODO: cleanup
@@ -10,6 +10,8 @@ var defaultOptions = {
 	fill: 'both',
 	easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 }
+
+var timeout = millis => new Promise(resolve => setTimeout(resolve, millis))
 
 export class ImageTransition {
 
@@ -163,7 +165,7 @@ export class ImageTransition {
 				break
 			case 'clone':
 				console.log('RECREATE WITH CLONE')
-				this.createClone()
+				await this.createClone()
 				this.nodeToAnimate = this.clone
 				this.setupRecreate()
 				break
@@ -240,19 +242,24 @@ export class ImageTransition {
 		this.target.after(this.placeholder)
 	}
 
-	createClone(adjacentNode = this.target) {
+	async createClone(adjacentNode = this.target) {
 		var {sd, td} = this
-		this.target.style.visibility = 'hidden'
 		this.clone = document.createElement('div')
-		this.clone.style.width  = td.containerWidth + 'px'
-		this.clone.style.height = td.containerHeight + 'px'
-		this.clone.style.backgroundImage = td.computed.backgroundImage
-		this.clone.style.backgroundPosition = td.computed.backgroundPosition
-		this.clone.style.backgroundSize = td.computed.backgroundSize
-		this.clone.style.backgroundRepeat = td.computed.backgroundRepeat
-		this.clone.style.backgroundColor = td.computed.backgroundColor
-		this.clone.style.zIndex = td.computed.zIndex
+		Object.assign(this.clone.style, {
+			willChange: 'all',
+			width: td.containerWidth + 'px',
+			height: td.containerHeight + 'px',
+			backgroundImage: td.computed.backgroundImage,
+			backgroundPosition: td.computed.backgroundPosition,
+			backgroundSize: td.computed.backgroundSize,
+			backgroundRepeat: td.computed.backgroundRepeat,
+			backgroundColor: td.computed.backgroundColor,
+			zIndex: td.computed.zIndex,
+		})
 		adjacentNode.after(this.clone)
+		// give the clone some time to load and render the image to prevent unstyled flash
+		await timeout(20)
+		this.target.style.visibility = 'hidden'
 	}
 
 	setupRecreate() {
@@ -299,6 +306,7 @@ export class ImageTransition {
 
 	async play() {
 		await this.ready
+		this.keyframes.zIndex = [1,1]
 		this.animation = this.nodeToAnimate.animate(this.keyframes, this.options)
 		this.source.style.visibility = 'hidden'
 		try {

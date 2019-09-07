@@ -373,6 +373,13 @@ function percentToRatio(percentString) {
 function pxToNumber(pxString) {
 	return Number(pxString.slice(0, -2))
 }
+
+export function promiseUrlLoad(url) {
+	let img = document.createElement('img')
+	img.src = url
+	return promiseLoad(img)
+}
+
 export function promiseLoad(img) {
 	if (isLoaded(img)) return Promise.resolve()
 	return new Promise((resolve, reject) => {

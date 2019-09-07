@@ -177,7 +177,7 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			`)
 			.join('')
 
-		var duration = 500
+		var duration = 500 * 10
 		var fill = 'both'
 		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 		var options = {duration, easing}
@@ -203,27 +203,41 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		}
 
 		async function closeDetail() {
-			detailView.setAttribute('hidden', '')
-			return
 			// TODO, implement reverse mode in ImageTransition (so that source could be scaled down)
 			var name = detailImg.getAttribute('name')
 			var gridImg = galleryGrid.querySelector(`[name="${name}"]`)
+
 			var transition = new ImageTransition(detailImg, gridImg, {duration})
 			await transition.ready
+
+			detailImg.style.zIndex = 1
+
 			detailView.removeAttribute('hidden')
+			detailView.style.backgroundColor = 'transparent'
+			/*
 			detailView.animate({
 				backgroundColor: ['black', 'transparent']
 			}, options)
+			*/
+
 			await transition.play()
 		}
 
-		setTimeout(() => {
-			openDetail(galleryGrid.children[6])
-			//detailView.removeAttribute('hidden')
-			//detailImg.src = './img/longboard/medium/IMG_20180908_190443.jpg'
-			//detailImg.setAttribute('name', 'IMG_20180908_190443.jpg')
-		}, 800)
 
+		var startOnDetail = true
+
+		if (startOnDetail) {
+			detailImg.src = '../img/longboard/medium/IMG_20180908_190443.jpg'
+			detailImg.setAttribute('name', 'IMG_20180908_190443.jpg')
+			detailView.removeAttribute('hidden')
+			setTimeout(() => {
+				closeDetail()
+			}, 800)
+		} else {
+			setTimeout(() => {
+				openDetail(galleryGrid.children[6])
+			}, 800)
+		}
 
 		galleryGrid.addEventListener('click', e => {
 			if (e.target.hasAttribute('name') && e.target.hasAttribute('cover'))

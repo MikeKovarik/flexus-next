@@ -29,11 +29,9 @@ export function promiseImageLoaded(img) {
 }
 
 async function fadeInNotLoadedImg(node, duration = 100, delay = 0, fill = 'both') {
-	node.style.opacity = 0
 	var promise = promiseImageLoaded(node)
-	if (!promise) {
-		node.style.opacity = 1
-	} else {
+	if (promise) {
+		node.style.opacity = 0
 		await promise
 		var options = {duration, delay, fill}
 		var animation = node.animate({opacity: [0, 1]}, options)
