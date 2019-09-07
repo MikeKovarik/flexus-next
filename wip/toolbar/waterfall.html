@@ -1,0 +1,78 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view theme="white">
+		<flexus-toolbar waterfall>[waterfall]</flexus-toolbar>
+		<main>
+			<p>shadow appears after scrolling</p>
+			<p>simple toolbar</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar waterfall seamed>[waterfall][seamed]</flexus-toolbar>
+		<main>
+			<p>shadow appears after scrolling</p>
+			<p>simple toolbar</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section sticky>[waterfall]</section>
+		</flexus-toolbar>
+		<main>
+			<p>shadow appears after scrolling</p>
+			<p>multisection toolbar</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall seamed>
+			<section sticky>[waterfall][seamed]</section>
+		</flexus-toolbar>
+		<main>
+			<p>shadow appears after scrolling</p>
+			<p>multisection toolbar</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section>hideable section</section>
+			<section sticky>sticky section</section>
+		</flexus-toolbar>
+		<main>
+			<p>multisection toolbar</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section sticky>
+				<button icon="arrow-back"></button>
+				<div flex></div>
+				<button icon="more"></button>
+			</section>
+			<section indent>Band Name</section>
+		</flexus-toolbar>
+		<main>
+			<p>practical example of multisection waterfall</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

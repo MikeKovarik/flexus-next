@@ -1,0 +1,98 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<style>
+		flexus-view > main > flexus-tabs:first-child {
+			margin-top: -1rem;
+			margin-bottom: 1rem;
+		}
+	</style>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section>default</section>
+			<flexus-tabs>
+				<div selected>one</div>
+				<div>two</div>
+				<div>trhee</div>
+			</flexus-tabs>
+		</flexus-toolbar>
+		<main>
+			<p>tabs are part of the toolbar, the whole toolbar sticks to the top</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section>sticky tabs</section>
+			<flexus-tabs sticky>
+				<div selected>one</div>
+				<div>two</div>
+				<div>trhee</div>
+			</flexus-tabs>
+		</flexus-toolbar>
+		<main>
+			<p>tabs should be sticky and push await top section when scrolling</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection>
+			<section sticky style="z-index: 0">opaque tabs over sticky top</section>
+			<flexus-tabs opaque style="z-index: 1">
+				<div selected>one</div>
+				<div>two</div>
+				<div>trhee</div>
+			</flexus-tabs>
+		</flexus-toolbar>
+		<main>
+			<p>top section is sticky but it gets hidden by tabs because tabs are opaque, effectively making tabs sticky</p>
+			<p>experimental</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection>
+			<section sticky opaque>sticky top</section>
+			<flexus-tabs>
+				<div selected>one</div>
+				<div>two</div>
+				<div>trhee</div>
+			</flexus-tabs>
+		</flexus-toolbar>
+		<main>
+			<p>Tabs are part of toolbar but are not sticky</p>
+			<p>Main section is sticky and opaque so it cover and hides tabs after scrolling</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection waterfall>
+			<section sticky>inside main</section>
+		</flexus-toolbar>
+		<main>
+			<flexus-tabs fullwidth fullbleed>
+				<div selected>one</div>
+				<div>two</div>
+				<div>trhee</div>
+			</flexus-tabs>
+			<p>Tabs as part of the main content gets hidden when scrolling</p>
+			<p>TODO: additional negative margin is needed</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

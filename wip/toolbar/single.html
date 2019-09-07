@@ -1,0 +1,48 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+
+</head>
+<body>
+
+	<style>
+		flexus-toolbar {
+			opacity: 0;
+		}
+	</style>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection seamed>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<!-- scalable="1.2-1" causes horizontal scrollbar becase we can't overflow: hidden -->
+			<div collapsible
+			fadable="0.7-0.1" parallax
+			ratio="1:1" cover
+			style="background-image: url('../../demos/img/albums/linkin-park-a-thousand-suns.jpg')"></div>
+			<section overlay>
+				<span scalable indentable>A Thousand Suns</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="./FxToolbar.js"></script>
+
+</body>
+</html>

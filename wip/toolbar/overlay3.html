@@ -1,0 +1,39 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<div fit cover
+			parallax fadable="0.6-0.1"
+			class="linkin-park"
+			style="z-index: -1;"></div>
+			<section overlay indent>changing bg</section>
+		</flexus-toolbar>
+		<main>
+			<p>normal toolbar with image backgorund.</p>
+			<p>TODO: from opacity</p>
+			<p>TODO: to opacity</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

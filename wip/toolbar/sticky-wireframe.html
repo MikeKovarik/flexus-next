@@ -1,0 +1,71 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted>sticks the whole time</section>
+			<section body2 muted>sticks the whole time</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view sticky>
+		<flexus-toolbar multisection>
+			<section body2 muted>sticks the whole time</section>
+			<section body2 muted>sticks the whole time</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted>scrolls away</section>
+			<section body2 muted sticky>sticks when first section is off screen</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted sticky>
+				<span flex-1>sticks the whole time</span>
+				<span flex-2></span>
+			</section>
+			<section body2 muted>
+				<span flex-1></span>
+				<span flex-2>collapses into first section, then sticks</span>
+			</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection hidable>
+			<section body2 muted sticky>
+				<span flex>sticks until second section collapses, then scrolls away</span>
+				<span flex></span>
+			</section>
+			<section body2 muted>
+				<span flex></span>
+				<span flex>collapses into first section, then scrolls away</span>
+			</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view id="one">
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<section indent>Case One</section>
+		</flexus-toolbar>
+		<main>
+			<p>Whole toolbar sticks, all the time</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<div collapsible fadable ratio="1:1" cover class="linkin-park"></div>
+			<section overlay indent>Case four +</section>
+		</flexus-toolbar>
+		<main>
+			<p>duplicate?.</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<section indent>Case One</section>
+		</flexus-toolbar>
+		<main>
+			<p>Whole toolbar sticks, all the time</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection hidable>
+			<section sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<section indent>Case Two</section>
+		</flexus-toolbar>
+		<main>
+			<p>First section sticks until second section collapses into it. Then it doesn't stick anymore and scrolls away.</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+				<button icon="plus" title="Add to List"></button>
+			</section>
+			<section indent>Case four</section>
+		</flexus-toolbar>
+		<main>
+			<p>Whole toolbar sticks and also collapses both sections into one.</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span indentable>Indentable</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+			<p>TODO: does it have to be overlay?</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar waterfall>[waterfall]</flexus-toolbar>
+		<main>shadow appears after scrolling</main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection>
+			<div collapsible
+			fadable
+			ratio="1:1" cover
+			class="linkin-park"></div>
+			<section overlay sticky>
+				<button icon="arrow-back"></button>
+				<div flex>Band name</div>
+				<button icon="more"></button>
+			</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

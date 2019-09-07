@@ -1,0 +1,72 @@
+.linkin-park {
+	background-image: url('../../demos/img/albums/linkin-park-a-thousand-suns.jpg');
+}
+
+.mike-shinoda {
+	background-image: url('../../demos/img/albums/mike-shinoda-post-traumatic.jpg');
+}
+
+body {
+	display: grid;
+	grid-auto-rows: 340px;
+	gap: 16px;
+	padding: 16px;
+}
+body:not([columns]) {
+	grid-template-columns: repeat(auto-fill, 300px);
+}
+body[columns] {
+	grid-template-columns: repeat(var(--columns), 1fr);
+}
+flexus-view main {
+	padding-bottom: 600px;
+}
+[indent] {
+	padding-left: calc(1rem + var(--keyline, 56px)) !important;
+}
+
+flexus-toolbar {
+	z-index: 99;
+}
+
+[sticky] {
+	position: sticky;
+	top: 0px;
+}
+
+flexus-toolbar [sticky] {
+	z-index: 1;
+}
+
+#four flexus-toolbar {
+	position: sticky;
+	top: -56px;
+	z-index: 99;
+}
+#four flexus-toolbar > :first-child {
+	position: sticky;
+	top: 0px;
+}
+
+
+@media only screen and (max-width: 599px) {
+	body {
+		padding: 0;
+		display: block;
+	}
+	body > flexus-view:not(:last-of-type) {
+		display: none;
+	}
+}
+@media only screen and (min-width: 600px) {
+	html {
+		height: 100% !important;
+	}
+	body {
+		overflow-y: scroll;
+	}
+	flexus-view {
+		display: block;
+		outline: 1px solid #aaa;
+	}
+}

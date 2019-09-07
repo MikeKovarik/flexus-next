@@ -1,0 +1,57 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection>
+			<section overlay sticky>[sticky] top</section>
+			<div collapsible
+			fadable
+			ratio="1:1" cover
+			class="linkin-park"></div>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view theme="white">
+		<flexus-toolbar multisection>
+			<div collapsible
+			fadable
+			ratio="1:1" cover
+			class="linkin-park"></div>
+			<section overlay sticky>[sticky] bottom</section>
+		</flexus-toolbar>
+		<main></main>
+	</flexus-view>
+
+	<flexus-view id="five" primary="red">
+		<flexus-toolbar multisection theme="dark" tinted>
+			<section sticky overlay>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible fadable ratio="1:1" cover class="mike-shinoda"></div>
+			<section sticky indent>Post Traumatic</section>
+			<button fab bottom right icon="pause"></button>
+		</flexus-toolbar>
+		<main>
+			<p>TODO: come up with more granular API that would allow the bottom section to collapse fade into the main toolbar.</p>
+			<p>[collapsible] comes to mind but it was meant for the large elements like images. And the code to distinguish between them img[collapsible] and section[collapsible] could get messy.</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

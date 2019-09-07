@@ -1,0 +1,100 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+</head>
+<body>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span indentable>Indentable</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span scalable>Scale</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span scalable indentable>Scale & indent</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex></div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span fade="in" body2 muted>fade in</span>
+				<span flex></span>
+				<span fade="out" body2 muted>fade out</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection tinted>
+			<section overlay sticky>
+				<button icon="menu"></button>
+				<div flex fade="in">Fade in</div>
+				<button icon="favorite" title="Add to Favorites"></button>
+			</section>
+			<div collapsible style="height: 160px"></div>
+			<section overlay layout>
+				<span fade="out">Combined</span>
+			</section>
+		</flexus-toolbar>
+		<main>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>

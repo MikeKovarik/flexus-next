@@ -1,0 +1,155 @@
+<!doctype html>
+<html screensize="s">
+<head>
+	<meta charset="utf-8">
+
+	<title>collapsible toolbar</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+	<link rel="stylesheet" type="text/css" href="./demo.css">
+
+	<style>
+		.graything {
+			background: gray;
+			height: 160px;
+		}
+
+	</style>
+
+</head>
+<body columns="4">
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted overlay>[overlay]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted overlay>[overlay]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Both top and bottom sections are displayed above the content of [collapsible]</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted overlay>[overlay]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted overlay sticky>[overlay][sticky]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Both top and bottom sections are displayed above the content of [collapsible]</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted overlay sticky>[overlay][sticky]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted overlay>[overlay]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Top section sticks to the top of the screen</p>
+			<p>Bottom section merges into the top section</p>
+			<p>Both top and bottom sections are displayed above the content of [collapsible]</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted overlay sticky>[overlay][sticky]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted overlay sticky>[overlay][sticky]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Top section sticks to the top of the screen</p>
+			<p>Bottom section will stick below top section once [collapsible] is scrolled away</p>
+			<p>Both top and bottom sections are displayed above the content of [collapsible]</p>
+		</main>
+	</flexus-view>
+
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted>default</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted>default</section>
+		</flexus-toolbar>
+		<main>
+			<p>Neither top nor bottom sections have [overlay] so they are separated from [collapsible] which is clearly between the two sections</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted>default</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted sticky>[sticky]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Top section scrolls away</p>
+			<p>Bottom section will stick below top section once [collapsible] is scrolled away</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted sticky>[sticky]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted>default</section>
+		</flexus-toolbar>
+		<main>
+			<p>Top section sticks to the top of the screen</p>
+			<p>Bottom section merges into the top section</p>
+			<p>Top section isn't [opaque] but transparent, so content of [collapsible] and bottom section spills into the top section.</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted sticky>[sticky]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted sticky>[sticky]</section>
+		</flexus-toolbar>
+		<main>
+			<p>Top section sticks to the top of the screen</p>
+			<p>Bottom section will stick below top section once [collapsible] is scrolled away</p>
+			<p>Top section isn't [opaque] but transparent, so content of [collapsible] spills into the top section.</p>
+		</main>
+	</flexus-view>
+
+
+	<flexus-view>
+		[opaque] variant is not necessary
+	</flexus-view>
+
+	<flexus-view>
+		[opaque] variant is not necessary
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted sticky opaque>[sticky] + [opaque]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted>default</section>
+		</flexus-toolbar>
+		<main>
+			<p>The same behaviour as above except the top section is also [opaque] so [collapsible] content doesn't spill into it while scrolling.</p>
+		</main>
+	</flexus-view>
+
+	<flexus-view>
+		<flexus-toolbar multisection>
+			<section body2 muted sticky opaque>[sticky] + [opaque]</section>
+			<div collapsible class="graything"></div>
+			<section body2 muted sticky>[sticky]</section>
+		</flexus-toolbar>
+		<main>
+			<p>The same behaviour as above except the top section is also [opaque] so [collapsible] content doesn't spill into it while scrolling.</p>
+		</main>
+	</flexus-view>
+
+	<script type="module" src="demo.js"></script>
+
+</body>
+</html>
