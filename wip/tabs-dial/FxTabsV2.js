@@ -140,12 +140,19 @@ class FxTabs extends FxTabsCore {
 		if (foo) this._deselect()
 		this.selected = index
 		this.selectedNode = this.children[index]
+		let computed = window.getComputedStyle(this.selectedNode)
+		let tintBg = computed.getPropertyValue('--tint-bg')
+		//let tintFg = computed.getPropertyValue('--tint-fg')
 		let translateX = this.stops[this.selected].left
 		Object.assign(this.highlight.style, {
+			backgroundColor: 'rgb(var(--tint-bg))',
+			//backgroundColor: `rgb(${tintBg})`,
 			transform: `translate(${translateX}px)`,
 			width: this.selectedNode.offsetWidth + 'px',
 			height: this.selectedNode.offsetHeight + 'px',
 		})
+		this.highlight.style.setProperty('--tint-bg', tintBg)
+		//this.highlight.style.setProperty('--tint-fg', tintFg)
 		if (foo) this._select()
 	}
 
