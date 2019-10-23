@@ -20,6 +20,11 @@ This is just a pseudocode skeleton done in a few minutes, not a real implementat
 			overflow: hidden;
 		}
 
+		h4 {
+			margin-top: 16px;
+			margin-bottom: 8px;
+		}
+
 		#bg {
 			will-change: opacity, filter;
 			top: -30px;
@@ -40,6 +45,10 @@ This is just a pseudocode skeleton done in a few minutes, not a real implementat
 		main {
 			padding-top: 20vh !important;
 		}
+
+		main button[neutral] {
+			--bg-base-opacity: 0.14;
+		}
 	</style>
 
 </head>
@@ -50,7 +59,7 @@ This is just a pseudocode skeleton done in a few minutes, not a real implementat
 		<div id="bg" fit cover style="background-image: url('./img/artists/odesza.jpg')"></div>
 
 		<flexus-toolbar transparent>
-			<button icon="arrow-back"></button>
+			<button neutral icon="arrow-back"></button>
 			<flexus-tabs flex round>
 				<div selected>Song</div>
 				<div>Lyrics</div>
@@ -65,7 +74,11 @@ This is just a pseudocode skeleton done in a few minutes, not a real implementat
 			<h4>Say My Name</h4>
 			<p>Odesza Feat. Zyra</p>
 			<p body2 thin muted>804 642 Shazams</p>
-			<button big flat neutral icon="more"></button>
+			<br>
+			<div layout>
+				<button tall flat neutral round>OPEN</button>
+				<button tall flat neutral icon="more"></button>
+			</div>
 		</main>
 
 	</flexus-view>

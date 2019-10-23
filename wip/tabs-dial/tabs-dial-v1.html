@@ -1,0 +1,95 @@
+<!--
+UNFINISHED!
+This is just a pseudocode skeleton done in a few minutes, not a real implementation.
+-->
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Tabs Dial</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="../../css/flexus-material.css">
+
+	<style>
+		/* ------------------------------------------------------- */
+		/* ------------------------ DEMO ------------------------- */
+		/* ------------------------------------------------------- */
+
+		main {
+			background-image: url('../../demos/img/longboard/medium/IMG_20180912_163950.jpg');
+			background-position: center;
+			background-size: cover;
+		}
+		#foo {
+			height: 100px;
+		}
+		flexus-view {
+			max-width: 360px;
+			height: 600px;
+			overflow: hidden;
+			margin: auto;
+		}
+		[evenly][spaced] {
+			justify-content: space-evenly;
+		}
+
+		flexus-tabs[dial] {
+			height: 52px;
+		}
+
+		/* ------------------------------------------------------- */
+		/* ---------------------- COMPONENT ---------------------- */
+		/* ------------------------------------------------------- */
+
+		flexus-tabs[dial] {
+			white-space: nowrap;
+			overflow-x: scroll;
+			border-radius: 0;
+		}
+		flexus-tabs[dial]::before,
+		flexus-tabs[dial]::after {
+			content: '';
+			display: block;
+			width: 50%;
+			flex-shrink: 0;
+		}
+		flexus-tabs[dial]::before {
+			width: calc(50% - var(--offset-left));
+		}
+		flexus-tabs[dial]::after {
+			width: calc(50% - var(--offset-right));
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<flexus-view theme="black">
+
+		<main></main>
+
+		<flexus-tabs dial round>
+			<div selected>Lens Blur</div>
+			<div>Night Sight</div>
+			<div>Camera</div>
+			<div>Video</div>
+			<div>More</div>
+		</flexus-tabs>
+
+		<div id="foo" center evenly spaced layout>
+			<button neutral icon="360" style="--icon-size: 32px"></button>
+			<button tinted fab icon="brightness_1"></button>
+			<button neutral icon="crop" style="--icon-size: 32px"></button>
+		</div>
+
+	</flexus-view>
+
+	<script type="module">
+		import './FxTabsV1.js'
+	</script>
+
+</body>
+</html>

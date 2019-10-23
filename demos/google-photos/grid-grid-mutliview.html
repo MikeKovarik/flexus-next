@@ -46,29 +46,35 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		flexus-view {
 			will-change: backgound, opacity, visibility, display;
 		}
-		main[grid] {
-			grid-auto-rows: min-content;
-			position: absolute !important;
-			left: 0;
-			top: 56px;
-			right: 0;
-			bottom: 0;
-		}
 	</style>
 
 </head>
 <body google theme="white">
 
 
-	<flexus-view>
+	<flexus-view fit id="view-dense">
 		<flexus-toolbar elevation="0">
 			<button icon="arrow-back"></button>
 			<div flex>Longboarding</div>
 			<button icon="edit"></button>
 		</flexus-toolbar>
-		<main nopadding grid columns="5" spaced="4px" id="grid-dense"></main>
-		<main nopadding grid columns="4" spaced="4px" id="grid-large"></main>
+		<main nopadding>
+			<div grid columns="5" spaced="4px" id="grid-dense"></div>
+		</main>
 	</flexus-view>
+
+
+	<flexus-view fit hidden id="view-large">
+		<flexus-toolbar elevation="0">
+			<button icon="arrow-back"></button>
+			<div flex>Longboarding</div>
+			<button icon="edit"></button>
+		</flexus-toolbar>
+		<main nopadding>
+			<div grid columns="4" spaced="4px" id="grid-large"></div>
+		</main>
+	</flexus-view>
+
 
 	<script type="importmap">
 	{
@@ -80,6 +86,8 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 
 	<script type="module">
 		import {ImageTransition} from 'image-transition'
+
+		// TODO: this will need force clone global above view so both view can be faded separately
 
 		var galleryNames = [
 			'IMG_20180725_163337.jpg',
@@ -102,6 +110,8 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			'IMG_20181110_144054.jpg',
 		]
 
+		var denseView = document.querySelector('#view-dense')
+		var largeView = document.querySelector('#view-large')
 		var denseGrid = document.querySelector('#grid-dense')
 		var largeGrid = document.querySelector('#grid-large')
 
@@ -127,44 +137,48 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			`)
 			.join('')
 
-		let denseGridImgs = Array.from(denseGrid.children)
-		let largeGridImgs = Array.from(largeGrid.children)
-
-		largeGridImgs[0].removeAttribute('ratio')
-		Object.assign(largeGridImgs[0].style, {
+		largeGrid.children[0].removeAttribute('ratio')
+		Object.assign(largeGrid.children[0].style, {
 			gridColumn: 'auto / span 3',
 			gridRow: 'auto / span 2',
 		})
 
-		Object.assign(largeGridImgs[3].style, {
+		Object.assign(largeGrid.children[3].style, {
 			gridColumn: 'auto / span 2',
 			gridRow: 'auto / span 2',
 		})
 
-		largeGridImgs[6].removeAttribute('ratio')
-		Object.assign(largeGridImgs[6].style, {
+		largeGrid.children[6].removeAttribute('ratio')
+		Object.assign(largeGrid.children[6].style, {
 			gridColumn: 'auto / span 2',
 			gridRow: 'auto / span 3',
 		})
 
-		Object.assign(largeGridImgs[7].style, {
+		Object.assign(largeGrid.children[7].style, {
 			gridColumn: 'auto / span 2',
 			gridRow: 'auto / span 2',
 		})
 
-		Object.assign(largeGridImgs[13].style, {
+		Object.assign(largeGrid.children[13].style, {
 			gridColumn: 'auto / span 2',
 			gridRow: 'auto / span 2',
 		})
 
-		function detectInViewport(container, nodes) {
-			let {top} = container.getBoundingClientRect()
-			let bottom = document.body.offsetHeight // TODO
-			for (let node of nodes) {
-				let bbox = node.getBoundingClientRect()
+
+		let denseGridGridImgs = Array.from(denseGrid.children)
+		let largeGridGridImgs = Array.from(largeGrid.children)
+
+		setTimeout(() => {
+		}, 100)
+
+		function detectInViewport(imgs) {
+			let {top} = largeGrid.getBoundingClientRect()
+			let bottom = document.body.offsetHeight
+			for (let img of imgs) {
+				let bbox = img.getBoundingClientRect()
 				let outsideViewport = bbox.bottom < top || bbox.top > bottom
 				let inViewport = !outsideViewport
-				node.inViewport = inViewport
+				img.inViewport = inViewport
 			}
 		}
 
@@ -172,161 +186,67 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 		var duration = 800
 		var fill = 'both'
 		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
-		var options = {duration, easing, fill}
+		var options = {duration, easing}
 
 		var timeout = millis => new Promise(resolve => setTimeout(resolve, millis))
 
-		class Container {
-
-			constructor(...items) {
-				this.items = items
-			}
-
-			get ready() {
-				return Promise.all(this.items.map(item => item.ready).filter(a => a))
-			}
-
-			get finished() {
-				return Promise.all(this.items.map(item => item.finished).filter(a => a))
-			}
-
-			play() {
-				for (let item of this.items) item.play && item.play()
-			}
-
-			pause() {
-				for (let item of this.items) item.pause && item.pause()
-			}
-
-			cancel() {
-				for (let item of this.items) item.cancel && item.cancel()
-			}
-
-			async execute() {
-				this.play()
-				await this.finished
-				this.cancel()
-			}
-
-		}
-
-		class Animations extends Container {
-
-			constructor(nodes, keyframes, options) {
-				let animations = nodes.map(node => {
-					let animation = node.animate(keyframes, options)
-					animation.pause()
-					return animation
-				})
-				super(...animations)
-			}
-
-		}
-
-		class Transitions extends Container {
-
-			constructor(pairs, options) {
-				let transitions = pairs.map(([source, target]) => new ImageTransition(source, target, options))
-				super(...transitions)
-			}
-
-		}
-
-		class CrossFade extends Transitions {
-
-			constructor(sourceContainer, targetContainer, options) {
-				super([], options) // TODO
-				this.sourceContainer = sourceContainer
-				this.targetContainer = targetContainer
-				this.sourceNodes = Array.from(sourceContainer.children)
-				this.targetNodes = Array.from(targetContainer.children)
-				detectInViewport(this.sourceContainer, this.sourceNodes)
-				detectInViewport(this.targetContainer, this.targetNodes)
-			}
-
-		}
-
 		async function openLargeGrid() {
 
+			largeView.style.opacity = 0
+			largeView.removeAttribute('hidden')
 
-			largeGrid.scrollTop = 0
-			largeGrid.style.opacity = 0
-			largeGrid.removeAttribute('hidden')
+			detectInViewport(largeGridGridImgs)
 
-			detectInViewport(denseGrid, denseGridImgs)
-			detectInViewport(largeGrid, largeGridImgs)
-
-			let pairs = largeGridImgs
+			let transitions = largeGridGridImgs
 				.filter(img => img.inViewport)
 				.map(imgInLarge => {
 					let name = imgInLarge.getAttribute('name')
 					let imgInDense = denseGrid.querySelector(`[name="${name}"]`)
-					return [imgInDense, imgInLarge]
+
+					var transition = new ImageTransition(imgInDense, imgInLarge, {duration})
+					return transition
 				})
 
-			let fadeableNodes = largeGridImgs
+			largeGridGridImgs
 				.filter(img => !img.inViewport)
-				.map(imgInLarge => {
+				.forEach(async imgInLarge => {
 					let name = imgInLarge.getAttribute('name')
-					return denseGrid.querySelector(`[name="${name}"]`)
+					let imgInDense = denseGrid.querySelector(`[name="${name}"]`)
+					let opts = Object.assign(options, {fill})
+					imgInDense.animate({
+						opacity: [1, 0]
+					}, opts)
 				})
 
-			let transitions = new Transitions(pairs, options)
-			let fades = new Animations(fadeableNodes, {opacity: [1, 0]}, options)
-			let combined = new Container(transitions, fades)
-
-			await combined.ready
-			largeGrid.style.opacity = 1
-			await combined.execute()
-			denseGrid.setAttribute('hidden', '')
+			await Promise.all(transitions.map(transition => transition.ready))
+			largeView.style.opacity = 1
+			await Promise.all(transitions.map(transition => transition.play()))
+			denseView.setAttribute('hidden', '')
 		}
 
 		async function openDenseGrid() {
 
-			detectInViewport(denseGrid, denseGridImgs)
-			detectInViewport(largeGrid, largeGridImgs)
-			denseGrid.removeAttribute('hidden')
+			detectInViewport(largeGridGridImgs)
+			denseView.removeAttribute('hidden')
 
-			let pairs = largeGridImgs
+			let transitions = largeGridGridImgs
 				.filter(img => img.inViewport)
 				.map(imgInLarge => {
 					let name = imgInLarge.getAttribute('name')
 					let imgInDense = denseGrid.querySelector(`[name="${name}"]`)
-					return [imgInLarge, imgInDense]
-				})
 
-			let fadeableNodes = largeGridImgs
-				.filter(img => !img.inViewport)
-				.map(imgInLarge => {
-					let name = imgInLarge.getAttribute('name')
-					return denseGrid.querySelector(`[name="${name}"]`)
-				})
-
-			let transitions = new Transitions(pairs, options)
-			let fades = new Animations(fadeableNodes, {opacity: [0, 1]}, {...options, delay: 100})
-			let combined = new Container(transitions, fades)
-
-			await combined.ready
-			largeGrid.style.opacity = 1
-			await combined.execute()
-			largeGrid.setAttribute('hidden', '')
-
-/*
-			let transitions = largeGridImgs
-				.filter(img => img.inViewport)
-				.map(imgInLarge => {
-					let name = imgInLarge.getAttribute('name')
-					let imgInDense = denseGrid.querySelector(`[name="${name}"]`)
 					var transition = new ImageTransition(imgInLarge, imgInDense, {duration})
 					return transition
 				})
 
+
 			await Promise.all(transitions.map(transition => transition.ready))
-			largeGrid.style.opacity = 1
+			largeView.style.opacity = 1
 			await Promise.all(transitions.map(transition => transition.play()))
 
-			largeGrid.setAttribute('hidden', '')
-*/
+			largeView.setAttribute('hidden', '')
+
+			return
 		}
 
 /*
@@ -334,8 +254,7 @@ Demo of image transition from Google Photos gallery grid into photo's fullscreen
 			openLargeGrid()
 		}, 300)
 */
-		largeGrid.removeAttribute('hidden')
-		denseGrid.setAttribute('hidden', '')
+		//largeView.removeAttribute('hidden')
 		setTimeout(() => {
 			//openDenseGrid()
 		}, 600)
