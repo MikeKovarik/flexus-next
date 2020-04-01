@@ -13,7 +13,7 @@ The examples are written more or less ugly, with a lot of inline styles and !imp
 ## Demos
 
 
-<img align="right" src="https://raw.githubusercontent.com/MikeKovarik/resume/master/flexus-animations.gif" width="300">
+<img align="right" src="https://raw.githubusercontent.com/MikeKovarik/flexus-next/master/flexus-animations.gif" width="300">
 
 There are some great demos, though not finished yet.
 
