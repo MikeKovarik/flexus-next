@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			body {
+				display: flex;
+			}
+			#box {
+				display: inline-block;
+				width: 200px;
+				height: 200px;
+				margin: 4px;
+				border: 1px solid gray;
+			}
+			.div > *:first-child {
+				font-size: 32px;
+			}
+			.div > *:last-child {
+				font-size: 20px;
+			}
+			.margins > *:first-child {
+				margin: 16px 0;
+			}
+			.margins > *:last-child {
+				margin: 8px 0;
+			}
+			.paddings > *:first-child {
+				padding: 16px 0;
+			}
+			.paddings > *:last-child {
+				padding: 8px 0;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="box">
+			<h1 id="h1">H1 to H2</h1>
+			<h2 id="h2">H1 to H2</h2>
+		</div>
+
+		<div id="box" class="div paddings">
+			<div id="paddedDiv1">padded divs</div>
+			<div id="paddedDiv2">padded divs</div>
+		</div>
+
+		<div id="box" class="div normal">
+			<div id="normalDiv1">normal divs</div>
+			<div id="normalDiv2">normal divs</div>
+		</div>
+
+		<div id="box" class="div margins">
+			<div id="marginedDiv1">margined divs</div>
+			<div id="marginedDiv2">margined divs</div>
+		</div>
+
+		<script type="module">
+			import {Transition} from '../../src/js/animations/Transition.js'
+
+			let t = new Transition
+            t.duration = 2000
+
+			setTimeout(() => {
+				t.transitionTextNodes(window.h1, window.h2)
+				t.transitionTextNodes(window.paddedDiv1, window.paddedDiv2)
+				t.transitionTextNodes(window.normalDiv1, window.normalDiv2)
+				t.transitionTextNodes(window.marginedDiv1, window.marginedDiv2)
+				t.play()
+			}, 600)
+
+		</script>
+
+	</body>
+</html>

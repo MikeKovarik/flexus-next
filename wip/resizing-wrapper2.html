@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" defer href="../css/flexus-material.css">
+	<style>
+		body {
+			display: block;
+		}
+		#flex-row {
+			display: inline-flex;
+			align-items: center;
+			margin: 16px;
+		}
+		#the-other {
+			display: inline-block;
+			margin: 16px;
+		}
+	</style>
+</head>
+<body>
+
+	<size-transition id="flex-row" card elevation="8">
+		<div>something inside</div>
+		<button id="add" seamed>add</button>
+		<button id="del" seamed>del</button>
+	</size-transition>
+
+	<br>
+	<br>
+	<br>
+	<br>
+
+	<size-transition id="the-other" card elevation="8">
+		<span>something inside</span>
+		<button id="add" seamed>add</button>
+		<button id="del" seamed>del</button>
+	</size-transition>
+
+	foo
+
+	<script type="module">
+		import FxComponent from './FxComponentV1.js'
+
+		//const duration = 120
+		const duration = 4800
+		const easing = 'cubic-bezier(0.1, 0.9, 0.2, 1)'
+
+		class SizeTransition extends FxComponent {
+
+			static template = `
+				<div id="container">
+					<slot></slot>
+				</div>
+				<div id="placeholder"></div>
+			`
+
+			static style = `
+				:host {
+					overflow: hidden;
+				}
+				#container {
+					display: inherit;
+					align-items: inherit;
+					justify-content: inherit;
+					position: absolute;
+				}
+			`
+
+			constructor() {
+				super()
+				this.observer = new ResizeObserver(entries => this.onResize(entries[0]))
+			}
+
+			attributeChangedCallback(...args) {
+				console.log(...args)
+			}
+
+			connectedCallback() {
+				this.container = this.shadowRoot.querySelector('#container')
+				this.placeholder = this.shadowRoot.querySelector('#placeholder')
+				this._startObserving()
+			}
+
+			disconnectedCallback() {
+				this._stopObserving()
+			}
+
+			_startObserving() {
+				this.observer.observe(this.container)
+			}
+
+			_stopObserving() {
+				this.observer.unobserve(this.container)
+			}
+
+			onResize(entry) {
+				let {width, height} = entry.contentRect
+				let computed = window.getComputedStyle(this)
+
+				let horizontalPadding = parseInt(computed.paddingLeft) + parseInt(computed.paddingRight)
+				let verticalPadding   = parseInt(computed.paddingTop)  + parseInt(computed.paddingBottom)
+
+				console.log('onResize', this.lastWidth, '->', width, '|', horizontalPadding)
+
+				this.placeholder.style.width  = px(width)
+				this.placeholder.style.height = px(height)
+
+				if (this.lastWidth !== width && this.lastWidth !== undefined) {
+					var keyframes = {}
+					if (this.lastWidth !== width) {
+						keyframes.width  = [px(this.lastWidth), px(width)]
+						//this.placeholder.style.width = `${Math.max(this.lastWidth, width)}px`
+					}
+					if (this.lastHeight !== height) {
+						keyframes.height = [px(this.lastHeight), px(height)]
+						//this.placeholder.style.height = `${Math.max(this.lastHeight, height)}px`
+					}
+					console.log('keyframes', keyframes.width)
+					let animation = this.placeholder.animate(keyframes, {easing, duration})
+					animation.onfinish = e => {
+						console.log('applying', width)
+						this.placeholder.style.width  = px(width)
+						this.placeholder.style.height = px(height)
+					}
+				}
+
+				this.lastWidth  = width
+				this.lastHeight = height
+			}
+
+		}
+
+		customElements.define('size-transition', SizeTransition)
+
+		function px(number) {
+			return number + 'px'
+		}
+
+		for (let selector of ['#flex-row', '#the-other']) {
+			let container = document.querySelector(selector)
+			container.querySelector('#add').addEventListener('click', e => {
+				let node = document.createElement('span')
+				container.appendChild(node)
+				node.innerText = 'new thing'
+			})
+			container.querySelector('#del').addEventListener('click', e => {
+				container.lastElementChild.remove()
+			})
+		}
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" defer href="../css/flexus-material.css">
+	<style>
+		body {
+			padding: 24px;
+			display: block;
+			background-color: #666;
+		}
+
+/*
+		shape-transition {
+			transition: transform 2000ms cubic-bezier(0.1, 0.9, 0.2, 1);
+		}
+		shape-transition[state="1"] {
+			transform: translate(0px, 0px);
+		}
+		shape-transition[state="2"] {
+			transform: translate(100px, 300px);
+		}
+*/
+	</style>
+</head>
+<body>
+
+	<button onclick="javascript: demo1.setState(1)">set state1</button>
+	<button onclick="javascript: demo1.setState(2)">set state2</button>
+	<button onclick="javascript: demo1.animateState(1)">animate state1</button>
+	<button onclick="javascript: demo1.animateState(2)">animate state2</button>
+
+	<br><br>
+
+	<shape-transition
+	id="demo1"
+	state="1"
+	state1="background-color: #FFF; width: 500px; height: 400px; border-radius: 5px; box-shadow: var(--elevation-8)"
+	state2="background-color: #FFF; width: 56px; height: 56px; border-radius: 28px; box-shadow: var(--elevation-4); display: flex; align-items: center; justify-content: center;">
+		<div slot="state1">
+			<flexus-toolbar transparent>
+				<button icon="close"></button>
+				Track editor
+			</flexus-toolbar>
+			<main style="padding: 16px;">
+				<p>This is the content of the card</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras scelerisque auctor lectus id bibendum. Nunc feugiat, tellus nec aliquam interdum, ligula nulla accumsan nisl, sed consectetur sapien dolor ut enim.</p>
+			</main>
+		</div>
+		<div slot="state2">
+			<icon>edit</icon>
+		</div>
+	</shape-transition>
+
+
+	<script type="module">
+		import FxComponent from './FxComponentV2.js'
+
+		// WARNING: WORK IN PROGRESS, HORRIBLE CODE AHEAD (almost pseudocode)
+		// this was written while waiting for doctor's appointment.
+
+		//const duration = 480
+		//const duration = 4800
+		const duration = 800
+		//const duration = 2000
+		const easing = 'cubic-bezier(0.1, 0.9, 0.2, 1)'
+
+		const camelize = s => s.replace(/-./g, x=>x.toUpperCase()[1])
+
+		const emptySize = {width: '0px', height: '0px'}
+
+		class ShapeTransition extends FxComponent {
+
+			static template = `
+				<div id="container">
+					<div id="background-sheet"></div>
+					<div id="clippable-content">
+						<div class="slot" id="state1"><slot name="state1"></slot></div>
+						<div class="slot" id="state2"><slot name="state2"></slot></div>
+					</div>
+				</div>
+			`
+
+			static style = `
+				:host {
+					display: inline-block;
+				}
+				#container {
+					position: relative;
+				}
+				#background-sheet {
+					position: relative;
+					z-index: 1;
+					opacity: 0.3;
+				}
+				#clippable-content {
+					position: absolute;
+					left: 0;
+					top: 0;
+					z-index: 2;
+				}
+				#clippable-content > .slot {
+					position: absolute;
+					left: 0;
+					top: 0;
+				}
+			`
+
+			constructor() {
+				super()
+				this.backgroundSheet = this.shadowRoot.querySelector('#background-sheet')
+				this.clippableContent = this.shadowRoot.querySelector('#clippable-content')
+				this.states = []
+				this.setupStateWrapper(1)
+				this.setupStateWrapper(2)
+				this.setState(1)
+				setTimeout(() => {
+					this.animateState(2)
+				}, 700)
+			}
+
+			setupStateWrapper(num) {
+				let slug = `state${num}`
+				let id  = `#state${num}`
+				let string = this.getAttribute(slug)
+				let style = parseStyle(string)
+				let layoutStyle = this.stripStyleToLayout(style)
+				//let size = {width: style.width, height: style.height}
+				let node = this[slug] = this.shadowRoot.querySelector(id)
+				this.states.push(node)
+				Object.assign(node.style, layoutStyle)
+			}
+
+			getStyle(num) {
+				let slug = `state${num}`
+				let string = this.getAttribute(slug)
+				return parseStyle(string)
+			}
+
+			stripStyleToLayout(style) {
+				let layoutStyle = {...style}
+				delete layoutStyle['background']
+				delete layoutStyle['background-image']
+				delete layoutStyle['background-color']
+				delete layoutStyle['clip-path']
+				delete layoutStyle['box-shadow']
+				return layoutStyle
+			}
+
+			enableState(node) {
+				Object.assign(node.style, {
+					opacity: 1,
+					visibility: '',
+					pointerEvents: ''
+				})
+			}
+
+			disableState(node) {
+				Object.assign(node.style, {
+					opacity: 0,
+					visibility: 'hidden',
+					pointerEvents: 'none'
+				})
+			}
+
+			setState(num) {
+				if (this.state === num) return
+				num = Number(num)
+				let slug = `state${num}`
+				this.state = num
+				let style = this.getAttribute(slug)
+				this.backgroundSheet.setAttribute('style', style)
+				let stateNode = this[slug]
+				for (let node of this.states) {
+					if (node === stateNode)
+						this.enableState(node)
+					else
+						this.disableState(node)
+				}
+			}
+
+			animateState(num) {
+				if (this.state === num) return
+				let fromNode = this.states[this.state - 1]
+				let toNode   = this.states[num - 1]
+				let fromStyle = this.getStyle(this.state)
+				let toStyle   = this.getStyle(num)
+
+				delete fromStyle['display']
+				delete fromStyle['justify-content']
+				delete fromStyle['align-items']
+				delete toStyle['display']
+				delete toStyle['justify-content']
+				delete toStyle['align-items']
+
+				fromStyle = camelCaseObject(fromStyle)
+				toStyle   = camelCaseObject(toStyle)
+				let fromSize = extractSize(fromStyle)
+				let toSize   = extractSize(toStyle)
+				let boundingSize = combineSizesToBounding(fromSize, toSize)
+
+				this.state = num
+				this.setAttribute('state', num)
+
+				let options = {easing, duration, fill: 'both'}
+				this.enableState(toNode)
+				Object.assign(this.clippableContent.style, boundingSize)
+
+				let startNodeAnimation, endNodeAnimation, contentClipAnimation, bgSheetAnimation
+				startNodeAnimation = fromNode.animate({
+					opacity: [1, 0],
+				}, options)
+				endNodeAnimation = toNode.animate({
+					opacity: [0, 1],
+				}, options)
+				contentClipAnimation = this.clippableContent.animate([
+					{clipPath: createStartClip(fromStyle, toStyle, boundingSize)},
+					{clipPath: createEndClip(fromStyle, toStyle, boundingSize)},
+				], options)
+				bgSheetAnimation = this.backgroundSheet.animate([fromStyle, toStyle], options)
+				setTimeout(() => {
+					this.disableState(fromNode)
+					Object.assign(this.backgroundSheet.style, toStyle)
+					Object.assign(this.clippableContent.style, emptySize)
+					startNodeAnimation   && startNodeAnimation.cancel()
+					endNodeAnimation     && endNodeAnimation.cancel()
+					contentClipAnimation && contentClipAnimation.cancel()
+					bgSheetAnimation     && bgSheetAnimation.cancel()
+				}, duration)
+			}
+
+		}
+
+		function parseStyle(string) {
+			let div = document.createElement('div')
+			div.setAttribute('style', string)
+			let out = {}
+			for (let i = 0; i < div.style.length; i++) {
+				let key = div.style[i]
+				out[key] = div.style[key]
+			}
+			
+			out['border-radius'] = div.style['border-radius']
+			delete out['border-bottom-left-radius']
+			delete out['border-bottom-right-radius']
+			delete out['border-top-left-radius']
+			delete out['border-top-right-radius']
+			
+			return out
+		}
+
+		function extractSize(style) {
+			let {width, height} = style
+			return {width, height}
+		}
+
+		function parseSize(string) {
+			let {width, height} = parseStyle(string)
+			return {width, height}
+		}
+
+		function combineSizesToBounding(startStyle, endStyle) {
+			let width  = Math.max(parseInt(startStyle.width), parseInt(endStyle.width))   + 'px'
+			let height = Math.max(parseInt(startStyle.height), parseInt(endStyle.height)) + 'px'
+			return {width, height}
+		}
+
+		function camelCaseObject(object) {
+			let out = {}
+			for (let [key, val] of Object.entries(object)) {
+				out[camelize(key)] = val
+			}
+			return out
+		}
+
+		function createStartClip(startStyle, endStyle, boundingSize) {
+			let startWidth = parseInt(boundingSize.width)
+			let startHeight = parseInt(boundingSize.height)
+			let endWidth = parseInt(startStyle.width)
+			let endHeight = parseInt(startStyle.height)
+			let right = startWidth - endWidth
+			let bottom = startHeight - endHeight
+			return createClipRoundBox(0, right, bottom, 0, startStyle.borderRadius)
+		}
+
+		function createEndClip(startStyle, endStyle, boundingSize) {
+			let startWidth = parseInt(boundingSize.width)
+			let startHeight = parseInt(boundingSize.height)
+			let endWidth = parseInt(endStyle.width)
+			let endHeight = parseInt(endStyle.height)
+			let right = startWidth - endWidth
+			let bottom = startHeight - endHeight
+			return createClipRoundBox(0, right, bottom, 0, endStyle.borderRadius)
+		}
+
+		function createClipRoundBox(...args) {
+			let [top, right, bottom, left, radius] = args.map(arg => {
+				if (typeof arg === 'number') return arg + 'px'
+				else return arg
+			})
+			return `inset(${top} ${right} ${bottom} ${left} round ${radius})`
+		}
+
+
+		customElements.define('shape-transition', ShapeTransition)
+
+	</script>
+
+</body>
+</html>

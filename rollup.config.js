@@ -1,11 +1,11 @@
 import fs from 'fs'
 import babel from 'rollup-plugin-babel'
 import notify from 'rollup-plugin-notify'
+import {builtinModules} from 'module'
 
 
 var pkg = JSON.parse(fs.readFileSync('package.json').toString())
-var nodeCoreModules = require('repl')._builtinLibs
-var external = [...nodeCoreModules, ...Object.keys(pkg.dependencies || {})]
+var external = [...builtinModules, ...Object.keys(pkg.dependencies || {})]
 var globals = external.reduce((obj, name) => (obj[name] = name, obj), {})
 
 var format = 'umd'

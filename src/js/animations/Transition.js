@@ -1,6 +1,8 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
 //import {ImageTransition} from './ImageTransition.js'
+//import {ImageTransition} from '../../../../image-transition/src/ImageTransition.js'
 import {cloneNode, camelToKebabCase} from './util.js'
+const ImageTransition = undefined // this was moved to separate package
 
 
 // TODO: merge this with ViewTransition's z-index constants
@@ -66,7 +68,10 @@ export class Transition extends AnimationOrchestrator {
 		return this.calculateDiffKeyframes(source, target, ['top', 'left', 'width', 'height'])
 	}
 
-	calculateDiffKeyframes(source, target, properties = []) {
+	// Some transitions need unchanged properties (both start and end values are the same)
+	// to be present in the keyframes. Often used for styles only applied during animation.
+	// Therefore removeUnchanged should be always false. But is configurable.
+	calculateDiffKeyframes(source, target, properties = [], removeUnchanged = false) {
 		var sourceBbox = source.getBoundingClientRect()
 		var targetBbox = target.getBoundingClientRect()
 		// Do not calculate computed styles untill necessary. It's expensive.
@@ -83,6 +88,7 @@ export class Transition extends AnimationOrchestrator {
 					targetComputed = window.getComputedStyle(target)
 				}
 				if (prop === 'borderRadius') {
+					// TODO: disable this if using box-shadow (??? and overflow:hidden ???)
 					keyframes.clipPath = [
 						`inset(0px 0px 0px 0px round ${sourceComputed.borderRadius})`,
 						`inset(0px 0px 0px 0px round ${targetComputed.borderRadius})`
@@ -90,6 +96,10 @@ export class Transition extends AnimationOrchestrator {
 				} else {
 					keyframes[prop] = [sourceComputed[prop], targetComputed[prop]]
 				}
+			}
+			if (removeUnchanged) {
+				let [val1, val2] = keyframes[prop]
+				if (val1 === val2) delete keyframes[prop]
 			}
 		}
 		return keyframes
@@ -260,7 +270,7 @@ export class Transition extends AnimationOrchestrator {
 
 
 	transitionNodes(source, target) {
-		if (ImageTransition.canTransition(source, target)) {
+		if (ImageTransition && ImageTransition.canTransition(source, target)) {
 			this.transitionImageNodes(source, target)
 		} else {
 			this.transitionTextNodes(source, target)
@@ -272,6 +282,7 @@ export class Transition extends AnimationOrchestrator {
 		// TODO: set adjacentNode from here to be newView. because the view can be faded as whole
 		// (do similar approach to transitionTextNode)
 		console.warn('transitionImageNodes not implemented yet')
+		if (ImageTransition === undefined) return console.warn(`ImageTransition is not loaded, image animations won't work`)
 		return
 		let {duration} = this
 		duration = 1000
@@ -280,19 +291,25 @@ export class Transition extends AnimationOrchestrator {
 		transition.play()
 	}
 
-	async transitionTextNodes(source, target) {
+	async transitionTextNodes(source, target, nodeToAnimate = 'clone') {
 		var fromBbox = source.getBoundingClientRect()
 		var toBbox = target.getBoundingClientRect()
 
-		var $clone = cloneNode(source)
-		Object.assign($clone.style, {
-			position: 'absolute',
-			zIndex: ZINDEX_CLONE_OVERLAY,
-			top: fromBbox.top + 'px',
-			left: fromBbox.left + 'px',
-		})
-		document.body.appendChild($clone)
-		//this.newView.appendChild($clone)
+		console.log('fromBbox', fromBbox)
+		console.log('fromBbox.top', fromBbox.top)
+
+		let clone = nodeToAnimate === 'clone'
+		if (clone) {
+			var $clone = cloneNode(source)
+			Object.assign($clone.style, {
+				position: 'absolute',
+				zIndex: ZINDEX_CLONE_OVERLAY,
+				top: fromBbox.top + 'px',
+				left: fromBbox.left + 'px',
+			})
+			document.body.appendChild($clone)
+			//this.newView.appendChild($clone)
+		}
 
 		source.style.visibility = 'hidden'
 		target.style.visibility = 'hidden'
@@ -314,13 +331,16 @@ export class Transition extends AnimationOrchestrator {
 		source.style.visibility = 'hidden'
 		target.style.visibility = 'hidden'
 
-		this.schedule($clone, keyframes)
+		if (clone)
+			this.schedule($clone, keyframes)
 
 		// TODO: implement this 
 		await this.finished
-		source.style.visibility = ''
-		target.style.visibility = ''
-		$clone.remove()
+		if (clone) {
+			source.style.visibility = ''
+			target.style.visibility = ''
+			$clone.remove()
+		}
 
 	}
 

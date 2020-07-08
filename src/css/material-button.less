@@ -300,9 +300,11 @@ select {
 		color: rgb(--theme-fg);
 	}
 
-	[touch] &:active,
-	[touch] &:focus {
-		--seam-size: 2px;
+	&:not([seamed]):not([flat]):not([elevated]) {
+		[touch] &:active,
+		[touch] &:focus {
+			--seam-size: 2px;
+		}
 	}
 
 }

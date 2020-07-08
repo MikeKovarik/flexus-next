@@ -163,7 +163,7 @@ and even icon and ink pseudo elements
 	// TODO: enable this is the fallback to base-color doesn't break anything
 	//color:            rgba(var(--fg, var(--theme-base-fg)), var(--fg-opacity, var(--fg-base-opacity, 1)));
 }
-.apply-background() {
+.apply-background(/* TODO: argument opacity, used as override for css var */) {
 	background-color: rgba(var(--bg), var(--bg-opacity, var(--bg-base-opacity, 1)));
 	// TODO: enable this is the fallback to base-color doesn't break anything
 	//background-color: rgba(var(--bg, var(--theme-base-bg)), var(--bg-opacity, var(--bg-base-opacity, 1)));

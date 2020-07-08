@@ -288,7 +288,7 @@ export class ViewTransition extends Transition {
 
 
 
-
+	// is this still used? why doesn't it return anything, not animations, nor promise
 	transitionNode(source, target, options = {}) {
 		var fromBbox = source.getBoundingClientRect()
 		var toBbox = target.getBoundingClientRect()
@@ -309,9 +309,9 @@ export class ViewTransition extends Transition {
 			toTransform[1] += ` scale(1, 1)`
 		}
 
-		var duration = 400
-		var fill = 'both'
-		var easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+		var duration = options.duration || 400
+		var fill = options.fill || 'both'
+		var easing = options.easing || 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
 		source.animate({
 			transformOrigin: ['top left', 'top left'],

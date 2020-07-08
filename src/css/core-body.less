@@ -41,10 +41,17 @@ flexus-view {
 }
 
 [sheet] {
-	--bg-opacity: 1;
 	--bg: var(--sheet-bg);
 	--fg: var(--sheet-fg);
+	--bg-opacity: 1;
+	// TODO: rework. this applies to all children, destryoing their look
+	// i.e. if sheet has childern with [seamed] or flat (practically any button) or [fx-item][seamed]
+	// it breaks (at least in dark mode where sheet bg color isnt' pure 0,0,0
 	.apply-colors();
+	// TODO: proposed change: use apply-* instead of apply-colors and add 
+	// argument to it which sets desired opacity (to only this element)
+	//.apply-background(1); // as in local opacity 1
+	//.apply-foreground();
 }
 
 // TODO: rename

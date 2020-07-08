@@ -72,18 +72,55 @@
 		[seamed="between"] + [seamed="between"] {
 			border-top: 1px solid #EEE;
 		}
+		
+		fx-expansion > [fx-item] {
+			--offset: 16px;
+			margin: 0;
+			--keyline: 48px;
+		}
 	</style>
 
 </head>
 <body>
 
 
-	<flexus-view>
+	<flexus-view theme="light">
 
 		<flexus-toolbar>
 			fx-expansion component
 		</flexus-toolbar>
 		<main>
+
+			<fx-expansion>
+				<div fx-item>
+					<icon tinted>check</icon>
+					<span flex>header</span>
+					<i icon="chevron_right"></i>
+				</div>
+				<div fx-item body2 muted>
+					<span flex>this is some boring gray text with a</span>
+					<button seamed>button</button>
+				</div>
+			</fx-expansion>
+
+			<fx-expansion>
+				<div fx-item>
+					<icon tinted>check</icon>
+					<div flex>
+						<div body2 muted>Cíl</div>
+						<div>${item.to}</div>
+					</div>
+					<div flex>
+						<div body2 muted>Cíl</div>
+						<div>${item.to}</div>
+					</div>
+					<i icon="chevron_right"></i>
+				</div>
+				<div fx-item body2 muted>
+					<span flex>this is some boring gray text with a</span>
+					<button seamed>button</button>
+				</div>
+			</fx-expansion>
 
 			<fx-expansion>
 				<div seamed>
