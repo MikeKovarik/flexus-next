@@ -1,12 +1,29 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
 //import {ImageTransition} from './ImageTransition.js'
-//import {ImageTransition} from '../../../../image-transition/src/ImageTransition.js'
 import {cloneNode, camelToKebabCase} from './util.js'
-const ImageTransition = undefined // this was moved to separate package
+
+import {ImageTransition} from '../../../../image-transition/src/ImageTransition.js'
+//const ImageTransition = undefined // this was moved to separate package
 
 
 // TODO: merge this with ViewTransition's z-index constants
-const ZINDEX_CLONE_OVERLAY = 105
+// TODO: make separate container (as a direct child of body) for all cloned items
+export const ZINDEX_CLONE_OVERLAY_CONTAINER = 105 // used by optional container for cloned nodes
+export const ZINDEX_CLONE_OVERLAY_IMAGES = 106
+export const ZINDEX_CLONE_OVERLAY_TEXT = 107
+
+let cloneContainer = document.createElement('div')
+Object.assign(cloneContainer.style, {
+	position: 'absolute',
+	top: 0,
+	right: 0,
+	bottom: 0,
+	left: 0,
+	zIndex: ZINDEX_CLONE_OVERLAY_CONTAINER,
+	pointerEvents: 'none'
+})
+document.body.prepend(cloneContainer)
+
 
 export class Transition extends AnimationOrchestrator {
 
@@ -240,6 +257,17 @@ export class Transition extends AnimationOrchestrator {
 		this.schedule(nodeToClip, keyframes, start, end)
 	}
 
+	// sugar api
+
+	scaleOut(node, start = 0, end = 1) {
+		var keyframes = {transform: ['scale(1)', 'scale(0)']}
+		this.schedule(node, keyframes, start, end)
+	}
+
+	scaleIn(node, start = 0, end = 1) {
+		var keyframes = {transform: ['scale(0)', 'scale(1)']}
+		this.schedule(node, keyframes, start, end)
+	}
 
 	fadeOut(node, start = 0, end = 1) {
 		var keyframes = {opacity: [1, 0]}
@@ -277,38 +305,45 @@ export class Transition extends AnimationOrchestrator {
 		}
 	}
 
-	transitionImageNodes(source, target) {
+	async transitionImageNodes(source, target) {
 		// TODO: this needs to be scheduled and integrated into AnimationOrchestrator API.
 		// TODO: set adjacentNode from here to be newView. because the view can be faded as whole
 		// (do similar approach to transitionTextNode)
+		// TODO: implement reverse animation
 		console.warn('transitionImageNodes not implemented yet')
 		if (ImageTransition === undefined) return console.warn(`ImageTransition is not loaded, image animations won't work`)
-		return
-		let {duration} = this
-		duration = 1000
-		var mode = 'clone'
-		var transition = new ImageTransition(source, target, {duration})
-		transition.play()
+		let options = {
+			duration: this.duration,
+			mode: 'clone',
+			cloneZindex: ZINDEX_CLONE_OVERLAY_IMAGES,
+			cloneContainer,
+		}
+		var transition = new ImageTransition(source, target, options)
+		this.readyPromises.push(transition.ready)
+		await transition.ready
+		let animation = transition.createAnimation()
+		animation.pause()
+		this.animations.push(animation)
 	}
 
+	// TODO: be able to fade both views in/out while the transitioning text is cloned and out of the fading elements
 	async transitionTextNodes(source, target, nodeToAnimate = 'clone') {
 		var fromBbox = source.getBoundingClientRect()
 		var toBbox = target.getBoundingClientRect()
 
-		console.log('fromBbox', fromBbox)
-		console.log('fromBbox.top', fromBbox.top)
-
-		let clone = nodeToAnimate === 'clone'
-		if (clone) {
-			var $clone = cloneNode(source)
-			Object.assign($clone.style, {
+		let shouldClone = nodeToAnimate === 'clone'
+		let clone
+		if (shouldClone) {
+			clone = cloneNode(source)
+			Object.assign(clone.style, {
 				position: 'absolute',
-				zIndex: ZINDEX_CLONE_OVERLAY,
+				zIndex: ZINDEX_CLONE_OVERLAY_TEXT,
 				top: fromBbox.top + 'px',
 				left: fromBbox.left + 'px',
 			})
-			document.body.appendChild($clone)
-			//this.newView.appendChild($clone)
+			if (localStorage.debugAnimations === 'true') clone.style.outline = '1px solid red'
+			cloneContainer.appendChild(clone)
+			//this.newView.appendChild(clone)
 		}
 
 		source.style.visibility = 'hidden'
@@ -319,9 +354,18 @@ export class Transition extends AnimationOrchestrator {
 		keyframes.transformOrigin = ['top left', 'top left']
 		var translateX = toBbox.left - fromBbox.left
 		var translateY = toBbox.top - fromBbox.top
+
+		// NOTE: 5px is a safeguard around start/end of the animation becase
+		// things like font-weight can jump-change the layour and cause text
+		// to break into multiple lines (repeatedly and cause jitter) 
+		keyframes.width = [
+			(source.offsetWidth + 5) + 'px',
+			(target.offsetWidth + 5) + 'px'
+		]
+
 		keyframes.transform = [
-			`translate(0, 0)`,
-			`translate(${translateX}px, ${translateY}px)`,
+			`translate(0, 0) ` + (source.style.transform || ''),
+			`translate(${translateX}px, ${translateY}px) ` + (target.style.transform || ''),
 		]
 
 		// TODO: use this for distance based duration calculations
@@ -331,15 +375,16 @@ export class Transition extends AnimationOrchestrator {
 		source.style.visibility = 'hidden'
 		target.style.visibility = 'hidden'
 
-		if (clone)
-			this.schedule($clone, keyframes)
+		if (shouldClone)
+			this.schedule(clone, keyframes)
 
 		// TODO: implement this 
 		await this.finished
-		if (clone) {
+		if (shouldClone) {
+			console.log('hiding clone text')
 			source.style.visibility = ''
 			target.style.visibility = ''
-			$clone.remove()
+			clone.remove()
 		}
 
 	}

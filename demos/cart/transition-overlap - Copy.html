@@ -103,12 +103,79 @@
 		import {ViewTransition} from '../../src/js/animations/ViewTransition.js'
 		import {setTransitionClass} from './cart-vue-app.js'
 
+		function mapRange(num, inMin, inMax, outMin, outMax) {
+			return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+		}
+
+		function getAllPreviousElements(node) {
+			let nodes = []
+			while (true) {
+				node = node.previousElementSibling
+				if (node === null) break
+				nodes.push(node)
+			}
+			return nodes
+		}
+
+		function getAllNextElements(node) {
+			let nodes = []
+			while (true) {
+				node = node.nextElementSibling
+				if (node === null) break
+				nodes.push(node)
+			}
+			return nodes
+		}
+
+		function isNotFab(node) {
+			return !node.hasAttribute('fab')
+		}
+
 
 		// TODO: simplify the class
 		class TransitionOverlap extends ViewTransition {
 
 			duration = 700
 			//duration = 10000
+
+			findSurroundingNodes() {
+				this.baseMain = this.baseView.querySelector(':scope > main')
+				this.zIndexNodeList.push('baseMain')
+
+				this.aboveNodes = getAllPreviousElements(this.baseMain).filter(isNotFab)
+				this.belowNodes = getAllNextElements(this.baseMain).filter(isNotFab)
+			}
+
+			// hides toolbar by pushing it away off the top of the screen
+			pushAwayElementsAbove() {
+				this.aboveMain = this.aboveNodes.pop()
+				if (!this.aboveMain) return
+				//if (!isElevated(this.aboveMain)) return
+				// MD spec wants to delay the animation until edges of toolbar and animated element are touching
+				// to make it look like the animated element pushes toolbar away.
+				// This is an ugly calculation that somewhat does the job (I'm not a mathematician. send halp pls).
+				// NOTE: It'd be nice to use the actual bezier curve used to animate the element.
+				let top = this.originBbox.top - this.baseViewBbox.top
+				// Distance between bottom edge of toolbar and origin's top edge.
+				let distFromToolbar = top - this.aboveMain.offsetHeight
+				let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
+				let delay = 0.1 + (Math.sin(radians) * 0.45)
+				let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, -100%, 0)']
+				this.schedule(this.aboveMain, {transform}, delay, 1)
+			}
+
+			// hides bottom tabs by pushing it away off the top of the screen
+			pushAwayElementsBelow() {
+				this.belowMain = this.belowNodes.pop()
+				if (!this.belowMain) return
+				let bottom = this.baseViewBbox.bottom - this.originBbox.bottom
+				// Distance between bottom edge of toolbar and origin's bottom edge.
+				let distFromToolbar = bottom - this.belowMain.offsetHeight
+				let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
+				let delay = 0.1 + (Math.sin(radians) * 0.45)
+				let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, 100%, 0)']
+				this.schedule(this.belowMain, {transform}, delay, 1)
+			}
 
 			setup() {
 				super.setup()
@@ -176,7 +243,7 @@
 				this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
 
 				this.fadeOut(this.origin, 0.1, 0.6)
-				this.fadeIn(this.newView, 0.4, 1)
+				this.fadeIn(this.newView, 0.3, 1)
 
 				this.baseMain.style.zIndex = 'unset'
 			}
@@ -187,8 +254,8 @@
 				} catch(err) {
 					throw err
 				} finally {
-					if (this.backdrop) this.backdrop.remove()
-					if (this.sheet)    this.sheet.remove()
+					this.backdrop.remove()
+					this.sheet.remove()
 				}
 			}
 
@@ -198,8 +265,8 @@
 				} catch(err) {
 					throw err
 				} finally {
-					if (this.backdrop) this.backdrop.remove()
-					if (this.sheet)    this.sheet.remove()
+					this.backdrop.remove()
+					this.sheet.remove()
 				}
 			}
 

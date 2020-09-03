@@ -106,7 +106,7 @@ class TransformableNode {
 		}
 		if (this.parallax) {
 			this.translateY = this.parallaxRatio * px
-			//this.node.style.clipPath = `inset(0px 0px ${this.translateY}px 0px)`
+			this.node.style.clipPath = `inset(0px 0px ${this.translateY}px 0px)`
 		}
 		if (this.blurable) {
 			let value = remapPercentage(percentage, this.blurExpanded, this.blurCollapsed)
@@ -119,12 +119,17 @@ class TransformableNode {
 
 }
 
+
+
+
+
 import {createTemplate, createGlobalStyle} from '../FxComponentV1.js'
 
 var parallaxShadowTemplate = createTemplate(`
 	<div style="clip-path: inset(0)">
 		<slot></slot>
 	</div>
+	<slot name="fab"></slot>
 `)
 
 createGlobalStyle(`
@@ -168,7 +173,13 @@ class FxToolbar extends FxComponent {
 		}
 
 		var parallax = this.querySelector('[parallax]') !== null
-		if (parallax) this._createShadowFromTemplate(parallaxShadowTemplate)
+		if (parallax) {
+			let fab = this.querySelector('[fab]')
+			if (fab) fab.setAttribute('slot', 'fab')
+			// TODO: watch if new nodes were added and dynamically add [slot='fab'] to them too
+			//       why: framework bindings like <div fab if.bind="...">
+			this._createShadowFromTemplate(parallaxShadowTemplate)
+		}
 
 		var sections = Array.from(this.querySelectorAll(':scope > *:not(button):not([collapsible])'))
 		var sections = Array.from(this.querySelectorAll(':scope > *:not(button)'))
@@ -188,11 +199,19 @@ class FxToolbar extends FxComponent {
 
 		this.collapsible = this.transformables.length > 0
 
-		this.setupCollapsible()
 
 		let computed = window.getComputedStyle(this)
 		if (computed.opacity === '0')
 			this._animate(this, {opacity: [0, 1]}).then(() => this.style.opacity = 1)
+	}
+
+	connectedCallback() {
+		//console.log('connectedCallback')
+		this.setupCollapsible()
+	}
+
+	disconnectedCallback() {
+		//console.log('disconnectedCallback')
 	}
 
 	setupCollapsible() {
@@ -233,8 +252,6 @@ class FxToolbar extends FxComponent {
 	}
 
 	calculateCollapsibleHeight() {
-		//console.log('-------------------')
-		//console.log(this)
 
 		let {topSection, bottomSection} = this
 
@@ -333,9 +350,6 @@ class FxToolbar extends FxComponent {
 			this.setAttribute('elevation', '4')
 			if (this.seamed) this.removeAttribute('seamed')
 		}
-	}
-
-	disconnectedCallback() {
 	}
 
 }

@@ -96,9 +96,12 @@
 		import {setTransitionClass} from './cart-vue-app.js'
 
 		class TransitionBlend extends ViewTransition {
+
+			duration = 500
+
 			setup() {
 				super.setup()
-				this.duration = 500
+				console.log('A this.duration', this.duration)
 				this.fadeOut(this.baseView, 0, 0.3)
 				this.fadeIn(this.newView, 0.7, 1)
 			}

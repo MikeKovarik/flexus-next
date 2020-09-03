@@ -27,8 +27,10 @@ var products = [{
 
 class FlexusView extends HTMLElement {}
 class FlexusToolbar extends HTMLElement {}
+class FlexusTabs extends HTMLElement {}
 customElements.define('flexus-view', FlexusView)
 customElements.define('flexus-toolbar', FlexusToolbar)
+customElements.define('flexus-tabs', FlexusTabs)
 
 var asyncTimeout = millis => new Promise(resolve => setTimeout(resolve, millis))
 
@@ -75,14 +77,18 @@ export function setTransitionClass(Class) {
 
 async function animateOverlapIn(baseView, newView, e, options) {
 	var transition = new TransitionClass(baseView, newView, e, options)
-	await transition.in()
+	try {
+		await transition.in()
+	} catch (err) {
+		console.error(err)
+	}
 }
 
 async function animateOverlapOut(baseView, newView, e, options) {
 	var name = newView.getAttribute('name')
 	var origin = baseView.querySelector(`[name="${name}"]`)
 	var transition = new TransitionClass(baseView, newView, origin, options)
-	await transition.out()
+	await transition.out().catch(console.error)
 }
 
 

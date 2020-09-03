@@ -10,6 +10,10 @@ const ZINDEX_NEWVIEW  = 104
 
 export class ViewTransition extends Transition {
 
+	duration = 250
+	fill = 'both'
+	easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
 	constructor(baseView, newView, origin, pivot) {
 		super()
 		
@@ -17,17 +21,16 @@ export class ViewTransition extends Transition {
 			pivot = newView.querySelector('[transition-pivot]') || newView
 		if (origin instanceof Event)
 			origin = this.findOrigin(origin)
+		if (!origin)
+			origin = this.findOriginInView(baseView)
+
+		if (!origin)
+			throw `Couldn't animate, 'origin' node is ${origin}`
 
 		this.baseView = baseView
 		this.newView  = newView
 		this.origin   = origin
 		this.pivot    = pivot
-
-		this.duration = 250
-		this.fill = 'both'
-		this.easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
-
-		//this.setup()
 	}
 
 	// accepts event
@@ -38,6 +41,10 @@ export class ViewTransition extends Transition {
 			if (node.hasAttribute('transition-origin')) return node
 			node = node.parentElement
 		}
+	}
+	findOriginInView(baseView) {
+		let origins = Array.from(baseView.querySelectorAll('[transition-origin]'))
+		if (origins.length === 1) return origins[0]
 	}
 
 	setup() {
@@ -57,20 +64,9 @@ export class ViewTransition extends Transition {
 				this.origin.style.position = 'relative'
 		}
 
-		this.originalZindexes = {
-			baseView: this.baseView && this.baseView.style.zIndex,
-			backdrop: this.backdrop && this.backdrop.style.zIndex,
-			sheet:    this.sheet    && this.sheet.style.zIndex,
-			originBg: this.originBg && this.originBg.style.zIndex,
-			origin:   this.origin   && this.origin.style.zIndex,
-			newView:  this.newView  && this.newView.style.zIndex,
-		}
-		if (this.baseView) this.baseView.style.zIndex = ZINDEX_BASEVIEW
-		if (this.backdrop) this.backdrop.style.zIndex = ZINDEX_BACKDROP
-		if (this.sheet)    this.sheet.style.zIndex    = ZINDEX_SHEET
-		if (this.originBg) this.originBg.style.zIndex = ZINDEX_ORIGINBG
-		if (this.origin)   this.origin.style.zIndex   = ZINDEX_ORIGIN
-		if (this.newView)  this.newView.style.zIndex  = ZINDEX_NEWVIEW
+		this.storeZindexes()
+		this.applyTransitionZindexes()
+
 		// todo:
 		this.scale = this.newViewBbox.width / this.originBbox.width
 		// distance of size between origin and new view.
@@ -78,10 +74,10 @@ export class ViewTransition extends Transition {
 		// TODO: calculate duration dynamically based on the distance. longer the distance, longer the animation.
 
 		if (this.canBlendToolbars)
-			this.blendAboveMain()
+			this.blendAboveMain() // todo
 
 		if (this.canBlendMains)
-			this.blendMains()
+			this.blendMains() // todo
 		// PUSH away other elevated elements (bottom tabs or bar)
 		// FADE out everything else.
 
@@ -106,12 +102,7 @@ export class ViewTransition extends Transition {
 	}
 
 	teardown() {
-		if (this.baseView) this.baseView.style.zIndex = this.originalZindexes.baseView
-		if (this.backdrop) this.backdrop.style.zIndex = this.originalZindexes.backdrop
-		if (this.sheet)    this.sheet.style.zIndex    = this.originalZindexes.sheet
-		if (this.originBg) this.originBg.style.zIndex = this.originalZindexes.originBg
-		if (this.origin)   this.origin.style.zIndex   = this.originalZindexes.origin
-		if (this.newView)  this.newView.style.zIndex  = this.originalZindexes.newView
+		this.restoreZindexes()
 		this.originalZindexes.newView = undefined
 	}
 
@@ -213,13 +204,6 @@ export class ViewTransition extends Transition {
 			this.setHidden(this.newView)
 			this.teardown()
 		}
-	}
-
-
-
-	pushAwayElementsAbove() {
-	}
-	pushAwayElementsBelow() {
 	}
 
 	createBackdrop() {
@@ -330,4 +314,111 @@ export class ViewTransition extends Transition {
 
 
 
+	// -------------------------------------------------------------
+	// ------------------------ SURROUNDING NODES -----------------------------
+	// -------------------------------------------------------------
+
+	findSurroundingNodes() {
+		this.baseMain = this.baseView.querySelector(':scope > main')
+		this.zIndexNodeList.push('baseMain')
+
+		this.aboveNodes = getAllPreviousElements(this.baseMain).filter(isNotFab)
+		this.belowNodes = getAllNextElements(this.baseMain).filter(isNotFab)
+	}
+
+	// hides toolbar by pushing it away off the top of the screen
+	pushAwayElementsAbove() {
+		// TODO: crude. proof of concept
+		this.aboveMain = this.aboveNodes.pop()
+		if (!this.aboveMain) return
+		//if (!isElevated(this.aboveMain)) return
+		// MD spec wants to delay the animation until edges of toolbar and animated element are touching
+		// to make it look like the animated element pushes toolbar away.
+		// This is an ugly calculation that somewhat does the job (I'm not a mathematician. send halp pls).
+		// NOTE: It'd be nice to use the actual bezier curve used to animate the element.
+		let top = this.originBbox.top - this.baseViewBbox.top
+		// Distance between bottom edge of toolbar and origin's top edge.
+		let distFromToolbar = top - this.aboveMain.offsetHeight
+		let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
+		let delay = 0.1 + (Math.sin(radians) * 0.45)
+		let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, -100%, 0)']
+		this.schedule(this.aboveMain, {transform}, delay, 1)
+	}
+
+	// hides bottom tabs by pushing it away off the top of the screen
+	pushAwayElementsBelow() {
+		// TODO: crude. proof of concept
+		this.belowMain = this.belowNodes.pop()
+		if (!this.belowMain) return
+		let bottom = this.baseViewBbox.bottom - this.originBbox.bottom
+		// Distance between bottom edge of toolbar and origin's bottom edge.
+		let distFromToolbar = bottom - this.belowMain.offsetHeight
+		let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
+		let delay = 0.1 + (Math.sin(radians) * 0.45)
+		let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, 100%, 0)']
+		this.schedule(this.belowMain, {transform}, delay, 1)
+	}
+
+
+
+	// -------------------------------------------------------------
+	// ------------------------ ZINDEX -----------------------------
+	// -------------------------------------------------------------
+
+	// list of nodes of which we'll be modifying and later restoring z-indexes.
+	zIndexNodeList = ['baseView', 'backdrop', 'sheet', 'originBg', 'origin', 'newView']
+
+	applyTransitionZindexes() {
+		if (this.baseView) this.baseView.style.zIndex = ZINDEX_BASEVIEW
+		if (this.backdrop) this.backdrop.style.zIndex = ZINDEX_BACKDROP
+		if (this.sheet)    this.sheet.style.zIndex    = ZINDEX_SHEET
+		if (this.originBg) this.originBg.style.zIndex = ZINDEX_ORIGINBG
+		if (this.origin)   this.origin.style.zIndex   = ZINDEX_ORIGIN
+		if (this.newView)  this.newView.style.zIndex  = ZINDEX_NEWVIEW
+	}
+
+	storeZindexes() {
+		let originalZindexes = this.originalZindexes = {}
+		for (let key of this.zIndexNodeList)
+			if (this[key]) originalZindexes[key] = this[key].style.zIndex
+	}
+
+	restoreZindexes() {
+		let {originalZindexes} = this
+		for (let key of this.zIndexNodeList)
+			if (this[key]) this[key].style.zIndex = originalZindexes[key]
+	}
+
+
+}
+
+
+
+
+function mapRange(num, inMin, inMax, outMin, outMax) {
+	return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+}
+
+function getAllPreviousElements(node) {
+	let nodes = []
+	while (true) {
+		node = node.previousElementSibling
+		if (node === null) break
+		nodes.push(node)
+	}
+	return nodes
+}
+
+function getAllNextElements(node) {
+	let nodes = []
+	while (true) {
+		node = node.nextElementSibling
+		if (node === null) break
+		nodes.push(node)
+	}
+	return nodes
+}
+
+function isNotFab(node) {
+	return !node.hasAttribute('fab')
 }

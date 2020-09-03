@@ -250,6 +250,7 @@ button[fab] {
 
 @{button},
 @{input},
+textarea,
 select {
 	border-radius: 4px;
 }
@@ -266,11 +267,16 @@ select {
 @{button},
 input,
 select {
-	.apply-colors();
-
 	--size: var(--input-height);
 	height: var(--size);
 	--icon-size: 18px;
+}
+
+@{button},
+input,
+textarea,
+select {
+	.apply-colors();
 
 	margin: 4px;
 	outline: none;
@@ -311,13 +317,19 @@ select {
 
 @{input},
 @{button},
+textarea,
 select {
 	--padding-top:    calc(var(--padding-vertical,   var(--padding, 0px)) - var(--seam-size, 0px));
 	--padding-right:  calc(var(--padding-horizontal, var(--padding, 0px)) - var(--seam-size, 0px));
 	--padding-bottom: calc(var(--padding-vertical,   var(--padding, 0px)) - var(--seam-size, 0px));
 	--padding-left:   calc(var(--padding-horizontal, var(--padding, 0px)) - var(--seam-size, 0px));
 }
+textarea {
+	--padding-top:    8px;
+	--padding-bottom: 8px;
+}
 @{button},
+textarea,
 select {
 	padding-top:    var(--padding-top);
 	padding-right:  var(--padding-right);
@@ -349,6 +361,7 @@ select {
 
 
 
+textarea,
 @{input} {
 
 	&::placeholder {
@@ -407,6 +420,7 @@ select {
 ///////////////////////////////////////////////////////////////////////////////
 
 @{input},
+textarea,
 select {
 	transition: 120ms background-color;
 	&:extend([hoverable] all);
@@ -420,11 +434,12 @@ select {
 
 @{button},
 input,
+//textarea,
 select {
 	--fg-opacity: 1;
 
 	--seam-color: var(--theme-base-fg);
-	&:not([neutral]) {
+	&:not([neutral=""]):not([neutral="true"]) {
 		&:active,
 		&:focus {
 			--seam-color: var(--tint-bg);
@@ -433,11 +448,11 @@ select {
 
 }
 
-button:not([neutral]):not([elevated]) {
+button:not([neutral=""]):not([neutral="true"]):not([elevated]) {
 	--fg: var(--tint-bg);
 }
 
-button:not([neutral]):not([seamed]):not([flat]) {
+button:not([neutral=""]):not([neutral="true"]):not([seamed]):not([flat]) {
 	--fg: var(--tint-bg);
 	--bg: var(--theme-sheet-bg);
 }

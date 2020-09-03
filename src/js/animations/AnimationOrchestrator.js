@@ -37,18 +37,25 @@ function reverseEntry([key, values]) {
 }
 */
 export class AnimationOrchestrator {
-	
-	constructor() {
-		this.requests = []
-		this.animations = []
-		this.duration = 150
-		// 'both' id combination of 'forwards' and 'backwards'.
-		// 'forwards' keeps the end keyframe applied even after animation is over.
-		// 'backwards' applies the first keyframe before the animation starts (in combination with delay).
-		this.fill = 'both'
-		// Default sine easing to make the animations more snappy and playful.
-		this.easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
+	duration = 150
+
+	// promises of async actions needed before we can start animating
+	// (for example waiting for image to load)	
+	readyPromises = []
+	// animation descriptions
+	requests = []
+	// actual animation instances
+	animations = []
+
+	// 'both' id combination of 'forwards' and 'backwards'.
+	// 'forwards' keeps the end keyframe applied even after animation is over.
+	// 'backwards' applies the first keyframe before the animation starts (in combination with delay).
+	fill = 'both'
+	// Default sine easing to make the animations more snappy and playful.
+	easing = 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+
+	constructor() {
 		this.started = new Promise(resolve => this.startedResolve = resolve)
 	}
 
@@ -57,6 +64,10 @@ export class AnimationOrchestrator {
 			var promises = this.animations.map(a => a.finished)
 			return Promise.all(promises)
 		})
+	}
+
+	get ready() {
+		return Promise.all(this.readyPromises)
 	}
 
 	get running() {
@@ -68,9 +79,16 @@ export class AnimationOrchestrator {
 		this.requests.push({node, keyframes, start, end})
 	}
 
+	// todo: rename: createAnimationsFromRequests
 	finalize(direction = 'normal', speed = 1) {
 		let {easing, fill} = this
 		let totalDuration = this.duration * speed
+		if (this.animations.length > 0) {
+			for (let animation of this.animations) {
+				if (animation.playState === 'paused')
+					animation.play()
+			}
+		}
 		for (let {node, keyframes, start, end} of this.requests) {
 			let duration = (end - start) * totalDuration
 			let delay = 0
@@ -88,21 +106,34 @@ export class AnimationOrchestrator {
 	}
 
 	async play(...args) {
-		await this.playOnly(...args)
+		await this.playButDontCancel(...args)
 		// Wrapping the cancellation in yet another delay (just till the end of current event loop)
 		// to ensure that the owner can finalize the animations. e.g. hiding the element with dispay:none
 		// before we cancel the 'fill' animation. Cancelling first could cause quick flash.
-		await promiseTimeout()
+		await promiseTimeout(0)
 		this.cancel()
 	}
 
-	async playOnly(...args) {
+	async playButDontCancel(...args) {
 		// Turn requests into Animation instances (and fill this.animations array).
 		this.finalize(...args)
+		if (this.readyPromises.length > 0) {
+			this.pauseAll()
+			await this.ready
+			this.playAll()
+		}
 		// resolve this.started promise.
 		this.startedResolve()
 		// Wait till all animations finish playing.
 		await this.finished
+	}
+
+	pauseAll() {
+		for (let animation of this.animations) animation.pause()
+	}
+
+	playAll() {
+		for (let animation of this.animations) animation.play()
 	}
 
 	cancel() {
