@@ -2,6 +2,9 @@ import './polyfill.js'
 import {promiseTimeout} from './util.js'
 
 
+export const normalSpeedMultiplier = 1
+export const reversedSpeedMultiplier = 0.7
+
 export function reverseKeyframes(keyframes) {
 	var output = {}
 	for (let [key, values] of Object.entries(keyframes))
@@ -117,9 +120,20 @@ export class AnimationOrchestrator {
 	async playButDontCancel(...args) {
 		// Turn requests into Animation instances (and fill this.animations array).
 		this.finalize(...args)
+		let animationCount = this.animations.length
 		if (this.readyPromises.length > 0) {
 			this.pauseAll()
 			await this.ready
+			// TODO: this does reverse animation but keeps original easing
+			//       which leads to wrong animation.
+			//       The image animation keyframes should be exposed and animated through orchestrator.
+			let externalAnimations = this.animations.slice(animationCount)
+			let [direction] = args
+			for (let animation of externalAnimations) {
+				animation.playbackRate = direction === 'reversed'
+					? -1 / reversedSpeedMultiplier
+					: 1 / normalSpeedMultiplier
+			}
 			this.playAll()
 		}
 		// resolve this.started promise.

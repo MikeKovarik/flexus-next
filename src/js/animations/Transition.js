@@ -1,4 +1,5 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
+import {normalSpeedMultiplier, reversedSpeedMultiplier} from './AnimationOrchestrator.js'
 //import {ImageTransition} from './ImageTransition.js'
 import {cloneNode, camelToKebabCase} from './util.js'
 
@@ -72,11 +73,11 @@ export class Transition extends AnimationOrchestrator {
 	// PLAYBACK
 
 	in() {
-		return this.play('normal', 1)
+		return this.play('normal', normalSpeedMultiplier)
 	}
 
 	out() {
-		return this.play('reverse', 0.7)
+		return this.play('reverse', reversedSpeedMultiplier)
 	}
 
 	// CALCULATIONS
@@ -310,7 +311,8 @@ export class Transition extends AnimationOrchestrator {
 		// TODO: set adjacentNode from here to be newView. because the view can be faded as whole
 		// (do similar approach to transitionTextNode)
 		// TODO: implement reverse animation
-		console.warn('transitionImageNodes not implemented yet')
+		console.log('------- transitionImageNodes -------')
+		console.warn('transitionImageNodes not yet fully implemented')
 		if (ImageTransition === undefined) return console.warn(`ImageTransition is not loaded, image animations won't work`)
 		let options = {
 			duration: this.duration,
