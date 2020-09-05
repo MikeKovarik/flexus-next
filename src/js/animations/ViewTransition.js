@@ -162,8 +162,10 @@ export class ViewTransition extends Transition {
 		if (!this.readyToPlay) this.setup()
 		if (this.setupIn) {
 			this.setupIn()
+			// todo???
 			var playReversed = false
 		} else {
+			// todo???
 			var playReversed = false
 			//var playReversed = true
 		}
@@ -188,8 +190,10 @@ export class ViewTransition extends Transition {
 		if (!this.readyToPlay) this.setup()
 		if (this.setupOut) {
 			this.setupOut()
+			// todo???
 			var playReversed = false
 		} else {
+			// todo???
 			var playReversed = true
 		}
 
@@ -298,13 +302,13 @@ export class ViewTransition extends Transition {
 		var easing = options.easing || 'cubic-bezier(0.4, 0.0, 0.2, 1)'
 
 		source.animate({
-			transformOrigin: ['top left', 'top left'],
+			transformOrigin: Array(2).fill('top left'),
 			transform: fromTransform,
 			opacity: [1, 0],
 		}, {duration, easing, fill})
 
 		target.animate({
-			transformOrigin: ['top left', 'top left'],
+			transformOrigin: Array(2).fill('top left'),
 			transform: toTransform,
 			opacity: [0, 1],
 		}, {duration, easing, fill})

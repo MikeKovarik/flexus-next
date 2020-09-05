@@ -26,6 +26,10 @@ Object.assign(cloneContainer.style, {
 document.body.prepend(cloneContainer)
 
 
+
+const xDirections = ['left', 'right']
+const yDirections = ['top', 'bottom']
+
 export class Transition extends AnimationOrchestrator {
 
 	constructor() {
@@ -37,19 +41,26 @@ export class Transition extends AnimationOrchestrator {
 	get transformOrigin() {
 		return `${this.originSideX} ${this.originSideY}`
 	}
+	// TODO: add this logic to setup/constructor as well to detect elements origin
 	set transformOrigin(string) {
-		this.originSideX = this.originSideY = 'center'
-		switch (string) {
-			case 'center': return
-			case 'top':    return this.originSideY = 'top'
-			case 'right':  return this.originSideX = 'right'
-			case 'bottom': return this.originSideY = 'bottom'
-			case 'left':   return this.originSideX = 'left'
-			default:
-				var {originSideX, originSideY} = string.split(' ')
-				this.originSideX = originSideX
-				this.originSideY = originSideY
+		//if (string)
+		console.log('TO', string)
+		return
+		let words = string.split(/[\s,]/g)
+		if (words.includes('center'))
+			this.originSideX = this.originSideY = 'center'
+		for (let word of words) {
+			if (xDirections.includes(word)) this.originSideX = word
+			if (yDirections.includes(word)) this.originSideY = word
 		}
+	}
+
+	parseTransformOrigin(computedStyle) {
+		let {transformOrigin, width, height} = computedStyle
+		let [x, y] = transformOrigin.split(' ')
+		// note: computed style of transform origin returns pixels instead of 'left bottom' etc...
+		this.originSideX = x === width ? 'right' : 'left'
+		this.originSideY = y === height ? 'bottom' : 'top'
 	}
 
 	finalize(...args) {

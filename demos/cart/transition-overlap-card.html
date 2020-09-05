@@ -12,10 +12,31 @@
 	-->
 	<link rel="stylesheet" type="text/css" href="./cart.css">
 
-</head>
-<body theme="white" primary="purple">
+	<style>
+		[card]:nth-of-type(1) {
+			/*
+			TOP LEFT IS THE DEFAULT
+			transform-origin: top left;
+			*/
+		}
+		[card]:nth-of-type(2) {
+			transform-origin: top right;
+		}
+		[card]:nth-of-type(3) {
+			transform-origin: bottom left;
+		}
+		[card]:nth-of-type(4) {
+			transform-origin: bottom right;
+		}
+		[card] > img {
+			max-height: 140px;
+		}
+	</style>
 
-	<flexus-view id="cart">
+</head>
+<body primary="purple">
+
+	<flexus-view id="cart" theme="light">
 		<flexus-toolbar tinted elevation="0">
 			<button icon="menu"></button>
 			<div flex>Cart</div>
@@ -24,16 +45,20 @@
 		</flexus-toolbar>
 		<main>
 
-			<div v-on:click="openDetail($event, product.id)"
-			fx-item seamed="between"
-			transition-origin :name="`product-${product.id}`"
-			v-for="product in products">
-				<img square avatar :src="product.image">
-				<div vertical layout flex>
-					<div>${product.name}</div>
-					<div body2 muted>${product.status}</div>
+			<div grid spaced="1" columns="2">
+				<div card nopadding vertical layout
+				v-on:click="openDetail($event, product.id)"
+				transition-origin :name="`product-${product.id}`"
+				v-for="product in products">
+					<img :src="product.image" flex cover>
+					<div padded horizontal layout>
+						<div vertical layout flex>
+							<div>${product.name}</div>
+							<div body2 muted>${product.status}</div>
+						</div>
+						<span>$${product.price.toFixed(2)}</span>
+					</div>
 				</div>
-				<span>$${product.price.toFixed(2)}</span>
 			</div>
 
 			<div fx-item>
@@ -67,7 +92,7 @@
 	</flexus-view>
 
 
-	<flexus-view id="detail" :name="`product-${product.id}`">
+	<flexus-view id="detail" :name="`product-${product.id}`" theme="white">
 
 		<flexus-toolbar seamed>
 			<button icon="x" v-on:click="goBack"></button>
@@ -107,8 +132,9 @@
 		// TODO: simplify the class
 		class TransitionOverlap extends ViewTransition {
 
-			duration = 700
+			//duration = 700
 			//duration = 10000
+			duration = 1000
 
 			setup() {
 				super.setup()
@@ -125,34 +151,110 @@
 				this.pushAwayElementsAbove()
 				this.pushAwayElementsBelow()
 
-				var originTransformKeyframes = {
-					transform: [
-						`translateX(0) translateY(0)`,
-						`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px)`
-					],
-					boxShadow: ['none', 'none']
+				this.parseTransformOrigin(this.originComputed)
+				this.allowOriginEdges = true
+
+				if (this.allowScalingOrigin) {
+					let scale = 2 // todo
+					var originTransformKeyframes = {
+						transformOrigin: ['left top', 'left top'],
+						transform: [
+							`translateX(0) translateY(0) scale(1)`,
+							`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px) scale(${scale})`
+						],
+						boxShadow: ['none', 'none']
+					}
+				} else {
+					let translateXleft   = this.newViewBbox.left  - this.originBbox.left
+					let translateXright  = this.newViewBbox.right - this.originBbox.right
+					let translateYtop    = this.newViewBbox.top   - this.originBbox.top
+					let translateYbottom = this.newViewBbox.bottom   - this.originBbox.bottom // TODO?????
+					let translateX = this.originSideX === 'right' ? translateXright : translateXleft
+					let translateY = this.originSideY === 'bottom' ? translateYbottom : translateYtop
+					if (this.allowOriginEdges) {
+						var originTransformKeyframes = {
+							transform: [
+								`translate(0, 0)`,
+								`translate(${translateX}px, ${translateYtop}px)`
+							],
+							boxShadow: ['none', 'none']
+						}
+					}
 				}
 
-				var newViewMoveKeyframes = {
-					transform: [
-						`translateX(${this.originBbox.left - this.newViewBbox.left}px) translateY(${this.originBbox.top - this.newViewBbox.top}px)`,
-						`translateX(0) translateY(0)`
-					],
-					clipPath: [
-						`polygon(0 0, ${this.originBbox.width}px 0, ${this.originBbox.width}px ${this.originBbox.height}px, 0% ${this.originBbox.height}px)`,
+				if (this.allowOriginEdges) {
+					let translateXleft   = this.originBbox.left - this.newViewBbox.left
+					let translateXright  = this.originBbox.right - this.newViewBbox.right
+					let translateYtop    = this.originBbox.top - this.newViewBbox.top
+					let translateYbottom = this.originBbox.bottom - this.newViewBbox.bottom
+
+					let translateX = this.originSideX === 'right' ? translateXright : translateXleft
+					let translateY = this.originSideY === 'bottom' ? translateYbottom : translateYtop
+
+					let transform = [
+						`translate(${translateX}px, ${translateY}px)`,
+						`translate(0, 0)`
+					]
+
+					let clipLeftTopDesc = {
+						top: 0,
+						right: `${this.originBbox.width}px`,
+						bottom: `${this.originBbox.height}px`,
+						left: 0,
+					}
+					let clipRightTopDesc = {
+						top: 0,
+						right: '100%',
+						bottom: `${this.originBbox.height}px`,
+						left: `calc(100% - ${this.originBbox.width}px)`,
+					}
+					let clipLeftBottomDesc = {
+						top: `calc(100% - ${this.originBbox.height}px)`,
+						right: `${this.originBbox.width}px`,
+						bottom: '100%',
+						left: 0,
+					}
+					let clipRightBottomDesc = {
+						top: `calc(100% - ${this.originBbox.height}px)`,
+						right: '100%',
+						bottom: '100%',
+						left: `calc(100% - ${this.originBbox.width}px)`,
+					}
+
+					const createClip = desc => `polygon(
+						${desc.left} ${desc.top},
+						${desc.right} ${desc.top},
+						${desc.right} ${desc.bottom},
+						${desc.left} ${desc.bottom}
+					)`
+					let clipLeftTop = createClip(clipLeftTopDesc)
+					let clipRightTop = createClip(clipRightTopDesc)
+					let clipLeftBottom = createClip(clipLeftBottomDesc)
+					let clipRightBottom = createClip(clipRightBottomDesc)
+
+					let clipStart = clipLeftTop
+					if (this.originSideX === 'left'  && this.originSideY === 'top')    clipStart = clipLeftTop
+					if (this.originSideX === 'right' && this.originSideY === 'top')    clipStart = clipRightTop
+					if (this.originSideX === 'left'  && this.originSideY === 'bottom') clipStart = clipLeftBottom
+					if (this.originSideX === 'right' && this.originSideY === 'bottom') clipStart = clipRightBottom
+
+					let clipPath = [
+						clipStart,
 						`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
-					],
+					]
+
+					var newViewMoveKeyframes = {transform, clipPath}
 				}
 
 				this.fade(this.backdrop, 0, 0.3, 0, 0.4)
 				this.elevate(this.sheet, this.originComputed.boxShadow, 8, 0, 0.2)
 
 				this.scheduleSheetResize(0.1, 1)
-				this.schedule(this.origin,  originTransformKeyframes, 0.1, 1)
-				this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
+				if (originTransformKeyframes) this.schedule(this.origin,  originTransformKeyframes, 0.1, 1)
+				if (newViewMoveKeyframes)     this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
 
-				this.fadeOut(this.origin, 0.1, 0.6)
-				this.fadeIn(this.newView, 0.4, 1)
+				this.fadeOut(this.origin, 0, 0.5)
+				this.fadeIn(this.newView, 0.3, 0.7)
 
 				this.baseMain.style.zIndex = 'unset'
 			}
