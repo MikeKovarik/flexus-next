@@ -153,6 +153,17 @@
 
 				this.parseTransformOrigin(this.originComputed)
 				this.allowOriginEdges = true
+				let {transformOrigin, width, height} = this.originComputed
+				let [originX, originY] = transformOrigin.split(' ').map(parseFloat)
+
+				//originX = 0
+				//originY = 0
+
+				let ratioX = originX / this.originBbox.width
+				let ratioXneg = 1 - ratioX
+				let ratioY = originY / this.originBbox.height
+				let ratioYneg = 1 - ratioY
+
 
 				if (this.allowScalingOrigin) {
 					let scale = 2 // todo
@@ -165,17 +176,12 @@
 						boxShadow: ['none', 'none']
 					}
 				} else {
-					let translateXleft   = this.newViewBbox.left  - this.originBbox.left
-					let translateXright  = this.newViewBbox.right - this.originBbox.right
-					let translateYtop    = this.newViewBbox.top   - this.originBbox.top
-					let translateYbottom = this.newViewBbox.bottom   - this.originBbox.bottom // TODO?????
-					let translateX = this.originSideX === 'right' ? translateXright : translateXleft
-					let translateY = this.originSideY === 'bottom' ? translateYbottom : translateYtop
 					if (this.allowOriginEdges) {
+						let translate = calcTranslate(this.newViewBbox, this.originBbox, ratioX, ratioY)
 						var originTransformKeyframes = {
 							transform: [
 								`translate(0, 0)`,
-								`translate(${translateX}px, ${translateYtop}px)`
+								`translate(${translate.x}px, ${translate.y}px)`
 							],
 							boxShadow: ['none', 'none']
 						}
@@ -183,43 +189,11 @@
 				}
 
 				if (this.allowOriginEdges) {
-					let translateXleft   = this.originBbox.left - this.newViewBbox.left
-					let translateXright  = this.originBbox.right - this.newViewBbox.right
-					let translateYtop    = this.originBbox.top - this.newViewBbox.top
-					let translateYbottom = this.originBbox.bottom - this.newViewBbox.bottom
-
-					let translateX = this.originSideX === 'right' ? translateXright : translateXleft
-					let translateY = this.originSideY === 'bottom' ? translateYbottom : translateYtop
-
+					let translate = calcTranslate(this.originBbox, this.newViewBbox, ratioX, ratioY)
 					let transform = [
-						`translate(${translateX}px, ${translateY}px)`,
+						`translate(${translate.x}px, ${translate.y}px)`,
 						`translate(0, 0)`
 					]
-
-					let clipLeftTopDesc = {
-						top: 0,
-						right: `${this.originBbox.width}px`,
-						bottom: `${this.originBbox.height}px`,
-						left: 0,
-					}
-					let clipRightTopDesc = {
-						top: 0,
-						right: '100%',
-						bottom: `${this.originBbox.height}px`,
-						left: `calc(100% - ${this.originBbox.width}px)`,
-					}
-					let clipLeftBottomDesc = {
-						top: `calc(100% - ${this.originBbox.height}px)`,
-						right: `${this.originBbox.width}px`,
-						bottom: '100%',
-						left: 0,
-					}
-					let clipRightBottomDesc = {
-						top: `calc(100% - ${this.originBbox.height}px)`,
-						right: '100%',
-						bottom: '100%',
-						left: `calc(100% - ${this.originBbox.width}px)`,
-					}
 
 					const createClip = desc => `polygon(
 						${desc.left} ${desc.top},
@@ -227,19 +201,14 @@
 						${desc.right} ${desc.bottom},
 						${desc.left} ${desc.bottom}
 					)`
-					let clipLeftTop = createClip(clipLeftTopDesc)
-					let clipRightTop = createClip(clipRightTopDesc)
-					let clipLeftBottom = createClip(clipLeftBottomDesc)
-					let clipRightBottom = createClip(clipRightBottomDesc)
 
-					let clipStart = clipLeftTop
-					if (this.originSideX === 'left'  && this.originSideY === 'top')    clipStart = clipLeftTop
-					if (this.originSideX === 'right' && this.originSideY === 'top')    clipStart = clipRightTop
-					if (this.originSideX === 'left'  && this.originSideY === 'bottom') clipStart = clipLeftBottom
-					if (this.originSideX === 'right' && this.originSideY === 'bottom') clipStart = clipRightBottom
+					let left   = `calc(${100 * ratioX}% - ${this.originBbox.width * ratioX}px)`
+					let right  = `calc(${100 * ratioX}% - ${this.originBbox.width * (ratioX - 1)}px)`
+					let top    = `calc(${100 * ratioY}% - ${this.originBbox.height * ratioY}px)`
+					let bottom = `calc(${100 * ratioY}% - ${this.originBbox.height * (ratioY - 1)}px)`
 
 					let clipPath = [
-						clipStart,
+						createClip({top, right, bottom, left}),
 						`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
 					]
 
@@ -318,6 +287,24 @@
 				return string.startsWith('#')
 					&& string.length === 5 && string[4] === '0'
 					&& string.length === 9 && string.slice(-2) === '00'
+			}
+		}
+
+		function diffBboxes(bboxA, bboxB) {
+			return {
+			}
+		}
+
+		function calcTranslate(bboxA, bboxB, ratioX, ratioY) {
+			let ratioXneg = 1 - ratioX
+			let ratioYneg = 1 - ratioY
+			let left   = bboxA.left   - bboxB.left
+			let right  = bboxA.right  - bboxB.right
+			let top    = bboxA.top    - bboxB.top
+			let bottom = bboxA.bottom - bboxB.bottom
+			return {
+				x: (left * ratioXneg) + (right  * ratioX),
+				y: (top  * ratioYneg) + (bottom * ratioY),
 			}
 		}
 
