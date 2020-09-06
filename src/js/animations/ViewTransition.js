@@ -1,4 +1,6 @@
 import {Transition} from './Transition.js'
+import {TransformOriginMixin} from './ViewTransition-transformOrigin.js'
+import {SurroundingNodesMixin} from './ViewTransition-surroundingNodes.js'
 
 
 const ZINDEX_BASEVIEW = 99
@@ -102,6 +104,8 @@ export class ViewTransition extends Transition {
 	}
 
 	teardown() {
+		if (this.backdrop) this.backdrop.remove()
+		if (this.sheet)    this.sheet.remove()
 		this.restoreZindexes()
 		this.originalZindexes.newView = undefined
 	}
@@ -113,21 +117,27 @@ export class ViewTransition extends Transition {
 		var parts = Array.from(parent.querySelectorAll('[transition]'))
 		if (!parts.includes(fab)) parts.push(fab)
 		for (let node of parts) {
-			if (node == this.pivot) continue
-			if (node == this.origin) continue
+			if (node === this.pivot) continue
+			if (node === this.origin) continue
 			let type = node === fab ? 'scale' : node.getAttribute('transition') || 'fade'
 			// TODO: call proper methods for 'scale' and 'fade'
 		}
 
 	}
 
-	//calculateOrigin(base, origin) {
-	calculateOrigin() {
-		var baseWidth = this.baseViewBbox.width - this.baseViewBbox.left
-		var originMidpoint = this.originBbox.left - this.baseViewBbox.left + (this.originBbox.width / 2)
-		this.originSideX = originMidpoint > baseWidth / 2 ? 'right' : 'left'
-		this.originSideY = 'top'
+	setVisible(node) {
+		node.style.visibility = 'visible'
+		node.style.display = ''
+		// TODO: reenable this once responsive [hidden=""] rule doesn't take precendence.
+		//this.baseView.setAttribute('hidden', '')
+		//this.baseView.style.display = 'unset !important'
 	}
+
+	setHidden(node) {
+		node.style.visibility = ''
+		node.style.display = 'none'
+	}
+
 /*
 	async play(...args) {
 		if (!this.readyToPlay) this.setup()
@@ -142,19 +152,6 @@ export class ViewTransition extends Transition {
 		}
 	}
 */
-	setVisible(node) {
-		node.style.visibility = 'visible'
-		node.style.display = ''
-		// TODO: reenable this once responsive [hidden=""] rule doesn't take precendence.
-		//this.baseView.setAttribute('hidden', '')
-		//this.baseView.style.display = 'unset !important'
-	}
-
-	setHidden(node) {
-		node.style.visibility = ''
-		node.style.display = 'none'
-	}
-
 	async in(...args) {
 		this.setVisible(this.baseView)
 		this.setVisible(this.newView)
@@ -316,55 +313,6 @@ export class ViewTransition extends Transition {
 
 
 
-
-
-	// -------------------------------------------------------------
-	// ------------------------ SURROUNDING NODES -----------------------------
-	// -------------------------------------------------------------
-
-	findSurroundingNodes() {
-		this.baseMain = this.baseView.querySelector(':scope > main')
-		this.zIndexNodeList.push('baseMain')
-
-		this.aboveNodes = getAllPreviousElements(this.baseMain).filter(isNotFab)
-		this.belowNodes = getAllNextElements(this.baseMain).filter(isNotFab)
-	}
-
-	// hides toolbar by pushing it away off the top of the screen
-	pushAwayElementsAbove() {
-		// TODO: crude. proof of concept
-		this.aboveMain = this.aboveNodes.pop()
-		if (!this.aboveMain) return
-		//if (!isElevated(this.aboveMain)) return
-		// MD spec wants to delay the animation until edges of toolbar and animated element are touching
-		// to make it look like the animated element pushes toolbar away.
-		// This is an ugly calculation that somewhat does the job (I'm not a mathematician. send halp pls).
-		// NOTE: It'd be nice to use the actual bezier curve used to animate the element.
-		let top = this.originBbox.top - this.baseViewBbox.top
-		// Distance between bottom edge of toolbar and origin's top edge.
-		let distFromToolbar = top - this.aboveMain.offsetHeight
-		let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
-		let delay = 0.1 + (Math.sin(radians) * 0.45)
-		let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, -100%, 0)']
-		this.schedule(this.aboveMain, {transform}, delay, 1)
-	}
-
-	// hides bottom tabs by pushing it away off the top of the screen
-	pushAwayElementsBelow() {
-		// TODO: crude. proof of concept
-		this.belowMain = this.belowNodes.pop()
-		if (!this.belowMain) return
-		let bottom = this.baseViewBbox.bottom - this.originBbox.bottom
-		// Distance between bottom edge of toolbar and origin's bottom edge.
-		let distFromToolbar = bottom - this.belowMain.offsetHeight
-		let radians = mapRange(distFromToolbar * 2, 0, this.newViewBbox.height, 0, Math.PI / 2)
-		let delay = 0.1 + (Math.sin(radians) * 0.45)
-		let transform = ['translate3d(0, 0%, 0)', 'translate3d(0, 100%, 0)']
-		this.schedule(this.belowMain, {transform}, delay, 1)
-	}
-
-
-
 	// -------------------------------------------------------------
 	// ------------------------ ZINDEX -----------------------------
 	// -------------------------------------------------------------
@@ -396,33 +344,21 @@ export class ViewTransition extends Transition {
 
 }
 
+// MIXINS
+extendClass(ViewTransition, TransformOriginMixin)
+extendClass(ViewTransition, SurroundingNodesMixin)
 
-
-
-function mapRange(num, inMin, inMax, outMin, outMax) {
-	return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
-}
-
-function getAllPreviousElements(node) {
-	let nodes = []
-	while (true) {
-		node = node.previousElementSibling
-		if (node === null) break
-		nodes.push(node)
+function extendClass(Target, Mixin) {
+	let staticKeys = Object.getOwnPropertyNames(Mixin)
+	let protoKeys = Object.getOwnPropertyNames(Mixin.prototype)
+	for (let key of staticKeys) {
+		if (key === 'length') continue
+		if (key === 'prototype') continue
+		if (key === 'name') continue
+		Target[key] = Mixin[key]
 	}
-	return nodes
-}
-
-function getAllNextElements(node) {
-	let nodes = []
-	while (true) {
-		node = node.nextElementSibling
-		if (node === null) break
-		nodes.push(node)
+	for (let key of protoKeys) {
+		if (key === 'constructor') continue
+		Target.prototype[key] = Mixin.prototype[key]
 	}
-	return nodes
-}
-
-function isNotFab(node) {
-	return !node.hasAttribute('fab')
 }

@@ -117,7 +117,6 @@
 				this.findSurroundingNodes()
 
 				this.origin.style.willChange = 'transform, opacity'
-				this.calculateOrigin()
 
 				this.createBackdrop()
 				this.createSheet()
@@ -125,31 +124,11 @@
 				this.pushAwayElementsAbove()
 				this.pushAwayElementsBelow()
 
-				var originTransformKeyframes = {
-					transform: [
-						`translateX(0) translateY(0)`,
-						`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px)`
-					],
-					boxShadow: ['none', 'none']
-				}
-
-				var newViewMoveKeyframes = {
-					transform: [
-						`translateX(${this.originBbox.left - this.newViewBbox.left}px) translateY(${this.originBbox.top - this.newViewBbox.top}px)`,
-						`translateX(0) translateY(0)`
-					],
-					clipPath: [
-						`polygon(0 0, ${this.originBbox.width}px 0, ${this.originBbox.width}px ${this.originBbox.height}px, 0% ${this.originBbox.height}px)`,
-						`polygon(0 0, 100% 0, 100% 100%, 0% 100%)`,
-					],
-				}
-
 				this.fade(this.backdrop, 0, 0.3, 0, 0.4)
 				this.elevate(this.sheet, this.originComputed.boxShadow, 8, 0, 0.2)
 
+				this.collapseOriginIntoNewView(0.1, 1)
 				this.scheduleSheetResize(0.1, 1)
-				this.schedule(this.origin,  originTransformKeyframes, 0.1, 1)
-				this.schedule(this.newView, newViewMoveKeyframes,     0.1, 1)
 
 				this.fadeOut(this.origin, 0.1, 0.6)
 				this.fadeIn(this.newView, 0.4, 1)
@@ -157,67 +136,9 @@
 				this.baseMain.style.zIndex = 'unset'
 			}
 
-			async in() {
-				try {
-					await super.in()
-				} catch(err) {
-					throw err
-				} finally {
-					if (this.backdrop) this.backdrop.remove()
-					if (this.sheet)    this.sheet.remove()
-				}
-			}
-
-			async out() {
-				try {
-					await super.out()
-				} catch(err) {
-					throw err
-				} finally {
-					if (this.backdrop) this.backdrop.remove()
-					if (this.sheet)    this.sheet.remove()
-				}
-			}
-
 		}
 
 		setTransitionClass(TransitionOverlap)
-
-
-		function isElevated(node, computed) {
-			var attr = Number(node.getAttribute('elevation'))
-			if (!Number.isNaN(attr)) return attr > 0
-			if (!computed) computed = window.getComputedStyle(node)
-			if (computed.boxShadow === 'none') return false
-			return computed.boxShadow
-				// split string by commas that are outside of parenthesis (rgba colors)
-				.split(/\,\s?(?![^\(]*\))/)
-				.some(shadow => {
-					// Split by all spaces that are outside of parenthesis.
-					var parts = shadow.split(/\s(?![^\(]*\))/)
-					var color = parts.find(isColor)
-					var sizes = parts.filter(part => !isColor(part))
-					var size = sizes.map(str => str.replace(/\D/g, '')).map(Number).reduce((a,b) => a + b)
-					return size > 0 && !isTransparent(color)
-				})
-		}
-
-		function isColor(string) {
-			return string.includes('#')
-				|| string.includes('rgb')
-				|| string.includes('hsl')
-		}
-
-		function isTransparent(string) {
-			if (string.includes('a(')) {
-				var alpha = string.slice(5, -1).split(',').map(Number).pop()
-				return alpha === 0
-			} else {
-				return string.startsWith('#')
-					&& string.length === 5 && string[4] === '0'
-					&& string.length === 9 && string.slice(-2) === '00'
-			}
-		}
 
 	</script>
 

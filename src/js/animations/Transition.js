@@ -1,7 +1,7 @@
 import {AnimationOrchestrator, reverseKeyframes} from './AnimationOrchestrator.js'
 import {normalSpeedMultiplier, reversedSpeedMultiplier} from './AnimationOrchestrator.js'
 //import {ImageTransition} from './ImageTransition.js'
-import {cloneNode, camelToKebabCase} from './util.js'
+import {pair, cloneNode, camelToKebabCase} from './util.js'
 
 import {ImageTransition} from '../../../../image-transition/src/ImageTransition.js'
 //const ImageTransition = undefined // this was moved to separate package
@@ -26,42 +26,7 @@ Object.assign(cloneContainer.style, {
 document.body.prepend(cloneContainer)
 
 
-
-const xDirections = ['left', 'right']
-const yDirections = ['top', 'bottom']
-
 export class Transition extends AnimationOrchestrator {
-
-	constructor() {
-		super()
-		this.originSideX = 'left'
-		this.originSideY = 'top'
-	}
-
-	get transformOrigin() {
-		return `${this.originSideX} ${this.originSideY}`
-	}
-	// TODO: add this logic to setup/constructor as well to detect elements origin
-	set transformOrigin(string) {
-		//if (string)
-		console.log('TO', string)
-		return
-		let words = string.split(/[\s,]/g)
-		if (words.includes('center'))
-			this.originSideX = this.originSideY = 'center'
-		for (let word of words) {
-			if (xDirections.includes(word)) this.originSideX = word
-			if (yDirections.includes(word)) this.originSideY = word
-		}
-	}
-
-	parseTransformOrigin(computedStyle) {
-		let {transformOrigin, width, height} = computedStyle
-		let [x, y] = transformOrigin.split(' ')
-		// note: computed style of transform origin returns pixels instead of 'left bottom' etc...
-		this.originSideX = x === width ? 'right' : 'left'
-		this.originSideY = y === height ? 'bottom' : 'top'
-	}
 
 	finalize(...args) {
 		// Read all keyframes and collect names of propeties we'll be animating.
@@ -162,14 +127,14 @@ export class Transition extends AnimationOrchestrator {
 	translateTo(node, origin, pivot = node, start = 0, end = 1) {
 		var values = this.calculateTranslate(node, origin, pivot)
 		var keyframes = getTransformKeyframes(values)
-		keyframes.transformOrigin = [this.transformOrigin, this.transformOrigin]
+		keyframes.transformOrigin = pair('top left')
 		this.schedule(node, keyframes, start, end)
 	}
 
 	scaleTo(node, origin, pivot = node, start = 0, end = 1) {
 		var values = this.calculateScale(node, origin, pivot)
 		var keyframes = getTransformKeyframes(values)
-		keyframes.transformOrigin = [this.transformOrigin, this.transformOrigin]
+		keyframes.transformOrigin = pair('top left')
 		this.schedule(node, keyframes, start, end)
 	}
 
@@ -181,7 +146,7 @@ export class Transition extends AnimationOrchestrator {
 		values.translateY += values2.translateY
 		var {translateX, translateY, scaleX, scaleY} = values
 		return {
-			transformOrigin: [this.transformOrigin, this.transformOrigin],
+			transformOrigin: pair('top left'),
 			transform: [
 				`translate(0px, 0px) scale(1, 1)`,
 				`translate(${translateX || 0}px, ${translateY || 0}px) scale(${scaleX || 1}, ${scaleY || 1})`,
