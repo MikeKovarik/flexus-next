@@ -132,9 +132,9 @@
 		// TODO: simplify the class
 		class TransitionOverlap extends ViewTransition {
 
-			//duration = 700
+			duration = 700
 			//duration = 10000
-			duration = 1000
+			//duration = 1000
 
 			setup() {
 				super.setup()
@@ -151,37 +151,50 @@
 				this.pushAwayElementsAbove()
 				this.pushAwayElementsBelow()
 
-				this.parseTransformOrigin(this.originComputed)
-				this.allowOriginEdges = true
 				let {transformOrigin, width, height} = this.originComputed
 				let [originX, originY] = transformOrigin.split(' ').map(parseFloat)
 
-				//originX = 0
-				//originY = 0
+
+				this.allowOriginEdges = true
+				/*
+				this.allowScalingOrigin = true
+				originX = 0
+				originY = 0
+				*/
 
 				let ratioX = originX / this.originBbox.width
 				let ratioXneg = 1 - ratioX
 				let ratioY = originY / this.originBbox.height
 				let ratioYneg = 1 - ratioY
 
+				let {originBbox, newViewBbox} = this
+				let diffLeft   = newViewBbox.left   - originBbox.left
+				let diffRight  = newViewBbox.right  - originBbox.right
+				let diffTop    = newViewBbox.top    - originBbox.top
+				let diffBottom = newViewBbox.bottom - originBbox.bottom
+				let translateX = (diffLeft * (1 - ratioX)) + (diffRight  * ratioX)
+				let translateY = (diffTop  * (1 - ratioY)) + (diffBottom * ratioY)
 
 				if (this.allowScalingOrigin) {
-					let scale = 2 // todo
+					// TODO
+					originX = 0
+					originY = 0
+					let scaleX = newViewBbox.width  / originBbox.width
+					let scaleY = newViewBbox.height / originBbox.height
 					var originTransformKeyframes = {
 						transformOrigin: ['left top', 'left top'],
 						transform: [
-							`translateX(0) translateY(0) scale(1)`,
-							`translateX(${this.newViewBbox.left - this.originBbox.left}px) translateY(${this.newViewBbox.top - this.originBbox.top}px) scale(${scale})`
+							`translate(0, 0) scale(1)`,
+							`translate(${diffLeft}px, ${diffTop}px) scale(${scaleX}, ${scaleY})`
 						],
 						boxShadow: ['none', 'none']
 					}
 				} else {
 					if (this.allowOriginEdges) {
-						let translate = calcTranslate(this.newViewBbox, this.originBbox, ratioX, ratioY)
 						var originTransformKeyframes = {
 							transform: [
 								`translate(0, 0)`,
-								`translate(${translate.x}px, ${translate.y}px)`
+								`translate(${translateX}px, ${translateY}px)`
 							],
 							boxShadow: ['none', 'none']
 						}
@@ -189,9 +202,8 @@
 				}
 
 				if (this.allowOriginEdges) {
-					let translate = calcTranslate(this.originBbox, this.newViewBbox, ratioX, ratioY)
 					let transform = [
-						`translate(${translate.x}px, ${translate.y}px)`,
+						`translate(${-translateX}px, ${-translateY}px)`,
 						`translate(0, 0)`
 					]
 
@@ -202,10 +214,11 @@
 						${desc.left} ${desc.bottom}
 					)`
 
-					let left   = `calc(${100 * ratioX}% - ${this.originBbox.width * ratioX}px)`
-					let right  = `calc(${100 * ratioX}% - ${this.originBbox.width * (ratioX - 1)}px)`
-					let top    = `calc(${100 * ratioY}% - ${this.originBbox.height * ratioY}px)`
-					let bottom = `calc(${100 * ratioY}% - ${this.originBbox.height * (ratioY - 1)}px)`
+					let {width, height} = this.originBbox
+					let left   = `calc(${100 * ratioX}% - ${width * ratioX}px)`
+					let right  = `calc(${100 * ratioX}% - ${width * (ratioX - 1)}px)`
+					let top    = `calc(${100 * ratioY}% - ${height * ratioY}px)`
+					let bottom = `calc(${100 * ratioY}% - ${height * (ratioY - 1)}px)`
 
 					let clipPath = [
 						createClip({top, right, bottom, left}),
@@ -287,24 +300,6 @@
 				return string.startsWith('#')
 					&& string.length === 5 && string[4] === '0'
 					&& string.length === 9 && string.slice(-2) === '00'
-			}
-		}
-
-		function diffBboxes(bboxA, bboxB) {
-			return {
-			}
-		}
-
-		function calcTranslate(bboxA, bboxB, ratioX, ratioY) {
-			let ratioXneg = 1 - ratioX
-			let ratioYneg = 1 - ratioY
-			let left   = bboxA.left   - bboxB.left
-			let right  = bboxA.right  - bboxB.right
-			let top    = bboxA.top    - bboxB.top
-			let bottom = bboxA.bottom - bboxB.bottom
-			return {
-				x: (left * ratioXneg) + (right  * ratioX),
-				y: (top  * ratioYneg) + (bottom * ratioY),
 			}
 		}
 
